@@ -11,7 +11,7 @@ const themeStore = useThemeStore();
 </script>
 
 <template>
-  <VDivider>{{ $t('theme.layout.header.title') }}</VDivider>
+  <VDivider class="my-8">{{ $t('theme.layout.header.title') }}</VDivider>
   <TransitionGroup tag="div" name="setting-list" class="flex-col-stretch gap-12px">
     <SettingItem key="1" :label="$t('theme.layout.header.height')">
       <VNumberInput
@@ -20,18 +20,19 @@ const themeStore = useThemeStore();
         density="compact"
         variant="outlined"
         hide-details
-        class="w-120px"
+        control-variant="stacked"
+        max-width="140"
       />
     </SettingItem>
     <SettingItem key="2" :label="$t('theme.layout.header.breadcrumb.visible')">
-      <VSwitch v-model="themeStore.header.breadcrumb.visible" color="primary" density="compact" hide-details inset />
+      <VSwitch v-model="themeStore.header.breadcrumb.visible" color="primary" density="compact" hide-details />
     </SettingItem>
     <SettingItem
       v-if="themeStore.header.breadcrumb.visible"
       key="3"
       :label="$t('theme.layout.header.breadcrumb.showIcon')"
     >
-      <VSwitch v-model="themeStore.header.breadcrumb.showIcon" color="primary" density="compact" hide-details inset />
+      <VSwitch v-model="themeStore.header.breadcrumb.showIcon" color="primary" density="compact" hide-details />
     </SettingItem>
   </TransitionGroup>
 </template>

@@ -16,7 +16,7 @@ const isHybridLayoutMode = computed(() => layoutMode.value.includes('hybrid'));
 </script>
 
 <template>
-  <VDivider>{{ $t('theme.layout.sider.title') }}</VDivider>
+  <VDivider class="my-8">{{ $t('theme.layout.sider.title') }}</VDivider>
   <TransitionGroup tag="div" name="setting-list" class="flex-col-stretch gap-12px">
     <SettingItem v-if="layoutMode === 'vertical'" key="1" :label="$t('theme.layout.sider.width')">
       <VNumberInput
@@ -24,8 +24,9 @@ const isHybridLayoutMode = computed(() => layoutMode.value.includes('hybrid'));
         :step="1"
         density="compact"
         variant="outlined"
+        control-variant="stacked"
         hide-details
-        class="w-120px"
+        max-width="140"
       />
     </SettingItem>
     <SettingItem v-if="layoutMode === 'vertical'" key="2" :label="$t('theme.layout.sider.collapsedWidth')">
@@ -34,8 +35,9 @@ const isHybridLayoutMode = computed(() => layoutMode.value.includes('hybrid'));
         :step="1"
         density="compact"
         variant="outlined"
+        control-variant="stacked"
         hide-details
-        class="w-120px"
+        max-width="140"
       />
     </SettingItem>
     <SettingItem v-if="isMixLayoutMode" key="3" :label="$t('theme.layout.sider.mixWidth')">
@@ -44,8 +46,9 @@ const isHybridLayoutMode = computed(() => layoutMode.value.includes('hybrid'));
         :step="1"
         density="compact"
         variant="outlined"
+        control-variant="stacked"
         hide-details
-        class="w-120px"
+        max-width="140"
       />
     </SettingItem>
     <SettingItem v-if="isMixLayoutMode" key="4" :label="$t('theme.layout.sider.mixCollapsedWidth')">
@@ -54,8 +57,9 @@ const isHybridLayoutMode = computed(() => layoutMode.value.includes('hybrid'));
         :step="1"
         density="compact"
         variant="outlined"
+        control-variant="stacked"
         hide-details
-        class="w-120px"
+        max-width="140"
       />
     </SettingItem>
     <SettingItem v-if="layoutMode === 'vertical-mix'" key="5" :label="$t('theme.layout.sider.mixChildMenuWidth')">
@@ -64,15 +68,16 @@ const isHybridLayoutMode = computed(() => layoutMode.value.includes('hybrid'));
         :step="1"
         density="compact"
         variant="outlined"
+        control-variant="stacked"
         hide-details
-        class="w-120px"
+        max-width="140"
       />
     </SettingItem>
     <SettingItem v-if="isHybridLayoutMode" key="6" :label="$t('theme.layout.sider.autoSelectFirstMenu')">
       <template #suffix>
         <IconTooltip :desc="$t('theme.layout.sider.autoSelectFirstMenuTip')" />
       </template>
-      <VSwitch v-model="themeStore.sider.autoSelectFirstMenu" color="primary" density="compact" hide-details inset />
+      <VSwitch v-model="themeStore.sider.autoSelectFirstMenu" color="primary" density="compact" hide-details />
     </SettingItem>
   </TransitionGroup>
 </template>

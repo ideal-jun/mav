@@ -11,7 +11,7 @@ const themeStore = useThemeStore();
 </script>
 
 <template>
-  <VDivider class="mb-3">{{ $t('theme.general.title') }}</VDivider>
+  <VDivider class="my-8">{{ $t('theme.general.title') }}</VDivider>
   <SettingItem :label="$t('theme.general.multilingual.visible')">
     <VSwitch v-model="themeStore.header.multilingual.visible" color="primary" hide-details density="compact" />
   </SettingItem>

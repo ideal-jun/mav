@@ -17,6 +17,9 @@ importers:
       '@antv/g6':
         specifier: 5.1.1
         version: 5.1.1
+      '@better-scroll/core':
+        specifier: 2.5.1
+        version: 2.5.1
       '@fontsource/roboto':
         specifier: ^5.3.0
         version: 5.3.0
@@ -41,6 +44,9 @@ importers:
       '@sa/hooks':
         specifier: workspace:*
         version: link:packages/hooks
+      '@sa/materials':
+        specifier: workspace:*
+        version: link:packages/materials
       '@sa/utils':
         specifier: workspace:*
         version: link:packages/utils
@@ -620,6 +626,12 @@ packages:
   '@babel/types@8.0.0-rc.4':
     resolution: {integrity: sha512-bw30DV880P/VYtsjWWdoWmJpb9S2Vn1/PqayyccTELzRQ/HslIO7+BD9rNoZ4AAFOAjC1vrNeBCkAsyh6Ibfww==}
     engines: {node: ^20.19.0 || >=22.12.0}
+
+  '@better-scroll/core@2.5.1':
+    resolution: {integrity: sha512-koKOuYA55dQ04FJRIVUpMGDr1hbCfWmfX0MGp1hKagkQSWSRpwblqACiwtggVauoj9aaJRJZ9hDsTM4weaavlg==}
+
+  '@better-scroll/shared-utils@2.5.1':
+    resolution: {integrity: sha512-AplkfSjXVYP9LZiD6JsKgmgQJ/mG4uuLmBuwLz8W5OsYc7AYTfN8kw6GqZ5OwCGoXkVhBGyd8NeC4xwYItp0aw==}
 
   '@capsizecss/unpack@4.0.1':
     resolution: {integrity: sha512-CuNiSqg7+e1cO/GjffyMOm5Tt2jUF9CWHHnvQ/UkqvtkGfHdgwEC0wpmq7fkN3gxwpRnrAN0WzO3vREKmNolMQ==}
@@ -5806,6 +5818,12 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 8.0.0-rc.4
       '@babel/helper-validator-identifier': 8.0.0-rc.4
+
+  '@better-scroll/core@2.5.1':
+    dependencies:
+      '@better-scroll/shared-utils': 2.5.1
+
+  '@better-scroll/shared-utils@2.5.1': {}
 
   '@capsizecss/unpack@4.0.1':
     dependencies:

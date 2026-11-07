@@ -12,9 +12,9 @@ defineOptions({
 const themeStore = useThemeStore();
 
 const icons: Record<UnionKey.ThemeScheme, string> = {
-  light: 'material-symbols:sunny',
-  dark: 'material-symbols:nightlight-rounded',
-  auto: 'material-symbols:hdr-auto'
+  light: 'mdi-weather-sunny',
+  dark: 'mdi-weather-night',
+  auto: 'mdi-theme-light-dark'
 };
 
 function handleSegmentChange(value: unknown) {
@@ -35,25 +35,21 @@ const showSiderInverted = computed(() => !themeStore.darkMode && themeStore.layo
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
-    <div class="flex items-center gap-3 text-sm font-medium">
-      <span>{{ $t('theme.appearance.themeSchema.title') }}</span>
-      <VDivider class="flex-1" />
-    </div>
-    <div class="flex justify-center">
-      <VBtnToggle
-        :model-value="themeStore.themeScheme"
-        mandatory
-        divided
-        density="compact"
-        color="primary"
-        @update:model-value="handleSegmentChange"
-      >
-        <VBtn v-for="(_, key) in themeSchemaRecord" :key="key" :value="key">
-          <SvgIcon :icon="icons[key]" class="h-5 text-icon-small" />
-        </VBtn>
-      </VBtnToggle>
-    </div>
+  <div class="flex flex-col">
+    <VDivider class="my-8">{{ $t('theme.appearance.themeSchema.title') }}</VDivider>
+    <VTabs
+      v-model="themeStore.themeScheme"
+      density="compact"
+      grow
+      inset
+      class="mx-16 shadow-none"
+      @update:model-value="handleSegmentChange"
+    >
+      <VTab v-for="(_, key) in themeSchemaRecord" :key="key" :value="key" min-width="30" :ripple="false">
+        <VIcon :icon="icons[key]"></VIcon>
+      </VTab>
+    </VTabs>
+
     <Transition name="sider-inverted">
       <SettingItem v-if="showSiderInverted" :label="$t('theme.layout.sider.inverted')">
         <VSwitch
@@ -87,6 +83,11 @@ const showSiderInverted = computed(() => !themeStore.darkMode && themeStore.layo
 </template>
 
 <style scoped>
+.theme-schema-toggle :deep(.v-btn) {
+  width: 44px;
+  height: 32px;
+}
+
 .sider-inverted-enter-active,
 .sider-inverted-leave-active {
   --uno: h-22px transition-all-300;

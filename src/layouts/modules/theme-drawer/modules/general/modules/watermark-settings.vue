@@ -29,11 +29,8 @@ function setEnableTime(value: boolean | null) {
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
-    <div class="flex items-center gap-3 text-sm font-medium">
-      <span>{{ $t('theme.general.watermark.title') }}</span>
-      <VDivider class="flex-1" />
-    </div>
+  <div class="flex flex-col">
+    <VDivider class="my-8">{{ $t('theme.general.watermark.title') }}</VDivider>
 
     <TransitionGroup tag="div" name="setting-list" class="flex flex-col gap-3">
       <SettingItem key="1" :label="$t('theme.general.watermark.visible')">

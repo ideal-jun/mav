@@ -5,7 +5,7 @@ import { useBoolean } from '@sa/hooks';
 import { enableStatusRecord, menuTypeRecord } from '@/constants/business';
 import { yesOrNoRecord } from '@/constants/common';
 import { fetchGetAllPages, fetchGetMenuList } from '@/service/api';
-import { $t } from '@/locales';
+import { $t, hasI18nKey } from '@/locales';
 import { defaultTransform, useTableOperate, useVuetifyPaginatedTable } from '@/hooks/common/table';
 import SvgIcon from '@/components/custom/svg-icon.vue';
 import MenuOperateModal from './modules/menu-operate-modal.vue';
@@ -191,7 +191,7 @@ init();
             </VChip>
           </template>
           <template #item.menuName="{ item }">
-            <span>{{ item.i18nKey ? $t(item.i18nKey) : item.menuName }}</span>
+            <span>{{ item.i18nKey && hasI18nKey(item.i18nKey) ? $t(item.i18nKey) : item.menuName }}</span>
           </template>
           <template #item.icon="{ item }">
             <div class="flex-center">

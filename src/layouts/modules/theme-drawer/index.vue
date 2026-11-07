@@ -35,12 +35,14 @@ const drawerWidth = computed(() => {
         <VBtn icon="mdi-close" variant="text" density="comfortable" @click="appStore.closeThemeDrawer" />
       </div>
 
-      <VTabs v-model="activeTab" color="primary" density="compact" grow class="px-2">
-        <VTab value="appearance">{{ $t('theme.tabs.appearance') }}</VTab>
-        <VTab value="layout">{{ $t('theme.tabs.layout') }}</VTab>
-        <VTab value="general">{{ $t('theme.tabs.general') }}</VTab>
-        <VTab value="preset">{{ $t('theme.tabs.preset') }}</VTab>
-      </VTabs>
+      <div class="shrink-0">
+        <VTabs v-model="activeTab" density="compact" :show-arrows="false" grow inset class="mx-4 shadow-none">
+          <VTab value="appearance" min-width="30" :ripple="false">{{ $t('theme.tabs.appearance') }}</VTab>
+          <VTab value="layout" min-width="30" :ripple="false">{{ $t('theme.tabs.layout') }}</VTab>
+          <VTab value="general" min-width="30" :ripple="false">{{ $t('theme.tabs.general') }}</VTab>
+          <VTab value="preset" min-width="30" :ripple="false">{{ $t('theme.tabs.preset') }}</VTab>
+        </VTabs>
+      </div>
 
       <div class="min-h-0 flex-1 overflow-y-auto px-4 py-4">
         <KeepAlive>

@@ -29,6 +29,11 @@ export function setupI18n(app: App) {
 
 export const $t = i18n.global.t as App.I18n.$T;
 
+/** whether the key exists in the current locale messages (data-driven keys may not) */
+export function hasI18nKey(key: string) {
+  return i18n.global.te(key);
+}
+
 export function setLocale(locale: App.I18n.LangType) {
   i18n.global.locale.value = locale;
 

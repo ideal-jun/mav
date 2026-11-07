@@ -21,32 +21,23 @@ function handleUpdateColor(color: string | null, key: App.Theme.ThemeColorKey) {
   themeStore.updateThemeColors(key, color);
 }
 
-const swatches: string[] = [
-  '#3b82f6',
-  '#6366f1',
-  '#8b5cf6',
-  '#a855f7',
-  '#0ea5e9',
-  '#06b6d4',
-  '#f43f5e',
-  '#ef4444',
-  '#ec4899',
-  '#d946ef',
-  '#f97316',
-  '#f59e0b',
-  '#eab308',
-  '#84cc16',
-  '#22c55e',
-  '#10b981'
+function isColorDisabled(key: App.Theme.ThemeColorKey) {
+  return key === 'info' && themeStore.isInfoFollowPrimary;
+}
+
+/** VColorPicker expects an array of columns, each column is stacked vertically */
+const swatchColumns: string[][] = [
+  ['#3b82f6', '#6366f1', '#8b5cf6', '#a855f7'],
+  ['#0ea5e9', '#06b6d4', '#14b8a6', '#10b981'],
+  ['#22c55e', '#84cc16', '#eab308', '#f59e0b'],
+  ['#f97316', '#ef4444', '#ec4899', '#d946ef'],
+  ['#64748b', '#0f172a', '#94a3b8', '#e2e8f0']
 ];
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
-    <div class="flex items-center gap-3 text-sm font-medium">
-      <span>{{ $t('theme.appearance.themeColor.title') }}</span>
-      <VDivider class="flex-1" />
-    </div>
+  <div class="flex flex-col">
+    <VDivider class="my-8">{{ $t('theme.appearance.themeColor.title') }}</VDivider>
 
     <SettingItem :label="$t('theme.appearance.recommendColor')">
       <template #suffix>
@@ -87,17 +78,23 @@ const swatches: string[] = [
           @update:model-value="value => (themeStore.isInfoFollowPrimary = Boolean(value))"
         />
       </template>
-      <div class="w-24">
-        <VColorPicker
-          :model-value="color"
-          :disabled="key === 'info' && themeStore.isInfoFollowPrimary"
-          :show-swatches="false"
-          :swatches="[swatches]"
-          hide-canvas
-          hide-inputs
-          @update:model-value="value => handleUpdateColor(value, key)"
-        />
-      </div>
+      <VColorInput
+        :model-value="color"
+        :disabled="isColorDisabled(key)"
+        :swatches="swatchColumns"
+        show-swatches
+        hide-inputs
+        density="compact"
+        variant="outlined"
+        hide-details
+        hide-actions
+        :base-color="color"
+        :color="color"
+        pip-location="prepend-inner"
+        color-pip
+        max-width="140"
+        @update:model-value="value => handleUpdateColor(value, key)"
+      />
     </SettingItem>
   </div>
 </template>

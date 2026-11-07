@@ -105,7 +105,7 @@ const applyPreset = (preset: ThemePreset): void => {
 </script>
 
 <template>
-  <VDivider>{{ $t('theme.appearance.preset.title') }}</VDivider>
+  <VDivider class="my-8">{{ $t('theme.appearance.preset.title') }}</VDivider>
 
   <div class="flex flex-col gap-3">
     <div

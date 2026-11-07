@@ -38,7 +38,7 @@ interface DropdownOption {
 const options = computed(() => {
   const opts: DropdownOption[] = [
     { key: 'closeCurrent', label: $t('dropdown.closeCurrent'), icon: 'mdi-close' },
-    { key: 'closeOther', label: $t('dropdown.closeOther'), icon: 'mdi-tab-close' },
+    { key: 'closeOther', label: $t('dropdown.closeOther'), icon: 'mdi-arrow-expand-horizontal' },
     { key: 'closeLeft', label: $t('dropdown.closeLeft'), icon: 'mdi-format-horizontal-align-left' },
     { key: 'closeRight', label: $t('dropdown.closeRight'), icon: 'mdi-format-horizontal-align-right' },
     { key: 'closeAll', label: $t('dropdown.closeAll'), icon: 'mdi-close-box-multiple-outline' }
@@ -103,23 +103,23 @@ onClickOutside(menuRef, hideDropdown);
 </script>
 
 <template>
-  <div v-if="visible" ref="menuRef" class="fixed z-[3000]" :style="{ left: `${x}px`, top: `${y}px` }">
-    <VCard class="min-w-[180px]" elevation="8">
-      <VList density="compact">
-        <VListItem
-          v-for="option in options"
-          :key="option.key"
-          :disabled="option.disabled"
-          @click="handleDropdown(option.key)"
-        >
-          <template #prepend>
-            <VIcon :icon="option.icon" size="18" />
-          </template>
-          <VListItemTitle>{{ option.label }}</VListItemTitle>
-        </VListItem>
-      </VList>
-    </VCard>
-  </div>
+  <VMenu v-model="visible" :target="[x, y]" :offset="[5, -5]">
+    <VList density="compact" nav prepend-gap="10">
+      <VListItem
+        v-for="option in options"
+        :key="option.key"
+        :disabled="option.disabled"
+        class="mt-0"
+        min-height="30"
+        @click="handleDropdown(option.key)"
+      >
+        <template #prepend>
+          <VIcon :icon="option.icon" size="16" />
+        </template>
+        <VListItemTitle>{{ option.label }}</VListItemTitle>
+      </VListItem>
+    </VList>
+  </VMenu>
 </template>
 
 <style scoped></style>

@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { nextTick, reactive, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { useElementBounding } from '@vueuse/core';
+import { PageTab } from '@sa/materials';
 import { useAppStore } from '@/store/modules/app';
 import { useThemeStore } from '@/store/modules/theme';
 import { useTabStore } from '@/store/modules/tab';
+import { isPC } from '@/utils/agent';
+import BetterScroll from '@/components/custom/better-scroll.vue';
 import ContextMenu from './context-menu.vue';
 
 defineOptions({
@@ -15,39 +19,56 @@ const appStore = useAppStore();
 const themeStore = useThemeStore();
 const tabStore = useTabStore();
 
-const tabScrollRef = ref<HTMLElement>();
+const bsWrapper = ref<HTMLElement>();
+const { width: bsWrapperWidth, left: bsWrapperLeft } = useElementBounding(bsWrapper);
+const bsScroll = ref<InstanceType<typeof BetterScroll>>();
+const tabRef = ref<HTMLElement>();
+const isPCFlag = isPC();
 
 const TAB_DATA_ID = 'data-tab-id';
 const MIDDLE_MOUSE_BUTTON = 1;
 const RIGHT_MOUSE_BUTTON = 2;
 
+type TabNamedNodeMap = NamedNodeMap & {
+  [TAB_DATA_ID]: Attr;
+};
+
 async function scrollToActiveTab() {
   await nextTick();
+  if (!tabRef.value) return;
 
-  const container = tabScrollRef.value;
+  const { children } = tabRef.value;
 
-  if (!container) return;
+  for (let i = 0; i < children.length; i += 1) {
+    const child = children[i];
 
-  const children = Array.from(container.querySelectorAll<HTMLElement>('[' + TAB_DATA_ID + ']'));
+    const { value: tabId } = (child.attributes as TabNamedNodeMap)[TAB_DATA_ID];
 
-  const activeTab = children.find(child => child.dataset.tabId === tabStore.activeTabId);
+    if (tabId === tabStore.activeTabId) {
+      const { left, width } = child.getBoundingClientRect();
+      const clientX = left + width / 2;
 
-  activeTab?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      setTimeout(() => {
+        scrollByClientX(clientX);
+      }, 50);
+
+      break;
+    }
+  }
 }
 
-function getTabClass(tab: App.Global.Tab) {
-  const active = tab.id === tabStore.activeTabId;
-  const mode = themeStore.tab.mode;
+function scrollByClientX(clientX: number) {
+  const currentX = clientX - bsWrapperLeft.value;
+  const deltaX = currentX - bsWrapperWidth.value / 2;
 
-  if (mode === 'button') {
-    return active ? 'tab-item--button-active' : 'tab-item--button';
+  if (bsScroll.value?.instance) {
+    const { maxScrollX, x: leftX, scrollBy } = bsScroll.value.instance;
+
+    const rightX = maxScrollX - leftX;
+    const update = deltaX > 0 ? Math.max(-deltaX, rightX) : Math.min(-deltaX, -leftX);
+
+    scrollBy(update, 0, 300);
   }
-
-  if (mode === 'slider') {
-    return active ? 'tab-item--slider-active' : 'tab-item--slider';
-  }
-
-  return active ? 'tab-item--chrome-active' : 'tab-item--chrome';
 }
 
 function getContextMenuDisabledKeys(tabId: string) {
@@ -164,42 +185,41 @@ init();
 </script>
 
 <template>
-  <div class="flex size-full items-center gap-2 px-3">
-    <div
-      ref="tabScrollRef"
-      class="tab-scroll h-full min-w-0 flex flex-1 items-center gap-2 overflow-x-auto"
-      @click="removeFocus"
-    >
-      <div
-        v-for="tab in tabStore.tabs"
-        :key="tab.id"
-        :data-tab-id="tab.id"
-        class="tab-item group flex h-full shrink-0 cursor-pointer items-center transition-colors"
-        :class="getTabClass(tab)"
-        @pointerdown="switchTab($event, tab)"
-        @mousedown="handleMousedown($event, tab)"
-        @contextmenu="handleContextMenu($event, tab.id)"
-      >
-        <div class="flex h-8 items-center pl-3" :class="tabStore.isTabRetain(tab.id) ? 'pr-3' : 'pr-1'">
-          <SvgIcon :icon="tab.icon" :local-icon="tab.localIcon" class="mr-1.5 text-16px" />
-          <span class="max-w-240px ellipsis-text text-sm">{{ tab.label }}</span>
-          <VBtn
-            v-if="!tabStore.isTabRetain(tab.id)"
-            icon="mdi-close"
-            size="x-small"
-            variant="text"
-            density="comfortable"
-            class="ml-1 opacity-60 hover:opacity-100"
-            @pointerdown.stop
-            @mousedown.stop
-            @click.stop="handleCloseTab(tab)"
-          />
+  <VSheet class="flex size-full items-center px-4 shadow-sm" color="surface" rounded="0">
+    <div ref="bsWrapper" class="h-full flex-1 overflow-hidden">
+      <BetterScroll ref="bsScroll" :options="{ scrollX: true, scrollY: false, click: !isPCFlag }" @click="removeFocus">
+        <div
+          ref="tabRef"
+          class="h-full flex pr-18px"
+          :class="[
+            themeStore.tab.mode === 'chrome' || themeStore.tab.mode === 'slider' ? 'items-end' : 'items-center gap-12px'
+          ]"
+        >
+          <PageTab
+            v-for="tab in tabStore.tabs"
+            :key="tab.id"
+            :[TAB_DATA_ID]="tab.id"
+            :mode="themeStore.tab.mode"
+            :dark-mode="themeStore.darkMode"
+            :active="tab.id === tabStore.activeTabId"
+            :active-color="themeStore.themeColor"
+            :closable="!tabStore.isTabRetain(tab.id)"
+            @pointerdown="switchTab($event, tab)"
+            @mousedown="handleMousedown($event, tab)"
+            @close="handleCloseTab(tab)"
+            @contextmenu="handleContextMenu($event, tab.id)"
+          >
+            <template #prefix>
+              <SvgIcon :icon="tab.icon" :local-icon="tab.localIcon" class="inline-block align-text-bottom text-16px" />
+            </template>
+            <div class="max-w-240px ellipsis-text">{{ tab.label }}</div>
+          </PageTab>
         </div>
-      </div>
+      </BetterScroll>
     </div>
     <ReloadButton :loading="!appStore.reloadFlag" @click="refresh" />
     <FullScreen :full="appStore.fullContent" @click="appStore.toggleFullContent" />
-  </div>
+  </VSheet>
   <ContextMenu
     :visible="dropdown.visible"
     :tab-id="dropdown.tabId"
@@ -210,45 +230,4 @@ init();
   />
 </template>
 
-<style scoped>
-.tab-scroll {
-  scrollbar-width: none;
-}
-
-.tab-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-.tab-item {
-  border-radius: 8px;
-  color: rgb(var(--v-theme-on-surface));
-}
-
-.tab-item:hover {
-  background-color: rgba(var(--v-theme-on-surface), 0.06);
-}
-
-.tab-item--button {
-  background-color: rgba(var(--v-theme-on-surface), 0.04);
-}
-
-.tab-item--button-active {
-  background-color: rgb(var(--v-theme-primary));
-  color: #fff;
-}
-
-.tab-item--chrome {
-  border-radius: 8px 8px 0 0;
-}
-
-.tab-item--chrome-active {
-  border-radius: 8px 8px 0 0;
-  background-color: rgb(var(--v-theme-surface));
-  box-shadow: inset 0 -2px 0 rgb(var(--v-theme-primary));
-}
-
-.tab-item--slider-active {
-  color: rgb(var(--v-theme-primary));
-  box-shadow: inset 0 -2px 0 rgb(var(--v-theme-primary));
-}
-</style>
+<style scoped></style>

@@ -1,3 +1,4 @@
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { createVuetify } from 'vuetify';
 import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n';
@@ -8,9 +9,23 @@ import i18n from '@/locales';
 import '@mdi/font/css/materialdesignicons.css';
 import 'vuetify/styles';
 
+const vuetifyI18nAdapter = createVueI18nAdapter({ i18n, useI18n });
+
+/**
+ * Vuetify's vue-i18n adapter infers the numeric group separator with
+ * `n(10000, { part: true }).find(...)`. With vue-i18n 11 that call returns a
+ * string, so the inference throws the first time a component (VNumberInput)
+ * reads it. Provide the separators explicitly instead.
+ */
+const localeAdapter = {
+  ...vuetifyI18nAdapter,
+  decimalSeparator: computed(() => '.'),
+  numericGroupSeparator: computed(() => ',')
+};
+
 export default createVuetify({
   locale: {
-    adapter: createVueI18nAdapter({ i18n, useI18n }),
+    adapter: localeAdapter,
     fallback: 'en'
   },
   defaults: {

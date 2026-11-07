@@ -24,7 +24,7 @@ export function useVuetifyTheme() {
       const name = darkMode ? 'dark' : 'light';
       const colors = theme.themes.value[name]?.colors;
 
-      theme.global.name.value = name;
+      theme.change(name);
 
       if (!colors) return;
 
