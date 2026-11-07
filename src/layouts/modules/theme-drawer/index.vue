@@ -28,13 +28,7 @@ const drawerWidth = computed(() => {
 </script>
 
 <template>
-  <VNavigationDrawer
-    v-model="appStore.themeDrawerVisible"
-    location="right"
-    temporary
-    :width="drawerWidth"
-    class="theme-drawer"
-  >
+  <VNavigationDrawer v-model="appStore.themeDrawerVisible" location="right" temporary :width="drawerWidth" order="-1">
     <div class="flex h-full flex-col">
       <div class="flex items-center justify-between px-4 py-3">
         <h2 class="text-lg font-medium">{{ $t('theme.themeDrawerTitle') }}</h2>

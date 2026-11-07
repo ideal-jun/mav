@@ -27,18 +27,21 @@ onMounted(() => {
 
 <template>
   <div>
-    <NCard title="pinyin 插件" :bordered="false" class="h-full card-wrapper">
-      <NSpace :vertical="true">
-        <GithubLink link="https://github.com/zh-lx/pinyin-pro" />
-        <WebSiteLink label="文档地址：" link="https://pinyin-pro.cn/" />
-      </NSpace>
-      <NDivider title-placement="left">常规使用</NDivider>
-      <p ref="domRef" class="text-18px"></p>
-      <NDivider title-placement="left">不带音调</NDivider>
-      <p ref="domRef2" class="text-18px"></p>
-      <NDivider title-placement="left">自定义样式</NDivider>
-      <p ref="domRef3" class="custom-style text-18px"></p>
-    </NCard>
+    <VCard class="h-full card-wrapper">
+      <VCardTitle>pinyin 插件</VCardTitle>
+      <VCardText>
+        <div class="flex flex-col gap-3">
+          <GithubLink link="https://github.com/zh-lx/pinyin-pro" />
+          <WebSiteLink label="文档地址：" link="https://pinyin-pro.cn/" />
+        </div>
+        <VDivider class="my-4">常规使用</VDivider>
+        <p ref="domRef" class="text-18px"></p>
+        <VDivider class="my-4">不带音调</VDivider>
+        <p ref="domRef2" class="text-18px"></p>
+        <VDivider class="my-4">自定义样式</VDivider>
+        <p ref="domRef3" class="custom-style text-18px"></p>
+      </VCardText>
+    </VCard>
   </div>
 </template>
 

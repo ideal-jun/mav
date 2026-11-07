@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import VChart from '@visactor/vchart';
 import {
@@ -227,183 +227,200 @@ onMounted(() => {
 
 <template>
   <div class="h-full">
-    <NSpace vertical :size="16">
-      <NCard title="List Table" :bordered="false" class="h-full w-2/3 card-wrapper">
-        <ListTable ref="listTableRef" :options="listOptions" :records="listRecords" height="400px">
-          <ListColumn field="Order ID" title="Order ID" width="auto" />
-          <ListColumn field="Customer ID" title="Customer ID" width="auto" />
-          <ListColumn field="Product Name" title="Product Name" width="auto" />
-          <ListColumn field="Category" title="Category" width="auto" />
-          <ListColumn field="Sub-Category" title="Sub-Category" width="auto" />
-          <ListColumn field="Region" title="Region" width="auto" />
-          <ListColumn field="City" title="City" width="auto" />
-          <ListColumn field="Order Date" title="Order Date" width="auto" />
-          <ListColumn field="Quantity" title="Quantity" width="auto" />
-          <ListColumn field="Sales" title="Sales" width="auto" />
-          <ListColumn field="Profit" title="Profit" width="auto" />
-        </ListTable>
-      </NCard>
+    <div class="flex flex-col gap-4">
+      <VCard class="h-full w-2/3 card-wrapper">
+        <VCardTitle>List Table</VCardTitle>
+        <VCardText>
+          <ListTable ref="listTableRef" :options="listOptions" :records="listRecords" height="400px">
+            <ListColumn field="Order ID" title="Order ID" width="auto" />
+            <ListColumn field="Customer ID" title="Customer ID" width="auto" />
+            <ListColumn field="Product Name" title="Product Name" width="auto" />
+            <ListColumn field="Category" title="Category" width="auto" />
+            <ListColumn field="Sub-Category" title="Sub-Category" width="auto" />
+            <ListColumn field="Region" title="Region" width="auto" />
+            <ListColumn field="City" title="City" width="auto" />
+            <ListColumn field="Order Date" title="Order Date" width="auto" />
+            <ListColumn field="Quantity" title="Quantity" width="auto" />
+            <ListColumn field="Sales" title="Sales" width="auto" />
+            <ListColumn field="Profit" title="Profit" width="auto" />
+          </ListTable>
+        </VCardText>
+      </VCard>
 
-      <NCard title="Group Table" :bordered="false" class="h-full w-2/3 card-wrapper">
-        <ListTable ref="groupTableRef" :options="groupOptions" :records="groupRecords" height="400px">
-          <ListColumn field="Order ID" title="Order ID" width="auto" />
-          <ListColumn field="Customer ID" title="Customer ID" width="auto" />
-          <ListColumn field="Product Name" title="Product Name" width="auto" />
-          <ListColumn field="Category" title="Category" width="auto" />
-          <ListColumn field="Sub-Category" title="Sub-Category" width="auto" />
-          <ListColumn field="Region" title="Region" width="auto" />
-          <ListColumn field="City" title="City" width="auto" />
-          <ListColumn field="Order Date" title="Order Date" width="auto" />
-          <ListColumn field="Quantity" title="Quantity" width="auto" />
-          <ListColumn field="Sales" title="Sales" width="auto" />
-          <ListColumn field="Profit" title="Profit" width="auto" />
-        </ListTable>
-      </NCard>
+      <VCard class="h-full w-2/3 card-wrapper">
+        <VCardTitle>Group Table</VCardTitle>
+        <VCardText>
+          <ListTable ref="groupTableRef" :options="groupOptions" :records="groupRecords" height="400px">
+            <ListColumn field="Order ID" title="Order ID" width="auto" />
+            <ListColumn field="Customer ID" title="Customer ID" width="auto" />
+            <ListColumn field="Product Name" title="Product Name" width="auto" />
+            <ListColumn field="Category" title="Category" width="auto" />
+            <ListColumn field="Sub-Category" title="Sub-Category" width="auto" />
+            <ListColumn field="Region" title="Region" width="auto" />
+            <ListColumn field="City" title="City" width="auto" />
+            <ListColumn field="Order Date" title="Order Date" width="auto" />
+            <ListColumn field="Quantity" title="Quantity" width="auto" />
+            <ListColumn field="Sales" title="Sales" width="auto" />
+            <ListColumn field="Profit" title="Profit" width="auto" />
+          </ListTable>
+        </VCardText>
+      </VCard>
 
-      <NCard title="Pivot Table" :bordered="false" class="h-full w-2/3 card-wrapper">
-        <PivotTable ref="pivotTableRef" :options="pivotTableOptions" :records="pivotTableRecords" height="400px">
-          <PivotColumnDimension
-            title="Category"
-            dimension-key="Category"
-            :header-style="{ textStick: true }"
-            width="auto"
+      <VCard class="h-full w-2/3 card-wrapper">
+        <VCardTitle>Pivot Table</VCardTitle>
+        <VCardText>
+          <PivotTable ref="pivotTableRef" :options="pivotTableOptions" :records="pivotTableRecords" height="400px">
+            <PivotColumnDimension
+              title="Category"
+              dimension-key="Category"
+              :header-style="{ textStick: true }"
+              width="auto"
+            />
+            <PivotRowDimension
+              v-for="(row, index) in pivotTableRows"
+              :key="index"
+              :dimension-key="row.dimensionKey"
+              :title="row.title"
+              :header-style="row.headerStyle"
+              :width="row.width"
+            />
+            <PivotIndicator
+              v-for="(indicator, index) in pivotTableIndicators"
+              :key="index"
+              :indicator-key="indicator.indicatorKey"
+              :title="indicator.title"
+              :width="indicator.width"
+              :show-sort="indicator.showSort"
+              :header-style="indicator.headerStyle"
+              :format="indicator.format"
+              :style="indicator.style"
+            />
+            <PivotCorner title-on-dimension="row" />
+            <Menu menu-type="html" :context-menu-items="['copy', 'paste', 'delete', '...']" />
+          </PivotTable>
+        </VCardText>
+      </VCard>
+
+      <VCard class="h-full w-2/3 card-wrapper">
+        <VCardTitle>Pivot Chart</VCardTitle>
+        <VCardText>
+          <PivotChart
+            ref="pivotChartRef"
+            :options="pivotChartOptions"
+            :records="pivotChartRecords"
+            height="800px"
+            @on-legend-item-click="handleLegendItemClick"
           />
-          <PivotRowDimension
-            v-for="(row, index) in pivotTableRows"
-            :key="index"
-            :dimension-key="row.dimensionKey"
-            :title="row.title"
-            :header-style="row.headerStyle"
-            :width="row.width"
-          />
-          <PivotIndicator
-            v-for="(indicator, index) in pivotTableIndicators"
-            :key="index"
-            :indicator-key="indicator.indicatorKey"
-            :title="indicator.title"
-            :width="indicator.width"
-            :show-sort="indicator.showSort"
-            :header-style="indicator.headerStyle"
-            :format="indicator.format"
-            :style="indicator.style"
-          />
-          <PivotCorner title-on-dimension="row" />
-          <Menu menu-type="html" :context-menu-items="['copy', 'paste', 'delete', '...']" />
-        </PivotTable>
-      </NCard>
+        </VCardText>
+      </VCard>
 
-      <NCard title="Pivot Chart" :bordered="false" class="h-full w-2/3 card-wrapper">
-        <PivotChart
-          ref="pivotChartRef"
-          :options="pivotChartOptions"
-          :records="pivotChartRecords"
-          height="800px"
-          @on-legend-item-click="handleLegendItemClick"
-        />
-      </NCard>
+      <VCard class="h-full w-2/3 card-wrapper">
+        <VCardTitle>Custom Component</VCardTitle>
+        <VCardText>
+          <ListTable
+            ref="customLayoutListTableRef"
+            :options="customLayoutListTableOptions"
+            :records="customLayoutListTableRecords"
+            height="400px"
+          >
+            <!-- Order Number Column -->
+            <ListColumn field="bloggerId" title="Order Number" width="100" />
 
-      <NCard title="Custom Component" :bordered="false" class="h-full w-2/3 card-wrapper">
-        <ListTable
-          ref="customLayoutListTableRef"
-          :options="customLayoutListTableOptions"
-          :records="customLayoutListTableRecords"
-          height="400px"
-        >
-          <!-- Order Number Column -->
-          <ListColumn field="bloggerId" title="Order Number" width="100" />
-
-          <!-- Anchor Nickname Column with Custom Layout -->
-          <!-- @vue-skip -->
-          <ListColumn field="bloggerName" title="Anchor Nickname" :width="330">
-            <template #customLayout="{ record, height, width }">
-              <Group :height="height" :width="width" display="flex" flex-direction="row" flex-wrap="nowrap">
-                <!-- Avatar Group -->
-                <Group
-                  :height="height"
-                  :width="60"
-                  display="flex"
-                  flex-direction="column"
-                  align-items="center"
-                  justify-content="space-around"
-                  fill="red"
-                  :opacity="0.1"
-                >
-                  <Image id="icon0" :width="50" :height="50" :image="record.bloggerAvatar" :corner-radius="25" />
-                </Group>
-                <!-- Blogger Info Group -->
-                <Group :height="height" :width="width - 60" display="flex" flex-direction="column" flex-wrap="nowrap">
+            <!-- Anchor Nickname Column with Custom Layout -->
+            <!-- @vue-skip -->
+            <ListColumn field="bloggerName" title="Anchor Nickname" :width="330">
+              <template #customLayout="{ record, height, width }">
+                <Group :height="height" :width="width" display="flex" flex-direction="row" flex-wrap="nowrap">
+                  <!-- Avatar Group -->
                   <Group
-                    :height="height / 2"
-                    :width="width - 60"
+                    :height="height"
+                    :width="60"
                     display="flex"
-                    flex-wrap="wrap"
+                    flex-direction="column"
                     align-items="center"
-                    fill="orange"
+                    justify-content="space-around"
+                    fill="red"
                     :opacity="0.1"
                   >
-                    <Text
-                      :text="record.bloggerName"
-                      :font-size="13"
-                      font-family="sans-serif"
-                      fill="black"
-                      :bounds-padding="[0, 0, 0, 10]"
-                    />
-                    <Image
-                      id="location"
-                      image="https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/location.svg"
-                      :width="15"
-                      :height="15"
-                      :bounds-padding="[0, 0, 0, 10]"
-                      cursor="pointer"
-                    />
-                    <Text :text="record.city" :font-size="11" font-family="sans-serif" fill="#6f7070" />
+                    <Image id="icon0" :width="50" :height="50" :image="record.bloggerAvatar" :corner-radius="25" />
                   </Group>
-                  <!-- Tags Group -->
-                  <Group
-                    :height="height / 2"
-                    :width="width - 60"
-                    display="flex"
-                    align-items="center"
-                    fill="yellow"
-                    :opacity="0.1"
-                  >
-                    <Tag
-                      v-for="tag in record?.tags"
-                      :key="tag"
-                      :text="tag"
-                      :text-style="{ fontSize: 10, fontFamily: 'sans-serif', fill: 'rgb(51, 101, 238)' }"
-                      :panel="{ visible: true, fill: '#f4f4f2', cornerRadius: 5 }"
-                      :space="5"
-                      :bounds-padding="[0, 0, 0, 5]"
-                    />
+                  <!-- Blogger Info Group -->
+                  <Group :height="height" :width="width - 60" display="flex" flex-direction="column" flex-wrap="nowrap">
+                    <Group
+                      :height="height / 2"
+                      :width="width - 60"
+                      display="flex"
+                      flex-wrap="wrap"
+                      align-items="center"
+                      fill="orange"
+                      :opacity="0.1"
+                    >
+                      <Text
+                        :text="record.bloggerName"
+                        :font-size="13"
+                        font-family="sans-serif"
+                        fill="black"
+                        :bounds-padding="[0, 0, 0, 10]"
+                      />
+                      <Image
+                        id="location"
+                        image="https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/location.svg"
+                        :width="15"
+                        :height="15"
+                        :bounds-padding="[0, 0, 0, 10]"
+                        cursor="pointer"
+                      />
+                      <Text :text="record.city" :font-size="11" font-family="sans-serif" fill="#6f7070" />
+                    </Group>
+                    <!-- Tags Group -->
+                    <Group
+                      :height="height / 2"
+                      :width="width - 60"
+                      display="flex"
+                      align-items="center"
+                      fill="yellow"
+                      :opacity="0.1"
+                    >
+                      <Tag
+                        v-for="tag in record?.tags"
+                        :key="tag"
+                        :text="tag"
+                        :text-style="{ fontSize: 10, fontFamily: 'sans-serif', fill: 'rgb(51, 101, 238)' }"
+                        :panel="{ visible: true, fill: '#f4f4f2', cornerRadius: 5 }"
+                        :space="5"
+                        :bounds-padding="[0, 0, 0, 5]"
+                      />
+                    </Group>
                   </Group>
                 </Group>
-              </Group>
-            </template>
-          </ListColumn>
+              </template>
+            </ListColumn>
 
-          <!-- Other Columns -->
-          <ListColumn
-            field="fansCount"
-            title="Fans Count"
-            width="120"
-            :field-format="rec => rec.fansCount + 'w'"
-            :style="customLayoutListTableColumnStyle"
-          />
-          <ListColumn field="worksCount" title="Works Count" :style="customLayoutListTableColumnStyle" width="135" />
-          <ListColumn
-            field="viewCount"
-            title="View Count"
-            width="120"
-            :field-format="rec => rec.viewCount + 'w'"
-            :style="customLayoutListTableColumnStyle"
-          />
-        </ListTable>
-      </NCard>
+            <!-- Other Columns -->
+            <ListColumn
+              field="fansCount"
+              title="Fans Count"
+              width="120"
+              :field-format="rec => rec.fansCount + 'w'"
+              :style="customLayoutListTableColumnStyle"
+            />
+            <ListColumn field="worksCount" title="Works Count" :style="customLayoutListTableColumnStyle" width="135" />
+            <ListColumn
+              field="viewCount"
+              title="View Count"
+              width="120"
+              :field-format="rec => rec.viewCount + 'w'"
+              :style="customLayoutListTableColumnStyle"
+            />
+          </ListTable>
+        </VCardText>
+      </VCard>
 
-      <NCard :bordered="false" class="h-full w-2/3 card-wrapper">
-        <WebSiteLink label="More VTable Demos: " link="https://www.visactor.com/vtable/example" />
-      </NCard>
-    </NSpace>
+      <VCard class="h-full w-2/3 card-wrapper">
+        <VCardText>
+          <WebSiteLink label="More VTable Demos: " link="https://www.visactor.com/vtable/example" />
+        </VCardText>
+      </VCard>
+    </div>
   </div>
 </template>

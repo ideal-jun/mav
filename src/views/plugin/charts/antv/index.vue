@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import { computed, onMounted, ref, useTemplateRef } from 'vue';
 import type { Ref } from 'vue';
 import type { CustomBehaviorOption, IPointerEvent } from '@antv/g6';
@@ -53,15 +53,18 @@ onMounted(() => {
 
 <template>
   <div class="h-full">
-    <NCard title="AntV G6 Next" :bordered="false" class="h-full card-wrapper">
-      <AntvFlow ref="antvFlowRef" :data="flowData" :selected="selectedNode" :behaviors="behaviors" />
-      <NDivider />
-      <NFlex>
-        <NButton @click="selectedNode = 'N5'">选中节点N5(需要自行处理选中事件，不会触发元素点击)</NButton>
-        <NButton v-if="!hasNodeN" @click="addNode">添加节点并与Node5连线</NButton>
-        <NButton v-else @click="() => removeNode('NN')">删除新添加的节点</NButton>
-        <NButton @click="() => removeNode('NX')">删除NodeX</NButton>
-      </NFlex>
-    </NCard>
+    <VCard class="h-full card-wrapper">
+      <VCardTitle>AntV G6 Next</VCardTitle>
+      <VCardText>
+        <AntvFlow ref="antvFlowRef" :data="flowData" :selected="selectedNode" :behaviors="behaviors" />
+        <VDivider class="my-3" />
+        <div class="flex flex-wrap gap-3">
+          <VBtn variant="tonal" @click="selectedNode = 'N5'">选中节点N5(需要自行处理选中事件，不会触发元素点击)</VBtn>
+          <VBtn v-if="!hasNodeN" variant="tonal" @click="addNode">添加节点并与Node5连线</VBtn>
+          <VBtn v-else variant="tonal" @click="() => removeNode('NN')">删除新添加的节点</VBtn>
+          <VBtn variant="tonal" @click="() => removeNode('NX')">删除NodeX</VBtn>
+        </div>
+      </VCardText>
+    </VCard>
   </div>
 </template>

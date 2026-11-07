@@ -24,12 +24,15 @@ onMounted(() => {
 
 <template>
   <div class="h-full">
-    <NCard title="富文本插件" :bordered="false" class="card-wrapper">
-      <div ref="domRef" class="bg-white dark:bg-dark"></div>
-      <template #footer>
+    <VCard class="card-wrapper">
+      <VCardTitle>富文本插件</VCardTitle>
+      <VCardText>
+        <div ref="domRef" class="bg-white dark:bg-dark"></div>
+      </VCardText>
+      <VCardActions>
         <GithubLink link="https://github.com/wangeditor-team/wangEditor" />
-      </template>
-    </NCard>
+      </VCardActions>
+    </VCard>
   </div>
 </template>
 

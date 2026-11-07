@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { SimpleScrollbar } from '@sa/materials';
 import { useBoolean } from '@sa/hooks';
 import type { RouteKey } from '@elegant-router/types';
 import { GLOBAL_SIDER_MENU_ID } from '@/constants/app';
@@ -12,6 +11,7 @@ import { useRouterPush } from '@/hooks/common/router';
 import { $t } from '@/locales';
 import { useMenu, useMixMenuContext } from '../context';
 import FirstLevelMenu from '../components/first-level-menu.vue';
+import AppMenu from '../components/app-menu.vue';
 import GlobalLogo from '../../global-logo/index.vue';
 
 defineOptions({
@@ -107,17 +107,15 @@ watch(
               @click="appStore.toggleMixSiderFixed"
             />
           </header>
-          <SimpleScrollbar>
-            <NMenu
+          <div class="min-h-0 flex-1 overflow-hidden">
+            <AppMenu
               v-model:expanded-keys="expandedKeys"
-              mode="vertical"
-              :value="selectedKey"
-              :options="secondLevelMenus"
+              :menus="secondLevelMenus"
+              :selected-key="selectedKey"
               :inverted="inverted"
-              :indent="18"
-              @update:value="routerPushByKeyWithMetaQuery"
+              @select="routerPushByKeyWithMetaQuery"
             />
-          </SimpleScrollbar>
+          </div>
         </DarkModeContainer>
       </div>
     </div>

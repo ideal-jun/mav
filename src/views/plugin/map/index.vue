@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue';
 import type { Component } from 'vue';
 import { BaiduMap, GaodeMap, TencentMap } from './components';
 
@@ -13,17 +14,25 @@ const maps: Map[] = [
   { id: 'tencent', label: '腾讯地图', component: TencentMap },
   { id: 'baidu', label: '百度地图', component: BaiduMap }
 ];
+
+const activeTab = ref(maps[0].id);
+
+const activeMap = computed(() => maps.find(item => item.id === activeTab.value) ?? maps[0]);
 </script>
 
 <template>
   <div class="h-full">
-    <NCard title="地图插件" :bordered="false" class="h-full card-wrapper" content-style="overflow:hidden">
-      <NTabs type="line" class="h-full flex-col-stretch" pane-class="flex-1-hidden">
-        <NTabPane v-for="item in maps" :key="item.id" :name="item.id" :tab="item.label">
-          <component :is="item.component" />
-        </NTabPane>
-      </NTabs>
-    </NCard>
+    <VCard class="h-full card-wrapper flex flex-col">
+      <VCardTitle>地图插件</VCardTitle>
+      <VTabs v-model="activeTab" color="primary" density="compact" class="px-2">
+        <VTab v-for="item in maps" :key="item.id" :value="item.id">{{ item.label }}</VTab>
+      </VTabs>
+      <div class="min-h-0 flex-1 overflow-hidden">
+        <KeepAlive>
+          <component :is="activeMap.component" />
+        </KeepAlive>
+      </div>
+    </VCard>
   </div>
 </template>
 

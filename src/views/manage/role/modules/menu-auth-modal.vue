@@ -49,8 +49,8 @@ async function getPages() {
 }
 
 const pageSelectOptions = computed(() => {
-  const opts: CommonType.Option[] = pages.value.map(page => ({
-    label: page,
+  const opts: { title: string; value: string }[] = pages.value.map(page => ({
+    title: page,
     value: page
   }));
 
@@ -99,32 +99,41 @@ watch(visible, val => {
 </script>
 
 <template>
-  <NModal v-model:show="visible" :title="title" preset="card" class="w-480px">
-    <div class="flex-y-center gap-16px pb-12px">
-      <div>{{ $t('page.manage.menu.home') }}</div>
-      <NSelect :value="home" :options="pageSelectOptions" size="small" class="w-160px" @update:value="updateHome" />
-    </div>
-    <NTree
-      v-model:checked-keys="checks"
-      :data="tree"
-      key-field="id"
-      checkable
-      expand-on-click
-      virtual-scroll
-      block-line
-      class="h-280px"
-    />
-    <template #footer>
-      <NSpace justify="end">
-        <NButton size="small" class="mt-16px" @click="closeModal">
-          {{ $t('common.cancel') }}
-        </NButton>
-        <NButton type="primary" size="small" class="mt-16px" @click="handleSubmit">
-          {{ $t('common.confirm') }}
-        </NButton>
-      </NSpace>
-    </template>
-  </NModal>
+  <VDialog v-model="visible" max-width="480">
+    <VCard>
+      <VCardTitle>{{ title }}</VCardTitle>
+      <VCardText>
+        <div class="flex items-center gap-4 pb-3">
+          <div>{{ $t('page.manage.menu.home') }}</div>
+          <VSelect
+            :model-value="home"
+            :items="pageSelectOptions"
+            density="compact"
+            class="w-160px"
+            @update:model-value="updateHome"
+          />
+        </div>
+        <div class="h-280px overflow-y-auto">
+          <VTreeview
+            v-model:selected="checks"
+            :items="tree"
+            item-title="label"
+            item-value="id"
+            item-children="children"
+            selectable
+            select-strategy="classic"
+            open-on-click
+            density="compact"
+          />
+        </div>
+      </VCardText>
+      <VCardActions>
+        <VSpacer />
+        <VBtn variant="text" @click="closeModal">{{ $t('common.cancel') }}</VBtn>
+        <VBtn color="primary" variant="flat" @click="handleSubmit">{{ $t('common.confirm') }}</VBtn>
+      </VCardActions>
+    </VCard>
+  </VDialog>
 </template>
 
 <style scoped></style>

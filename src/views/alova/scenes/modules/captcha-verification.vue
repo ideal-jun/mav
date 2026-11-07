@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { actionDelegationMiddleware, useCaptcha, useForm } from '@sa/alova/client';
 import { $t } from '@/locales';
-import { useFormRules, useNaiveForm } from '@/hooks/common/form';
+import { useVuetifyForm, useVuetifyFormRules } from '@/hooks/common/form';
 import { sendCaptcha, verifyCaptcha } from '@/service-alova/api';
 
 defineOptions({
@@ -28,44 +28,46 @@ const {
   }
 });
 
-const { formRef, validate } = useNaiveForm();
-
-const rules = computed<Record<keyof typeof form.value, App.Global.FormRule[]>>(() => {
-  const { formRules } = useFormRules();
-
-  return {
-    phone: formRules.phone,
-    code: formRules.code
-  };
-});
+const { formRef, validate } = useVuetifyForm();
+const { formRules } = useVuetifyFormRules();
 
 async function handleSubmit() {
-  await validate();
+  const valid = await validate();
+
+  if (!valid) {
+    return;
+  }
+
   await submit();
-  // request
   window.$message?.success($t('page.login.common.validateSuccess'));
 }
 </script>
 
 <template>
-  <NForm ref="formRef" :model="form" :rules="rules" size="large" :show-label="false" @keyup.enter="handleSubmit">
-    <NFormItem path="phone">
-      <NInput v-model:value="form.phone" :placeholder="$t('page.login.common.phonePlaceholder')" :maxlength="11" />
-    </NFormItem>
-    <NFormItem path="code">
-      <div class="w-full flex-y-center gap-16px">
-        <NInput v-model:value="form.code" :placeholder="$t('page.login.common.codePlaceholder')" />
-        <NButton size="large" :disabled="countdown > 0" :loading="loading" @click="send(form.phone)">
+  <VForm ref="formRef" :model="form" @keyup.enter="handleSubmit">
+    <div class="flex flex-col gap-4">
+      <VTextField
+        v-model="form.phone"
+        :rules="formRules.phone"
+        :placeholder="$t('page.login.common.phonePlaceholder')"
+        :maxlength="11"
+      />
+      <div class="flex items-center gap-4">
+        <VTextField
+          v-model="form.code"
+          class="flex-1"
+          :rules="formRules.code"
+          :placeholder="$t('page.login.common.codePlaceholder')"
+        />
+        <VBtn size="large" :disabled="countdown > 0" :loading="loading" @click="send(form.phone)">
           {{ label }}
-        </NButton>
+        </VBtn>
       </div>
-    </NFormItem>
-    <NSpace vertical :size="18" class="w-full">
-      <NButton type="primary" size="large" round block :loading="submiting" @click="handleSubmit">
+      <VBtn block rounded color="primary" size="large" variant="flat" :loading="submiting" @click="handleSubmit">
         {{ $t('common.confirm') }}
-      </NButton>
-    </NSpace>
-  </NForm>
+      </VBtn>
+    </div>
+  </VForm>
 </template>
 
 <style scoped></style>

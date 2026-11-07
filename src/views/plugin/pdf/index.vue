@@ -20,8 +20,9 @@ function onPdfRendered() {
   }
 }
 
-function showAllPagesChange() {
-  currentPage.value = showAllPages.value ? undefined : 1;
+function showAllPagesChange(value: boolean | null) {
+  showAllPages.value = Boolean(value);
+  currentPage.value = value ? undefined : 1;
 }
 
 const rotations = [0, 90, 180, 270];
@@ -42,24 +43,25 @@ async function handleDownload() {
 
 <template>
   <div class="overflow-hidden">
-    <NCard title="PDF 预览" :bordered="false" class="h-full card-wrapper" content-class="overflow-hidden">
-      <div class="h-full flex-col-stretch">
+    <VCard class="h-full card-wrapper flex flex-col">
+      <VCardTitle>PDF 预览</VCardTitle>
+      <VCardText class="min-h-0 flex flex-1 flex-col">
         <GithubLink link="https://github.com/hrynko/vue-pdf-embed" />
         <WebSiteLink label="文档地址：" link="https://www.npmjs.com/package/vue-pdf-embed" />
-        <div class="flex-y-center justify-end gap-12px">
-          <NCheckbox v-model:checked="showAllPages" @update:checked="showAllPagesChange">显示所有页面</NCheckbox>
+        <div class="flex items-center justify-end gap-3">
+          <VCheckbox :model-value="showAllPages" @update:model-value="showAllPagesChange">显示所有页面</VCheckbox>
           <ButtonIcon tooltip-content="旋转90度" @click="handleRotate">
-            <icon-material-symbols-light-rotate-90-degrees-ccw-outline-rounded />
+            <VIcon icon="mdi-rotate-left" />
           </ButtonIcon>
           <ButtonIcon tooltip-content="打印" @click="handlePrint">
-            <icon-mdi-printer />
+            <VIcon icon="mdi-printer" />
           </ButtonIcon>
           <ButtonIcon tooltip-content="下载" @click="handleDownload">
-            <icon-charm-download />
+            <VIcon icon="mdi-download" />
           </ButtonIcon>
         </div>
-        <NScrollbar class="flex-1-hidden">
-          <NSkeleton v-if="loading" size="small" class="mt-12px" text :repeat="12" />
+        <div class="min-h-0 flex-1 overflow-auto">
+          <VSkeletonLoader v-if="loading" type="text@12" class="mt-3" />
           <VuePdfEmbed
             ref="pdfRef"
             class="container overflow-auto"
@@ -69,13 +71,19 @@ async function handleDownload() {
             :source="source"
             @rendered="onPdfRendered"
           />
-        </NScrollbar>
-        <div class="flex-y-center justify-between">
-          <div v-if="showAllPages" class="text-18px font-medium">共{{ pageCount }}页</div>
-          <NPagination v-else v-model:page="currentPage" :page-count="pageCount" :page-size="1" />
         </div>
-      </div>
-    </NCard>
+        <div class="flex items-center justify-between">
+          <div v-if="showAllPages" class="text-18px font-medium">共{{ pageCount }}页</div>
+          <VPagination
+            v-else
+            :model-value="currentPage ?? 1"
+            :length="pageCount"
+            :total-visible="7"
+            @update:model-value="currentPage = $event"
+          />
+        </div>
+      </VCardText>
+    </VCard>
   </div>
 </template>
 

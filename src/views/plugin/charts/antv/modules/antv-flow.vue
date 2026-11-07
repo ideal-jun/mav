@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import { shallowRef, useTemplateRef, watch } from 'vue';
 import { vResizeObserver } from '@vueuse/components';
 import { useDebounceFn } from '@vueuse/core';
@@ -85,43 +85,44 @@ defineExpose({ selectNode, graph: graphRef });
 <template>
   <div class="relative">
     <!-- 画布操作栏 -->
-    <div class="absolute left-0 right-0 z-1 flex items-center items-stretch justify-between">
-      <NButtonGroup size="small" class="bg-white!">
-        <NButton @click="zoomOut">
-          <icon-mingcute-zoom-out-line />
-        </NButton>
-        <NButton @click="zoomIn">
-          <icon-mingcute-zoom-in-line />
-        </NButton>
-        <NButton @click="resetZoom">
-          <icon-icon-park-outline-equal-ratio />
-        </NButton>
-        <NButton @click="fitZoom">
-          <icon-gg-ratio />
-        </NButton>
-      </NButtonGroup>
-      <div class="flex-center gap-12px">
-        <NPopover placement="bottom-end" :animated="false">
-          <template #trigger>
-            <NButton size="small" class="bg-white!">
-              <icon-fe-question />
-            </NButton>
+    <div class="absolute left-0 right-0 z-1 flex items-stretch justify-between">
+      <VBtnGroup density="compact" variant="outlined" class="bg-white!">
+        <VBtn @click="zoomOut">
+          <SvgIcon icon="mingcute:zoom-out-line" />
+        </VBtn>
+        <VBtn @click="zoomIn">
+          <SvgIcon icon="mingcute:zoom-in-line" />
+        </VBtn>
+        <VBtn @click="resetZoom">
+          <SvgIcon icon="icon-park-outline:equal-ratio" />
+        </VBtn>
+        <VBtn @click="fitZoom">
+          <SvgIcon icon="gg:ratio" />
+        </VBtn>
+      </VBtnGroup>
+      <div class="flex items-center gap-3">
+        <VMenu location="bottom end">
+          <template #activator="{ props: activatorProps }">
+            <VBtn v-bind="activatorProps" density="compact" variant="outlined" class="bg-white!">
+              <SvgIcon icon="fe:question" />
+            </VBtn>
           </template>
-          <div class="flex-col gap-8px">
-            <div span="2" class="text-12px font-bold">节点图例</div>
-            <NGrid :cols="2" :y-gap="8" class="w-180px!">
-              <NGi v-for="(config, status) in nodeStatus" :key="status" class="flex-center">
-                <NTag size="small" round :bordered="false">
-                  <template #icon>
-                    <icon-f7-flag-circle-fill v-if="status === 'MILESTONE'" :style="{ color: config.color }" />
-                    <icon-f7-circle-fill v-else :style="{ color: config.color }" />
-                  </template>
+          <div class="flex flex-col gap-2 p-4">
+            <div class="text-12px font-bold">节点图例</div>
+            <div class="grid w-180px! grid-cols-2 gap-y-2">
+              <div v-for="(config, status) in nodeStatus" :key="status" class="flex items-center justify-center">
+                <VChip size="small" variant="tonal" rounded="pill">
+                  <SvgIcon
+                    :icon="status === 'MILESTONE' ? 'f7:flag-circle-fill' : 'f7:circle-fill'"
+                    :style="{ color: config.color }"
+                    class="mr-1"
+                  />
                   {{ config.type }}
-                </NTag>
-              </NGi>
-            </NGrid>
+                </VChip>
+              </div>
+            </div>
           </div>
-        </NPopover>
+        </VMenu>
       </div>
     </div>
     <!-- 画布 -->

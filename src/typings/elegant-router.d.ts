@@ -72,14 +72,6 @@ declare module "@elegant-router/types" {
     "plugin_tables_vtable": "/plugin/tables/vtable";
     "plugin_typeit": "/plugin/typeit";
     "plugin_video": "/plugin/video";
-    "pro-naive": "/pro-naive";
-    "pro-naive_form": "/pro-naive/form";
-    "pro-naive_form_basic": "/pro-naive/form/basic";
-    "pro-naive_form_query": "/pro-naive/form/query";
-    "pro-naive_form_step": "/pro-naive/form/step";
-    "pro-naive_table": "/pro-naive/table";
-    "pro-naive_table_remote": "/pro-naive/table/remote";
-    "pro-naive_table_row-edit": "/pro-naive/table/row-edit";
     "user-center": "/user-center";
   };
 
@@ -124,7 +116,6 @@ declare module "@elegant-router/types" {
     | "manage"
     | "multi-menu"
     | "plugin"
-    | "pro-naive"
     | "user-center"
   >;
 
@@ -184,11 +175,6 @@ declare module "@elegant-router/types" {
     | "plugin_tables_vtable"
     | "plugin_typeit"
     | "plugin_video"
-    | "pro-naive_form_basic"
-    | "pro-naive_form_query"
-    | "pro-naive_form_step"
-    | "pro-naive_table_remote"
-    | "pro-naive_table_row-edit"
     | "user-center"
   >;
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { toRaw } from 'vue';
+import { computed, ref, toRaw } from 'vue';
 import { jsonClone } from '@sa/utils';
 import { enableStatusOptions } from '@/constants/business';
 import { translateOptions } from '@/utils/common';
@@ -17,6 +17,12 @@ const emit = defineEmits<Emits>();
 
 const model = defineModel<Api.SystemManage.RoleSearchParams>('model', { required: true });
 
+const enableStatusItems = computed(() =>
+  translateOptions(enableStatusOptions).map(item => ({ title: item.label, value: item.value }))
+);
+
+const expanded = ref<string[]>(['role-search']);
+
 const defaultModel = jsonClone(toRaw(model.value));
 
 function resetModel() {
@@ -29,46 +35,51 @@ function search() {
 </script>
 
 <template>
-  <NCard :bordered="false" size="small" class="card-wrapper">
-    <NCollapse :default-expanded-names="['role-search']">
-      <NCollapseItem :title="$t('common.search')" name="role-search">
-        <NForm :model="model" label-placement="left" :label-width="80">
-          <NGrid responsive="screen" item-responsive>
-            <NFormItemGi span="24 s:12 m:6" :label="$t('page.manage.role.roleName')" path="roleName" class="pr-24px">
-              <NInput v-model:value="model.roleName" :placeholder="$t('page.manage.role.form.roleName')" />
-            </NFormItemGi>
-            <NFormItemGi span="24 s:12 m:6" :label="$t('page.manage.role.roleCode')" path="roleCode" class="pr-24px">
-              <NInput v-model:value="model.roleCode" :placeholder="$t('page.manage.role.form.roleCode')" />
-            </NFormItemGi>
-            <NFormItemGi span="24 s:12 m:6" :label="$t('page.manage.role.roleStatus')" path="status" class="pr-24px">
-              <NSelect
-                v-model:value="model.status"
-                :placeholder="$t('page.manage.role.form.roleStatus')"
-                :options="translateOptions(enableStatusOptions)"
-                clearable
-              />
-            </NFormItemGi>
-            <NFormItemGi span="24 s:12 m:6">
-              <NSpace class="w-full" justify="end">
-                <NButton @click="resetModel">
-                  <template #icon>
-                    <icon-ic-round-refresh class="text-icon" />
-                  </template>
-                  {{ $t('common.reset') }}
-                </NButton>
-                <NButton type="primary" ghost @click="search">
-                  <template #icon>
-                    <icon-ic-round-search class="text-icon" />
-                  </template>
-                  {{ $t('common.search') }}
-                </NButton>
-              </NSpace>
-            </NFormItemGi>
-          </NGrid>
-        </NForm>
-      </NCollapseItem>
-    </NCollapse>
-  </NCard>
+  <VCard class="card-wrapper">
+    <VExpansionPanels v-model="expanded" variant="accordion">
+      <VExpansionPanel value="role-search" :title="$t('common.search')">
+        <VExpansionPanelText>
+          <VForm @submit.prevent="search">
+            <VRow>
+              <VCol cols="12" sm="12" md="6" class="pr-6">
+                <VTextField
+                  v-model="model.roleName"
+                  :label="$t('page.manage.role.roleName')"
+                  :placeholder="$t('page.manage.role.form.roleName')"
+                />
+              </VCol>
+              <VCol cols="12" sm="12" md="6" class="pr-6">
+                <VTextField
+                  v-model="model.roleCode"
+                  :label="$t('page.manage.role.roleCode')"
+                  :placeholder="$t('page.manage.role.form.roleCode')"
+                />
+              </VCol>
+              <VCol cols="12" sm="12" md="6" class="pr-6">
+                <VSelect
+                  v-model="model.status"
+                  :label="$t('page.manage.role.roleStatus')"
+                  :placeholder="$t('page.manage.role.form.roleStatus')"
+                  :items="enableStatusItems"
+                  clearable
+                />
+              </VCol>
+              <VCol cols="12" sm="12" md="6" class="pr-6">
+                <div class="flex h-full items-center justify-end gap-2">
+                  <VBtn variant="text" prepend-icon="mdi-refresh" @click="resetModel">
+                    {{ $t('common.reset') }}
+                  </VBtn>
+                  <VBtn color="primary" variant="outlined" prepend-icon="mdi-magnify" @click="search">
+                    {{ $t('common.search') }}
+                  </VBtn>
+                </div>
+              </VCol>
+            </VRow>
+          </VForm>
+        </VExpansionPanelText>
+      </VExpansionPanel>
+    </VExpansionPanels>
+  </VCard>
 </template>
 
 <style scoped></style>

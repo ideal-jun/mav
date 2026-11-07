@@ -2,7 +2,6 @@
 import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import type { RouteKey } from '@elegant-router/types';
-import { SimpleScrollbar } from '@sa/materials';
 import { useBoolean } from '@sa/hooks';
 import { GLOBAL_HEADER_MENU_ID, GLOBAL_SIDER_MENU_ID } from '@/constants/app';
 import { useAppStore } from '@/store/modules/app';
@@ -11,6 +10,8 @@ import { useRouteStore } from '@/store/modules/route';
 import { useRouterPush } from '@/hooks/common/router';
 import { useMenu, useMixMenuContext } from '../context';
 import FirstLevelMenu from '../components/first-level-menu.vue';
+import AppMenu from '../components/app-menu.vue';
+import AppHorizontalMenu from '../components/app-horizontal-menu.vue';
 import GlobalLogo from '../../global-logo/index.vue';
 
 defineOptions({
@@ -110,14 +111,7 @@ watch(
 
 <template>
   <Teleport :to="`#${GLOBAL_HEADER_MENU_ID}`">
-    <NMenu
-      mode="horizontal"
-      :value="activeFirstLevelMenuKey"
-      :options="firstLevelMenus"
-      :indent="18"
-      responsive
-      @update:value="handleSelectMenu"
-    />
+    <AppHorizontalMenu :menus="firstLevelMenus" :selected-key="activeFirstLevelMenuKey" @select="handleSelectMenu" />
   </Teleport>
   <Teleport :to="`#${GLOBAL_SIDER_MENU_ID}`">
     <div class="h-full flex" @mouseleave="handleResetActiveMenu">
@@ -152,17 +146,15 @@ watch(
               @click="appStore.toggleMixSiderFixed"
             />
           </header>
-          <SimpleScrollbar>
-            <NMenu
+          <div class="min-h-0 flex-1 overflow-hidden">
+            <AppMenu
               v-model:expanded-keys="expandedKeys"
-              mode="vertical"
-              :value="selectedKey"
-              :options="childLevelMenus"
+              :menus="childLevelMenus"
+              :selected-key="selectedKey"
               :inverted="inverted"
-              :indent="18"
-              @update:value="routerPushByKeyWithMetaQuery"
+              @select="routerPushByKeyWithMetaQuery"
             />
-          </SimpleScrollbar>
+          </div>
         </DarkModeContainer>
       </div>
     </div>

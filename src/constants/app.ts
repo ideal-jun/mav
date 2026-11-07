@@ -69,3 +69,5 @@ export const watermarkTimeFormatOptions = [
   { label: 'HH:mm:ss', value: 'HH:mm:ss' },
   { label: 'MM-DD HH:mm', value: 'MM-DD HH:mm' }
 ];
+/** The id of the scroll element of the layout */
+export const LAYOUT_SCROLL_EL_ID = '__SCROLL_EL_ID__';

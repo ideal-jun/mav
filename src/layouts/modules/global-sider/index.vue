@@ -20,22 +20,21 @@ const darkMenu = computed(
 );
 const showLogo = computed(() => themeStore.layout.mode === 'vertical');
 const menuWrapperClass = computed(() => (showLogo.value ? 'flex-1 overflow-hidden' : 'h-full'));
+
+const siderStyle = computed(() =>
+  darkMenu.value ? { backgroundColor: 'rgb(var(--inverted-bg-color))', color: '#1f1f1f' } : undefined
+);
 </script>
 
 <template>
-  <VSheet
-    class="size-full flex flex-col shadow-sm"
-    color="surface"
-    rounded="0"
-    :style="darkMenu ? { backgroundColor: 'rgb(var(--inverted-bg-color))', color: '#1f1f1f' } : undefined"
-  >
+  <div class="size-full flex flex-col" :style="siderStyle">
     <GlobalLogo
       v-if="showLogo"
       :show-title="!appStore.siderCollapse"
       :style="{ height: themeStore.header.height + 'px' }"
     />
     <div :id="GLOBAL_SIDER_MENU_ID" :class="menuWrapperClass"></div>
-  </VSheet>
+  </div>
 </template>
 
 <style scoped></style>

@@ -5,6 +5,7 @@ import { useAppStore } from '@/store/modules/app';
 import { useThemeStore } from '@/store/modules/theme';
 import { useRouterPush } from '@/hooks/common/router';
 import FirstLevelMenu from '../components/first-level-menu.vue';
+import AppHorizontalMenu from '../components/app-horizontal-menu.vue';
 import { useMenu, useMixMenuContext } from '../context';
 
 defineOptions({
@@ -37,14 +38,7 @@ function handleSelectMenu(key: RouteKey) {
 
 <template>
   <Teleport :to="`#${GLOBAL_HEADER_MENU_ID}`">
-    <NMenu
-      mode="horizontal"
-      :value="selectedKey"
-      :options="secondLevelMenus"
-      :indent="18"
-      responsive
-      @update:value="routerPushByKeyWithMetaQuery"
-    />
+    <AppHorizontalMenu :menus="secondLevelMenus" :selected-key="selectedKey" @select="routerPushByKeyWithMetaQuery" />
   </Teleport>
   <Teleport :to="`#${GLOBAL_SIDER_MENU_ID}`">
     <div class="h-full pt-2">

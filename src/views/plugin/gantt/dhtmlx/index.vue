@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import { onMounted, shallowRef } from 'vue';
 import { gantt } from 'dhtmlx-gantt';
 import type { GanttConfigOptions, ZoomLevel } from 'dhtmlx-gantt';
@@ -178,30 +178,26 @@ onMounted(() => {
 
 <template>
   <div class="overflow-hidden lt-sm:overflow-auto">
-    <NCard
-      title="甘特图演示"
-      :bordered="false"
-      size="small"
-      content-class="overflow-y-hidden overflow-x-auto"
-      class="h-full card-wrapper"
-    >
-      <template #header-extra>
-        <NTabs
-          :value="timeType"
-          type="segment"
-          animated
-          size="small"
+    <VCard class="h-full card-wrapper">
+      <VCardTitle class="flex items-center justify-between">
+        <span>甘特图演示</span>
+        <VTabs
+          :model-value="timeType"
+          color="primary"
+          density="compact"
           class="relative w-320px"
-          @update:value="changeTime"
+          @update:model-value="changeTime"
         >
-          <NTab v-for="item in data" :key="item.code" :name="item.code">
+          <VTab v-for="item in data" :key="item.code" :value="item.code">
             {{ item.name }}
-          </NTab>
-        </NTabs>
-      </template>
+          </VTab>
+        </VTabs>
+      </VCardTitle>
 
-      <div ref="ganttRef" class="size-full min-w-800px"></div>
-    </NCard>
+      <div class="overflow-x-auto overflow-y-hidden">
+        <div ref="ganttRef" class="size-full min-w-800px"></div>
+      </div>
+    </VCard>
   </div>
 </template>
 

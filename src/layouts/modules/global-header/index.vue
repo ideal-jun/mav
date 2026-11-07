@@ -30,7 +30,7 @@ const { isFullscreen, toggle } = useFullscreen();
 </script>
 
 <template>
-  <VSheet class="h-full px-3 shadow-sm" color="surface" rounded="0">
+  <div class="h-full w-full px-3">
     <div class="flex h-full items-center">
       <GlobalLogo v-if="showLogo" class="h-full" :style="{ width: themeStore.sider.width + 'px' }" />
       <MenuToggler v-if="showMenuToggler" :collapsed="appStore.siderCollapse" @click="appStore.toggleSiderCollapse" />
@@ -56,7 +56,7 @@ const { isFullscreen, toggle } = useFullscreen();
         <UserAvatar />
       </div>
     </div>
-  </VSheet>
+  </div>
 </template>
 
 <style scoped></style>

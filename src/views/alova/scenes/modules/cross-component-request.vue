@@ -9,5 +9,7 @@ const handleAutoRequestSend = async () => {
 </script>
 
 <template>
-  <NButton @click="handleAutoRequestSend">{{ $t('page.alova.scenes.triggerAllRequest') }}</NButton>
+  <VBtn color="primary" variant="flat" @click="handleAutoRequestSend">
+    {{ $t('page.alova.scenes.triggerAllRequest') }}
+  </VBtn>
 </template>

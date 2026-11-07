@@ -26,18 +26,18 @@ const toggleStop = () => {
 </script>
 
 <template>
-  <NSpace vertical>
-    <NAlert type="info">
+  <div class="flex flex-col gap-4">
+    <VAlert type="info" variant="tonal">
       {{ $t('page.alova.scenes.visibilityRequestTips') }}
-    </NAlert>
-    <NButton type="primary" @click="toggleStop">
-      <icon-carbon-play v-if="isStop" class="mr-2" />
-      <icon-carbon-stop v-else class="mr-2" />
+    </VAlert>
+    <VBtn color="primary" variant="flat" :prepend-icon="isStop ? 'mdi-play' : 'mdi-stop'" @click="toggleStop">
       {{ isStop ? $t('page.alova.scenes.startRequest') : $t('page.alova.scenes.stopRequest') }}
-    </NButton>
-    <NSpace align="center">
+    </VBtn>
+    <div class="flex items-center gap-3">
       <span>{{ $t('page.alova.scenes.refreshTime') }}: {{ data.time || '--' }}</span>
-      <NSpin v-if="loading" :size="12" />
-    </NSpace>
-  </NSpace>
+      <VProgressCircular v-if="loading" indeterminate size="16" color="primary" />
+    </div>
+  </div>
 </template>
+
+<style scoped></style>

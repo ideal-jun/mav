@@ -5,7 +5,7 @@ defineOptions({
 </script>
 
 <template>
-  <VSheet class="flex h-full items-center justify-center" color="surface" rounded="0">
+  <div class="flex h-full items-center justify-center">
     <a
       class="text-sm text-medium-emphasis no-underline hover:text-primary"
       href="https://github.com/soybeanjs/soybean-admin/blob/main/LICENSE"
@@ -14,7 +14,7 @@ defineOptions({
     >
       Copyright MIT © 2021 Soybean
     </a>
-  </VSheet>
+  </div>
 </template>
 
 <style scoped></style>

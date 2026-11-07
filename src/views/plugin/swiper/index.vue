@@ -87,23 +87,28 @@ const swiperExample: SwiperExample[] = [
 
 <template>
   <div>
-    <NCard title="Swiper插件" :bordered="false" class="card-wrapper">
-      <NSpace :vertical="true">
-        <GithubLink link="https://github.com/nolimits4web/swiper" />
-        <WebSiteLink label="vue3版文档地址：" link="https://swiperjs.com/vue" />
-        <WebSiteLink label="插件demo地址：" link="https://swiperjs.com/demos" />
-      </NSpace>
-      <NSpace :vertical="true">
-        <div v-for="item in swiperExample" :key="item.id">
-          <h3 class="py-24px text-24px font-bold">{{ item.label }}</h3>
-          <Swiper v-bind="item.options">
-            <SwiperSlide v-for="i in 5" :key="i">
-              <div class="h-240px w-full flex-center border-1px border-#999 text-18px font-bold">Slide{{ i }}</div>
-            </SwiperSlide>
-          </Swiper>
+    <VCard class="card-wrapper">
+      <VCardTitle>Swiper插件</VCardTitle>
+      <VCardText>
+        <div class="flex flex-col gap-3">
+          <GithubLink link="https://github.com/nolimits4web/swiper" />
+          <WebSiteLink label="vue3版文档地址：" link="https://swiperjs.com/vue" />
+          <WebSiteLink label="插件demo地址：" link="https://swiperjs.com/demos" />
         </div>
-      </NSpace>
-    </NCard>
+        <div class="flex flex-col gap-3">
+          <div v-for="item in swiperExample" :key="item.id">
+            <h3 class="py-24px text-24px font-bold">{{ item.label }}</h3>
+            <Swiper v-bind="item.options">
+              <SwiperSlide v-for="i in 5" :key="i">
+                <div class="h-240px w-full flex items-center justify-center border-1px border-#999 text-18px font-bold">
+                  Slide{{ i }}
+                </div>
+              </SwiperSlide>
+            </Swiper>
+          </div>
+        </div>
+      </VCardText>
+    </VCard>
   </div>
 </template>
 

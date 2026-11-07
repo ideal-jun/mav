@@ -1,6 +1,5 @@
 import { computed, effectScope, onScopeDispose, reactive, shallowRef, watch } from 'vue';
 import type { Ref } from 'vue';
-import type { PaginationProps } from 'naive-ui';
 import { useBoolean, useTable } from '@sa/hooks';
 import type { PaginationData, TableColumnCheck, UseTableOptions } from '@sa/hooks';
 import type { FlatResponseData } from '@sa/axios';
@@ -8,10 +7,60 @@ import { jsonClone } from '@sa/utils';
 import { useAppStore } from '@/store/modules/app';
 import { $t } from '@/locales';
 
-export type UseNaiveTableOptions<ResponseData, ApiData, Pagination extends boolean> = Omit<
-  UseTableOptions<ResponseData, ApiData, NaiveUI.TableColumn<ApiData>, Pagination>,
+/**
+ * A Vuetify data-table column (header) definition.
+ *
+ * The columns are consumed by Vuetify's `VDataTable` / `VDataTableServer` through the `headers` prop,
+ * cell rendering is done with the `item.<key>` slots of the table component.
+ */
+export interface TableColumn {
+  /** the unique key of the column, it maps to the `item.<key>` slot of the table */
+  key: string;
+  /** the column title */
+  title?: string;
+  /** the text alignment of the column */
+  align?: 'start' | 'center' | 'end';
+  /** the fixed width of the column */
+  width?: number | string;
+  /** the min width of the column */
+  minWidth?: number | string;
+  /** the max width of the column */
+  maxWidth?: number | string;
+  /** whether the column is sortable */
+  sortable?: boolean;
+  /** the fixed position of the column */
+  fixed?: boolean | 'start' | 'end';
+}
+
+/**
+ * The type of the table operation
+ *
+ * - add: add table item
+ * - edit: edit table item
+ */
+export type TableOperateType = 'add' | 'edit';
+
+/** the pagination params of the table api */
+export interface TablePaginationParams {
+  page: number;
+  pageSize: number;
+}
+
+/** the pagination state shared with `VDataTableServer` */
+export interface TablePagination extends TablePaginationParams {
+  total: number;
+}
+
+export type UseVuetifyTableOptions<ResponseData, ApiData, Pagination extends boolean> = Omit<
+  UseTableOptions<ResponseData, ApiData, TableColumn, Pagination>,
   'pagination' | 'getColumnChecks' | 'getColumns'
 > & {
+  /**
+   * whether to show the selection column of the table
+   *
+   * @default false
+   */
+  showSelect?: boolean;
   /**
    * get column visible
    *
@@ -19,30 +68,26 @@ export type UseNaiveTableOptions<ResponseData, ApiData, Pagination extends boole
    *
    * @default true
    *
-   * @returns true if the column is visible, false otherwise
+   * @returns true if the column is visible in the column setting panel, false otherwise
    */
-  getColumnVisible?: (column: NaiveUI.TableColumn<ApiData>) => boolean;
+  getColumnVisible?: (column: TableColumn) => boolean;
 };
 
-const SELECTION_KEY = '__selection__';
+type UseVuetifyPaginatedTableOptions<ResponseData, ApiData> = UseVuetifyTableOptions<ResponseData, ApiData, true> & {
+  /** the initial pagination state */
+  paginationProps?: Partial<TablePaginationParams>;
+  onPaginationParamsChange?: (params: TablePaginationParams) => void | Promise<void>;
+};
 
-const EXPAND_KEY = '__expand__';
-
-export function useNaiveTable<ResponseData, ApiData>(options: UseNaiveTableOptions<ResponseData, ApiData, false>) {
+export function useVuetifyTable<ResponseData, ApiData>(options: UseVuetifyTableOptions<ResponseData, ApiData, false>) {
   const scope = effectScope();
   const appStore = useAppStore();
 
-  const result = useTable<ResponseData, ApiData, NaiveUI.TableColumn<ApiData>, false>({
+  const result = useTable<ResponseData, ApiData, TableColumn, false>({
     ...options,
+    pagination: false,
     getColumnChecks: cols => getColumnChecks(cols, options.getColumnVisible),
     getColumns
-  });
-
-  // calculate the total width of the table this is used for horizontal scrolling
-  const scrollX = computed(() => {
-    return result.columns.value.reduce((acc, column) => {
-      return acc + Number(column.width ?? column.minWidth ?? 120);
-    }, 0);
   });
 
   scope.run(() => {
@@ -60,81 +105,39 @@ export function useNaiveTable<ResponseData, ApiData>(options: UseNaiveTableOptio
 
   return {
     ...result,
-    scrollX
+    showSelect: Boolean(options.showSelect)
   };
 }
 
-type PaginationParams = Pick<PaginationProps, 'page' | 'pageSize'>;
-
-type UseNaivePaginatedTableOptions<ResponseData, ApiData> = UseNaiveTableOptions<ResponseData, ApiData, true> & {
-  paginationProps?: Omit<PaginationProps, 'page' | 'pageSize' | 'itemCount'>;
-  /**
-   * whether to show the total count of the table
-   *
-   * @default true
-   */
-  showTotal?: boolean;
-  onPaginationParamsChange?: (params: PaginationParams) => void | Promise<void>;
-};
-
-export function useNaivePaginatedTable<ResponseData, ApiData>(
-  options: UseNaivePaginatedTableOptions<ResponseData, ApiData>
+export function useVuetifyPaginatedTable<ResponseData, ApiData>(
+  options: UseVuetifyPaginatedTableOptions<ResponseData, ApiData>
 ) {
   const scope = effectScope();
   const appStore = useAppStore();
 
-  const isMobile = computed(() => appStore.isMobile);
-
-  const showTotal = computed(() => options.showTotal ?? true);
-
-  const pagination = reactive({
-    page: 1,
-    pageSize: 10,
-    itemCount: 0,
-    showSizePicker: true,
-    pageSizes: [10, 15, 20, 25, 30],
-    prefix: showTotal.value ? page => $t('datatable.itemCount', { total: page.itemCount }) : undefined,
-    onUpdatePage(page) {
-      pagination.page = page;
-    },
-    onUpdatePageSize(pageSize) {
-      pagination.pageSize = pageSize;
-      pagination.page = 1;
-    },
-    ...options.paginationProps
-  }) as PaginationProps;
-
-  // this is for mobile, if the system does not support mobile, you can use `pagination` directly
-  const mobilePagination = computed(() => {
-    const p: PaginationProps = {
-      ...pagination,
-      pageSlot: isMobile.value ? 3 : 9,
-      prefix: !isMobile.value && showTotal.value ? pagination.prefix : undefined
-    };
-
-    return p;
+  const pagination = reactive<TablePagination>({
+    page: options.paginationProps?.page ?? 1,
+    pageSize: options.paginationProps?.pageSize ?? 10,
+    total: 0
   });
 
-  const paginationParams = computed(() => {
-    const { page, pageSize } = pagination;
+  const paginationParams = computed<TablePaginationParams>(() => ({
+    page: pagination.page,
+    pageSize: pagination.pageSize
+  }));
 
-    return {
-      page,
-      pageSize
-    };
-  });
-
-  const result = useTable<ResponseData, ApiData, NaiveUI.TableColumn<ApiData>, true>({
+  const result = useTable<ResponseData, ApiData, TableColumn, true>({
     ...options,
     pagination: true,
     getColumnChecks: cols => getColumnChecks(cols, options.getColumnVisible),
     getColumns,
     onFetched: data => {
-      pagination.itemCount = data.total;
+      pagination.total = data.total;
       pagination.pageSize = data.pageSize;
     }
   });
 
+  /** jump to the target page and fetch the data, it is used by the search form */
   async function getDataByPage(page: number = 1) {
     if (page !== pagination.page) {
       pagination.page = page;
@@ -153,6 +156,16 @@ export function useNaivePaginatedTable<ResponseData, ApiData>(
       }
     );
 
+    // Vuetify does not reset the page when the page size changes, do it to keep the api params valid
+    watch(
+      () => pagination.pageSize,
+      (newPageSize, oldPageSize) => {
+        if (oldPageSize !== undefined && newPageSize !== oldPageSize) {
+          pagination.page = 1;
+        }
+      }
+    );
+
     watch(paginationParams, async newVal => {
       await options.onPaginationParamsChange?.(newVal);
 
@@ -168,7 +181,7 @@ export function useNaivePaginatedTable<ResponseData, ApiData>(
     ...result,
     getDataByPage,
     pagination,
-    mobilePagination
+    showSelect: Boolean(options.showSelect)
   };
 }
 
@@ -179,7 +192,7 @@ export function useTableOperate<TableData>(
 ) {
   const { bool: drawerVisible, setTrue: openDrawer, setFalse: closeDrawer } = useBoolean();
 
-  const operateType = shallowRef<NaiveUI.TableOperateType>('add');
+  const operateType = shallowRef<TableOperateType>('add');
 
   function handleAdd() {
     operateType.value = 'add';
@@ -197,8 +210,8 @@ export function useTableOperate<TableData>(
     openDrawer();
   }
 
-  /** the checked row keys of table */
-  const checkedRowKeys = shallowRef<string[]>([]);
+  /** the selected row values of the table */
+  const checkedRowKeys = shallowRef<Array<TableData[keyof TableData]>>([]);
 
   /** the hook after the batch delete operation is completed */
   async function onBatchDeleted() {
@@ -254,68 +267,69 @@ export function defaultTransform<ApiData>(
   };
 }
 
-function getColumnChecks<Column extends NaiveUI.TableColumn<any>>(
-  cols: Column[],
-  getColumnVisible?: (column: Column) => boolean
-) {
+function getColumnChecks(cols: TableColumn[], getColumnVisible?: (column: TableColumn) => boolean) {
   const checks: TableColumnCheck[] = [];
 
   cols.forEach(column => {
-    if (isTableColumnHasKey(column)) {
-      checks.push({
-        key: column.key as string,
-        title: column.title!,
-        checked: true,
-        fixed: column.fixed ?? 'unFixed',
-        visible: getColumnVisible?.(column) ?? true
-      });
-    } else if (column.type === 'selection') {
-      checks.push({
-        key: SELECTION_KEY,
-        title: $t('common.check'),
-        checked: true,
-        fixed: column.fixed ?? 'unFixed',
-        visible: getColumnVisible?.(column) ?? false
-      });
-    } else if (column.type === 'expand') {
-      checks.push({
-        key: EXPAND_KEY,
-        title: $t('common.expandColumn'),
-        checked: true,
-        fixed: column.fixed ?? 'unFixed',
-        visible: getColumnVisible?.(column) ?? false
-      });
-    }
+    checks.push({
+      key: column.key,
+      title: column.title ?? column.key,
+      checked: true,
+      fixed: toColumnFixed(column.fixed),
+      visible: getColumnVisible?.(column) ?? true
+    });
   });
 
   return checks;
 }
 
-function getColumns<Column extends NaiveUI.TableColumn<any>>(cols: Column[], checks: TableColumnCheck[]) {
-  const columnMap = new Map<string, Column>();
+function getColumns(cols: TableColumn[], checks: TableColumnCheck[]): TableColumn[] {
+  const columnMap = new Map<string, TableColumn>();
 
   cols.forEach(column => {
-    if (isTableColumnHasKey(column)) {
-      columnMap.set(column.key as string, column);
-    } else if (column.type === 'selection') {
-      columnMap.set(SELECTION_KEY, column);
-    } else if (column.type === 'expand') {
-      columnMap.set(EXPAND_KEY, column);
-    }
+    columnMap.set(column.key, column);
   });
 
-  const filteredColumns = checks
-    .filter(item => item.checked)
-    .map(check => {
-      return {
-        ...columnMap.get(check.key),
-        fixed: check.fixed
-      } as Column;
-    });
+  const result: TableColumn[] = [];
 
-  return filteredColumns;
+  checks.forEach(check => {
+    if (!check.checked) return;
+
+    const column = columnMap.get(check.key);
+
+    if (!column) return;
+
+    result.push({
+      ...column,
+      fixed: fromColumnFixed(check.fixed)
+    });
+  });
+
+  return result;
 }
 
-export function isTableColumnHasKey<T>(column: NaiveUI.TableColumn<T>): column is NaiveUI.TableColumnWithKey<T> {
-  return Boolean((column as NaiveUI.TableColumnWithKey<T>).key);
+type TableColumnFixed = TableColumnCheck['fixed'];
+
+function toColumnFixed(fixed: TableColumn['fixed']): TableColumnFixed {
+  if (fixed === 'end') {
+    return 'right';
+  }
+
+  if (fixed) {
+    return 'left';
+  }
+
+  return 'unFixed';
+}
+
+function fromColumnFixed(fixed: TableColumnFixed): TableColumn['fixed'] {
+  if (fixed === 'right') {
+    return 'end';
+  }
+
+  if (fixed === 'left') {
+    return 'start';
+  }
+
+  return false;
 }

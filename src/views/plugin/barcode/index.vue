@@ -96,18 +96,19 @@ onMounted(() => {
 
 <template>
   <div class="overflow-hidden">
-    <NCard title="条形码" :bordered="false" class="h-full card-wrapper" content-class="overflow-hidden">
-      <NScrollbar class="h-full">
-        <NGrid cols="1 s:2 l:3" :x-gap="12" :y-gap="24" responsive="screen" item-responsive>
-          <NGi v-for="item in codes" :key="item.id">
-            <div class="flex-col-center">
+    <VCard class="h-full card-wrapper flex flex-col">
+      <VCardTitle>条形码</VCardTitle>
+      <div class="min-h-0 flex-1 overflow-y-auto px-4 pb-4">
+        <div class="grid grid-cols-1 gap-x-3 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div v-for="item in codes" :key="item.id">
+            <div class="flex flex-col items-center">
               <h3>{{ item.title }}</h3>
               <svg :id="item.id" class="h-130px" />
             </div>
-          </NGi>
-        </NGrid>
-      </NScrollbar>
-    </NCard>
+          </div>
+        </div>
+      </div>
+    </VCard>
   </div>
 </template>
 

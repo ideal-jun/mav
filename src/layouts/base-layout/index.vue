@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent } from 'vue';
-import { AdminLayout, LAYOUT_SCROLL_EL_ID } from '@sa/materials';
-import type { LayoutMode } from '@sa/materials';
 import { useAppStore } from '@/store/modules/app';
 import { useThemeStore } from '@/store/modules/theme';
 import GlobalHeader from '../modules/global-header/index.vue';
@@ -22,11 +20,24 @@ const { secondLevelMenus, childLevelMenus, isActiveFirstLevelMenuHasChildren } =
 
 const GlobalMenu = defineAsyncComponent(() => import('../modules/global-menu/index.vue'));
 
-const layoutMode = computed(() => {
-  const vertical: LayoutMode = 'vertical';
-  const horizontal: LayoutMode = 'horizontal';
-  return themeStore.layout.mode.includes(vertical) ? vertical : horizontal;
-});
+const isTopHybridHeaderFirst = computed(() => themeStore.layout.mode === 'top-hybrid-header-first');
+const isVerticalMix = computed(() => themeStore.layout.mode === 'vertical-mix');
+const isVerticalHybridHeaderFirst = computed(() => themeStore.layout.mode === 'vertical-hybrid-header-first');
+const isTopHybridSidebarFirst = computed(() => themeStore.layout.mode === 'top-hybrid-sidebar-first');
+
+/** the horizontal layout family: the header is full width and the sider starts below it */
+const isHorizontalLayout = computed(
+  () => themeStore.layout.mode === 'horizontal' || isTopHybridSidebarFirst.value || isTopHybridHeaderFirst.value
+);
+
+/**
+ * The order of the Vuetify layout items decides the geometry.
+ * - vertical family: sider spans the full height, header and tab start to its right
+ * - horizontal family: header is full width, sider starts below the header
+ */
+const layoutOrder = computed(() =>
+  isHorizontalLayout.value ? { header: 0, tab: 1, sider: 2, footer: 3 } : { sider: 0, header: 1, tab: 2, footer: 3 }
+);
 
 const headerProps = computed(() => {
   const { mode } = themeStore.layout;
@@ -69,17 +80,30 @@ const headerProps = computed(() => {
 
 const siderVisible = computed(() => themeStore.layout.mode !== 'horizontal');
 
-const isVerticalMix = computed(() => themeStore.layout.mode === 'vertical-mix');
-
-const isVerticalHybridHeaderFirst = computed(() => themeStore.layout.mode === 'vertical-hybrid-header-first');
-
-const isTopHybridSidebarFirst = computed(() => themeStore.layout.mode === 'top-hybrid-sidebar-first');
-
-const isTopHybridHeaderFirst = computed(() => themeStore.layout.mode === 'top-hybrid-header-first');
-
 const siderWidth = computed(() => getSiderAndCollapsedWidth(false));
 
 const siderCollapsedWidth = computed(() => getSiderAndCollapsedWidth(true));
+
+const showSider = computed(
+  () => !appStore.fullContent && siderVisible.value && (siderWidth.value > 0 || siderCollapsedWidth.value > 0)
+);
+
+const currentSiderWidth = computed(() => (appStore.siderCollapse ? siderCollapsedWidth.value : siderWidth.value));
+
+const showHeader = computed(() => !appStore.fullContent);
+
+const showTab = computed(() => themeStore.tab.visible);
+
+const showFooter = computed(() => !appStore.fullContent && themeStore.footer.visible);
+
+/** On mobile the sider becomes a temporary Vuetify drawer controlled by the sider-collapse state. */
+const drawerModel = computed(() => (appStore.isMobile ? !appStore.siderCollapse : true));
+
+function handleDrawerModelUpdate(value: boolean) {
+  if (appStore.isMobile) {
+    appStore.setSiderCollapse(!value);
+  }
+}
 
 function getSiderAndCollapsedWidth(isCollapsed: boolean) {
   const {
@@ -117,46 +141,33 @@ function getSiderAndCollapsedWidth(isCollapsed: boolean) {
 </script>
 
 <template>
-  <AdminLayout
-    v-model:sider-collapse="appStore.siderCollapse"
-    :mode="layoutMode"
-    :scroll-el-id="LAYOUT_SCROLL_EL_ID"
-    :scroll-mode="themeStore.layout.scrollMode"
-    :is-mobile="appStore.isMobile"
-    :full-content="appStore.fullContent"
-    :fixed-top="themeStore.fixedHeaderAndTab"
-    :header-height="themeStore.header.height"
-    :tab-visible="themeStore.tab.visible"
-    :tab-height="themeStore.tab.height"
-    :content-class="appStore.contentXScrollable ? 'overflow-x-hidden' : ''"
-    :sider-visible="siderVisible"
-    :sider-width="siderWidth"
-    :sider-collapsed-width="siderCollapsedWidth"
-    :footer-visible="themeStore.footer.visible"
-    :footer-height="themeStore.footer.height"
-    :fixed-footer="themeStore.footer.fixed"
-    :right-footer="themeStore.footer.right"
+  <VNavigationDrawer
+    v-if="showSider"
+    :model-value="drawerModel"
+    :permanent="!appStore.isMobile"
+    :width="currentSiderWidth"
+    @update:model-value="handleDrawerModelUpdate"
   >
-    <template #header>
-      <GlobalHeader v-bind="headerProps" />
-    </template>
-    <template #tab>
+    <GlobalSider />
+  </VNavigationDrawer>
+
+  <VAppBar v-if="showHeader" :height="themeStore.header.height">
+    <GlobalHeader v-bind="headerProps" />
+    <template v-if="showTab" #extension>
       <GlobalTab />
     </template>
-    <template #sider>
-      <GlobalSider />
-    </template>
-    <GlobalMenu />
+  </VAppBar>
+
+  <VMain scrollable>
     <GlobalContent />
-    <ThemeDrawer />
-    <template #footer>
-      <GlobalFooter />
-    </template>
-  </AdminLayout>
+  </VMain>
+
+  <VFooter v-if="showFooter" app :order="layoutOrder.footer" :height="themeStore.footer.height">
+    <GlobalFooter />
+  </VFooter>
+
+  <GlobalMenu />
+  <ThemeDrawer />
 </template>
 
-<style lang="scss">
-#__SCROLL_EL_ID__ {
-  @include scrollbar();
-}
-</style>
+<style lang="scss"></style>

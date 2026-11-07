@@ -38,12 +38,15 @@ onUnmounted(() => {
 
 <template>
   <div class="h-full">
-    <NCard title="markdown插件" :bordered="false" class="card-wrapper">
-      <div ref="domRef"></div>
-      <template #footer>
+    <VCard class="card-wrapper">
+      <VCardTitle>markdown插件</VCardTitle>
+      <VCardText>
+        <div ref="domRef"></div>
+      </VCardText>
+      <VCardActions>
         <GithubLink link="https://github.com/Vanessa219/vditor" />
-      </template>
-    </NCard>
+      </VCardActions>
+    </VCard>
   </div>
 </template>
 

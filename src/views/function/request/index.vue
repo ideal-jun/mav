@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { fetchCustomBackendError } from '@/service/api';
 import { $t } from '@/locales';
+import { fetchCustomBackendError } from '@/service/api';
 
 async function logout() {
   await fetchCustomBackendError('8888', $t('request.logoutMsg'));
@@ -35,29 +35,42 @@ async function handleRepeatedModalError() {
 </script>
 
 <template>
-  <NSpace vertical :size="16">
-    <NCard :title="$t('request.logout')" :bordered="false" size="small" segmented class="card-wrapper">
-      <NButton @click="logout">{{ $t('common.trigger') }}</NButton>
-    </NCard>
-    <NCard :title="$t('request.logoutWithModal')" :bordered="false" size="small" segmented class="card-wrapper">
-      <NButton @click="logoutWithModal">{{ $t('common.trigger') }}</NButton>
-    </NCard>
-    <NCard :title="$t('request.refreshToken')" :bordered="false" size="small" segmented class="card-wrapper">
-      <NButton @click="refreshToken">{{ $t('common.trigger') }}</NButton>
-    </NCard>
-    <NCard
-      :title="$t('page.function.request.repeatedErrorOccurOnce')"
-      :bordered="false"
-      size="small"
-      segmented
-      class="card-wrapper"
-    >
-      <NButton @click="handleRepeatedMessageError">{{ $t('page.function.request.repeatedError') }}(Message)</NButton>
-      <NButton class="ml-12px" @click="handleRepeatedModalError">
-        {{ $t('page.function.request.repeatedError') }}(Modal)
-      </NButton>
-    </NCard>
-  </NSpace>
+  <div class="flex flex-col gap-4">
+    <VCard class="card-wrapper">
+      <VCardTitle>{{ $t('request.logout') }}</VCardTitle>
+      <VCardText>
+        <VBtn color="primary" variant="flat" @click="logout">{{ $t('common.trigger') }}</VBtn>
+      </VCardText>
+    </VCard>
+
+    <VCard class="card-wrapper">
+      <VCardTitle>{{ $t('request.logoutWithModal') }}</VCardTitle>
+      <VCardText>
+        <VBtn color="primary" variant="flat" @click="logoutWithModal">{{ $t('common.trigger') }}</VBtn>
+      </VCardText>
+    </VCard>
+
+    <VCard class="card-wrapper">
+      <VCardTitle>{{ $t('request.refreshToken') }}</VCardTitle>
+      <VCardText>
+        <VBtn color="primary" variant="flat" @click="refreshToken">{{ $t('common.trigger') }}</VBtn>
+      </VCardText>
+    </VCard>
+
+    <VCard class="card-wrapper">
+      <VCardTitle>{{ $t('page.function.request.repeatedErrorOccurOnce') }}</VCardTitle>
+      <VCardText>
+        <div class="flex flex-wrap gap-3">
+          <VBtn color="primary" variant="flat" @click="handleRepeatedMessageError">
+            {{ $t('page.function.request.repeatedError') }}(Message)
+          </VBtn>
+          <VBtn color="primary" variant="flat" @click="handleRepeatedModalError">
+            {{ $t('page.function.request.repeatedError') }}(Modal)
+          </VBtn>
+        </div>
+      </VCardText>
+    </VCard>
+  </div>
 </template>
 
 <style scoped></style>

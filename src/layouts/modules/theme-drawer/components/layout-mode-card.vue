@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { PopoverPlacement } from 'naive-ui';
 import { themeLayoutModeRecord } from '@/constants/app';
 import { $t } from '@/locales';
 
@@ -26,7 +25,7 @@ const emit = defineEmits<Emits>();
 type LayoutConfig = Record<
   UnionKey.ThemeLayoutMode,
   {
-    placement: PopoverPlacement;
+    placement: string;
     menuClass: string;
     mainClass: string;
   }

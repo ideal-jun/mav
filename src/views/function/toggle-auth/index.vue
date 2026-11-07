@@ -59,45 +59,56 @@ async function handleToggleAccount(account: Account) {
 </script>
 
 <template>
-  <NSpace vertical :size="16">
-    <NCard :title="$t('route.function_toggle-auth')" :bordered="false" size="small" segmented class="card-wrapper">
-      <NDescriptions bordered :column="1">
-        <NDescriptionsItem :label="$t('page.manage.user.userRole')">
-          <NSpace>
-            <NTag v-for="role in authStore.userInfo.roles" :key="role">{{ role }}</NTag>
-          </NSpace>
-        </NDescriptionsItem>
-        <NDescriptionsItem ions-item :label="$t('page.function.toggleAuth.toggleAccount')">
-          <NSpace>
-            <NButton
-              v-for="account in accounts"
-              :key="account.key"
-              :loading="loading && loginAccount === account.key"
-              :disabled="loading && loginAccount !== account.key"
-              @click="handleToggleAccount(account)"
-            >
-              {{ account.label }}
-            </NButton>
-          </NSpace>
-        </NDescriptionsItem>
-      </NDescriptions>
-    </NCard>
-    <NCard
-      :title="$t('page.function.toggleAuth.authHook')"
-      :bordered="false"
-      size="small"
-      segmented
-      class="card-wrapper"
-    >
-      <NSpace>
-        <NButton v-if="hasAuth('B_CODE1')">{{ $t('page.function.toggleAuth.superAdminVisible') }}</NButton>
-        <NButton v-if="hasAuth('B_CODE2')">{{ $t('page.function.toggleAuth.adminVisible') }}</NButton>
-        <NButton v-if="hasAuth('B_CODE3')">
-          {{ $t('page.function.toggleAuth.adminOrUserVisible') }}
-        </NButton>
-      </NSpace>
-    </NCard>
-  </NSpace>
+  <div class="flex flex-col gap-4">
+    <VCard class="card-wrapper">
+      <VCardTitle>{{ $t('route.function_toggle-auth') }}</VCardTitle>
+      <VCardText>
+        <div class="flex flex-col divide-y divide-gray-200">
+          <div class="flex items-start gap-4 py-3">
+            <span class="w-40 shrink-0 text-medium-emphasis">{{ $t('page.manage.user.userRole') }}</span>
+            <div class="flex flex-wrap gap-2">
+              <VChip v-for="role in authStore.userInfo.roles" :key="role" color="primary" size="small" variant="tonal">
+                {{ role }}
+              </VChip>
+            </div>
+          </div>
+          <div class="flex items-start gap-4 py-3">
+            <span class="w-40 shrink-0 text-medium-emphasis">{{ $t('page.function.toggleAuth.toggleAccount') }}</span>
+            <div class="flex flex-wrap gap-2">
+              <VBtn
+                v-for="account in accounts"
+                :key="account.key"
+                color="primary"
+                variant="flat"
+                :loading="loading && loginAccount === account.key"
+                :disabled="loading && loginAccount !== account.key"
+                @click="handleToggleAccount(account)"
+              >
+                {{ account.label }}
+              </VBtn>
+            </div>
+          </div>
+        </div>
+      </VCardText>
+    </VCard>
+
+    <VCard class="card-wrapper">
+      <VCardTitle>{{ $t('page.function.toggleAuth.authHook') }}</VCardTitle>
+      <VCardText>
+        <div class="flex flex-wrap gap-3">
+          <VBtn v-if="hasAuth('B_CODE1')" color="primary" variant="flat">
+            {{ $t('page.function.toggleAuth.superAdminVisible') }}
+          </VBtn>
+          <VBtn v-if="hasAuth('B_CODE2')" color="primary" variant="flat">
+            {{ $t('page.function.toggleAuth.adminVisible') }}
+          </VBtn>
+          <VBtn v-if="hasAuth('B_CODE3')" color="primary" variant="flat">
+            {{ $t('page.function.toggleAuth.adminOrUserVisible') }}
+          </VBtn>
+        </div>
+      </VCardText>
+    </VCard>
+  </div>
 </template>
 
 <style scoped></style>

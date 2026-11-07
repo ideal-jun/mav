@@ -1,5 +1,6 @@
 <script setup lang="ts" generic="T extends Record<string, unknown>, K = never">
 import { computed } from 'vue';
+import type { TableColumnCheck } from '@sa/hooks';
 import { VueDraggable } from 'vue-draggable-plus';
 import { $t } from '@/locales';
 
@@ -7,18 +8,18 @@ defineOptions({
   name: 'TableColumnSetting'
 });
 
-const columns = defineModel<NaiveUI.TableColumnCheck[]>('columns', {
+const columns = defineModel<TableColumnCheck[]>('columns', {
   required: true
 });
 
-const tooltipRecord: Record<NaiveUI.TableColumnFixed, App.I18n.I18nKey> = {
+const tooltipRecord: Record<TableColumnCheck['fixed'], App.I18n.I18nKey> = {
   left: 'datatable.fixed.right',
   right: 'datatable.fixed.unFixed',
   unFixed: 'datatable.fixed.left'
 };
 
-function handleFixed(column: NaiveUI.TableColumnCheck) {
-  const fixedOptions: NaiveUI.TableColumnFixed[] = ['left', 'right', 'unFixed'];
+function handleFixed(column: TableColumnCheck) {
+  const fixedOptions: TableColumnCheck['fixed'][] = ['left', 'right', 'unFixed'];
   const index = fixedOptions.findIndex(item => item === column.fixed);
   const nextIndex = index === fixedOptions.length - 1 ? 0 : index + 1;
   column.fixed = fixedOptions[nextIndex];
@@ -60,58 +61,54 @@ function toggleSelectAll(checked: boolean) {
 </script>
 
 <template>
-  <NPopover placement="bottom-end" trigger="click">
-    <template #trigger>
-      <NButton size="small">
-        <template #icon>
-          <icon-ant-design-setting-outlined class="text-icon" />
-        </template>
+  <VMenu location="bottom end" :close-on-content-click="false">
+    <template #activator="{ props: activatorProps }">
+      <VBtn v-bind="activatorProps" size="small" variant="text" prepend-icon="mdi-cog-outline">
         {{ $t('common.columnSetting') }}
-      </NButton>
+      </VBtn>
     </template>
-    <div>
-      <div class="h-36px flex-y-center rd-4px pl-26px hover:(bg-primary bg-opacity-20)">
-        <NCheckbox
-          :checked="selectAllChecked"
+    <VCard class="min-w-[220px] p-2" max-height="300">
+      <div class="flex items-center px-2">
+        <VCheckbox
+          :model-value="selectAllChecked"
           :indeterminate="selectAllIndeterminate"
           :disabled="visibleStats.total === 0"
-          class="flex-1"
-          @update:checked="toggleSelectAll"
-        >
-          {{ $t('common.selectAll') }}
-        </NCheckbox>
+          :label="$t('common.selectAll')"
+          hide-details
+          density="compact"
+          @update:model-value="value => toggleSelectAll(Boolean(value))"
+        />
       </div>
-      <NDivider class="!my-4px" />
+      <VDivider class="my-1" />
       <VueDraggable v-model="columns" :animation="150" filter=".none_draggable" class="max-h-[200px] overflow-y-auto">
         <div
           v-for="item in columns"
           :key="item.key"
-          class="h-36px flex-y-center justify-between gap-6px"
+          class="flex items-center justify-between gap-2"
           :class="{ hidden: !item.visible }"
         >
-          <div class="h-full flex-y-center flex-1 rd-4px hover:(bg-primary bg-opacity-20)">
-            <icon-mdi-drag class="mr-8px h-full cursor-move text-icon" />
-            <NCheckbox v-model:checked="item.checked" class="none_draggable flex-1">
+          <div class="flex min-w-0 flex-1 items-center">
+            <VIcon icon="mdi-drag" size="small" class="mr-2 cursor-move" />
+            <VCheckbox v-model="item.checked" class="none_draggable flex-1" hide-details density="compact">
               <template v-if="typeof item.title === 'function'">
                 <component :is="item.title" />
               </template>
               <template v-else>{{ item.title }}</template>
-            </NCheckbox>
+            </VCheckbox>
           </div>
           <ButtonIcon
             :disabled="!item.checked"
-            :focusable="false"
-            :tooltip-content="$t(tooltipRecord[item.fixed!])"
+            :tooltip-content="$t(tooltipRecord[item.fixed])"
             @click="handleFixed(item)"
           >
-            <icon-octicon-pin-16 v-if="item.fixed === 'unFixed'" />
-            <icon-octicon-pin-16 v-else-if="item.fixed === 'left'" class="rotate-270" />
-            <icon-octicon-pin-slash-16 v-else />
+            <VIcon v-if="item.fixed === 'unFixed'" icon="mdi-pin-outline" size="small" />
+            <VIcon v-else-if="item.fixed === 'left'" icon="mdi-pin" size="small" class="rotate-270" />
+            <VIcon v-else icon="mdi-pin-off" size="small" />
           </ButtonIcon>
         </div>
       </VueDraggable>
-    </div>
-  </NPopover>
+    </VCard>
+  </VMenu>
 </template>
 
 <style scoped></style>

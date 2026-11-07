@@ -25,7 +25,7 @@ function handleClickMenu(key: string) {
 </script>
 
 <template>
-  <VBreadcrumb v-if="themeStore.header.breadcrumb.visible" class="ml-3">
+  <VBreadcrumbs v-if="themeStore.header.breadcrumb.visible" class="ml-3">
     <!-- define component start: BreadcrumbContent -->
     <DefineBreadcrumbContent v-slot="{ breadcrumb }">
       <span class="inline-flex items-center">
@@ -35,7 +35,7 @@ function handleClickMenu(key: string) {
     </DefineBreadcrumbContent>
     <!-- define component end: BreadcrumbContent -->
 
-    <VBreadcrumbItem v-for="item in routeStore.breadcrumbs" :key="item.key">
+    <VBreadcrumbsItem v-for="item in routeStore.breadcrumbs" :key="item.key">
       <VMenu v-if="item.options?.length" location="bottom start">
         <template #activator="{ props }">
           <span v-bind="props" class="inline-flex cursor-pointer items-center">
@@ -49,8 +49,8 @@ function handleClickMenu(key: string) {
         </VList>
       </VMenu>
       <BreadcrumbContent v-else :breadcrumb="item" />
-    </VBreadcrumbItem>
-  </VBreadcrumb>
+    </VBreadcrumbsItem>
+  </VBreadcrumbs>
 </template>
 
 <style scoped></style>

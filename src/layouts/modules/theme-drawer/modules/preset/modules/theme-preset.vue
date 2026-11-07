@@ -33,8 +33,6 @@ type ThemePreset = Pick<
   desc: string;
   i18nkey?: string;
   version: string;
-  /** Optional NaiveUI theme overrides */
-  naiveui?: App.Theme.NaiveUIThemeOverride;
 };
 
 const presetModules = import.meta.glob('@/theme/preset/*.json', { eager: true, import: 'default' });
@@ -82,7 +80,7 @@ const getPresetDesc = (preset: ThemePreset): string => {
 
 const applyPreset = (preset: ThemePreset): void => {
   const mergedPreset = defu(preset, themeSettings);
-  const { themeScheme, grayscale, colourWeakness, layout, watermark, naiveui, ...rest } = mergedPreset;
+  const { themeScheme, grayscale, colourWeakness, layout, watermark, ...rest } = mergedPreset;
   themeStore.setThemeScheme(themeScheme);
   themeStore.setGrayscale(grayscale);
   themeStore.setColourWeakness(colourWeakness);
@@ -102,15 +100,12 @@ const applyPreset = (preset: ThemePreset): void => {
     tokens: { ...rest.tokens }
   });
 
-  // Apply NaiveUI theme overrides if present
-  themeStore.setNaiveThemeOverrides(naiveui);
-
   window.$message?.success($t('theme.appearance.preset.applySuccess'));
 };
 </script>
 
 <template>
-  <NDivider>{{ $t('theme.appearance.preset.title') }}</NDivider>
+  <VDivider>{{ $t('theme.appearance.preset.title') }}</VDivider>
 
   <div class="flex flex-col gap-3">
     <div
@@ -123,11 +118,20 @@ const applyPreset = (preset: ThemePreset): void => {
           <h5 class="m-0 truncate text-sm text-primary font-600">
             {{ getPresetName(preset) }}
           </h5>
-          <NBadge :value="`v${preset.version}`" type="info" size="small" class="flex-shrink-0 opacity-80" />
+          <VChip size="small" color="info" variant="tonal" class="flex-shrink-0 opacity-80">
+            v{{ preset.version }}
+          </VChip>
         </div>
-        <NButton type="primary" size="tiny" ghost round class="ml-2 flex-shrink-0" @click="applyPreset(preset)">
+        <VBtn
+          color="primary"
+          size="x-small"
+          variant="outlined"
+          rounded="pill"
+          class="ml-2 flex-shrink-0"
+          @click="applyPreset(preset)"
+        >
           {{ $t('theme.appearance.preset.apply') }}
-        </NButton>
+        </VBtn>
       </div>
 
       <p class="line-clamp-2 mb-3 text-xs text-gray-500 leading-4">{{ getPresetDesc(preset) }}</p>

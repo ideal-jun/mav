@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { SimpleScrollbar } from '@sa/materials';
 import type { RouteKey } from '@elegant-router/types';
 import { GLOBAL_HEADER_MENU_ID, GLOBAL_SIDER_MENU_ID } from '@/constants/app';
 import { useAppStore } from '@/store/modules/app';
-import { useThemeStore } from '@/store/modules/theme';
 import { useRouteStore } from '@/store/modules/route';
 import { useRouterPush } from '@/hooks/common/router';
 import { useMenu, useMixMenuContext } from '../context';
+import AppMenu from '../components/app-menu.vue';
+import AppHorizontalMenu from '../components/app-horizontal-menu.vue';
 
 defineOptions({
   name: 'TopHybridHeaderFirst'
@@ -16,7 +16,6 @@ defineOptions({
 
 const route = useRoute();
 const appStore = useAppStore();
-const themeStore = useThemeStore();
 const routeStore = useRouteStore();
 const { routerPushByKeyWithMetaQuery } = useRouterPush();
 const {
@@ -60,29 +59,18 @@ watch(
 
 <template>
   <Teleport :to="`#${GLOBAL_HEADER_MENU_ID}`">
-    <NMenu
-      mode="horizontal"
-      :value="activeFirstLevelMenuKey"
-      :options="firstLevelMenus"
-      :indent="18"
-      responsive
-      @update:value="handleSelectMenu"
-    />
+    <AppHorizontalMenu :menus="firstLevelMenus" :selected-key="activeFirstLevelMenuKey" @select="handleSelectMenu" />
   </Teleport>
   <Teleport :to="`#${GLOBAL_SIDER_MENU_ID}`">
-    <SimpleScrollbar>
-      <NMenu
+    <div class="h-full overflow-hidden">
+      <AppMenu
         v-model:expanded-keys="expandedKeys"
-        mode="vertical"
-        :value="selectedKey"
+        :menus="secondLevelMenus"
+        :selected-key="selectedKey"
         :collapsed="appStore.siderCollapse"
-        :collapsed-width="themeStore.sider.collapsedWidth"
-        :collapsed-icon-size="22"
-        :options="secondLevelMenus"
-        :indent="18"
-        @update:value="routerPushByKeyWithMetaQuery"
+        @select="routerPushByKeyWithMetaQuery"
       />
-    </SimpleScrollbar>
+    </div>
   </Teleport>
 </template>
 

@@ -1,6 +1,6 @@
 import { h } from 'vue';
 import type { App } from 'vue';
-import { NButton } from 'naive-ui';
+import { VBtn } from 'vuetify/components';
 import { $t } from '@/locales';
 
 export function setupAppErrorHandle(app: App) {
@@ -39,8 +39,9 @@ export function setupAppVersionNotification() {
       action() {
         return h('div', { style: { display: 'flex', justifyContent: 'end', gap: '12px', width: '325px' } }, [
           h(
-            NButton,
+            VBtn,
             {
+              variant: 'text',
               onClick() {
                 n?.destroy();
                 isShow = false;
@@ -49,9 +50,10 @@ export function setupAppVersionNotification() {
             () => $t('system.updateCancel')
           ),
           h(
-            NButton,
+            VBtn,
             {
-              type: 'primary',
+              color: 'primary',
+              variant: 'flat',
               onClick() {
                 location.reload();
               }

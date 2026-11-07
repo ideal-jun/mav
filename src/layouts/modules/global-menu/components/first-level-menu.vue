@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { createReusableTemplate } from '@vueuse/core';
-import { SimpleScrollbar } from '@sa/materials';
 import { transformColorWithOpacity } from '@sa/color';
 import type { RouteKey } from '@elegant-router/types';
 
@@ -81,7 +80,7 @@ function toggleSiderCollapse() {
 
   <div class="h-full flex-col-stretch flex-1-hidden">
     <slot></slot>
-    <SimpleScrollbar>
+    <div class="min-h-0 flex-1 overflow-y-auto">
       <MixMenuItem
         v-for="menu in menus"
         :key="menu.key"
@@ -91,7 +90,7 @@ function toggleSiderCollapse() {
         :is-mini="siderCollapse"
         @click="handleClickMixMenu(menu.routeKey)"
       />
-    </SimpleScrollbar>
+    </div>
     <MenuToggler
       arrow-icon
       :collapsed="siderCollapse"

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue';
+import type { TableColumnCheck } from '@sa/hooks';
 import { $t } from '@/locales';
 
 defineOptions({
@@ -6,12 +8,12 @@ defineOptions({
 });
 
 interface Props {
-  itemAlign?: NaiveUI.Align;
+  itemAlign?: 'start' | 'center' | 'end';
   disabledDelete?: boolean;
   loading?: boolean;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 interface Emits {
   (e: 'add'): void;
@@ -21,8 +23,18 @@ interface Emits {
 
 const emit = defineEmits<Emits>();
 
-const columns = defineModel<NaiveUI.TableColumnCheck[]>('columns', {
+const columns = defineModel<TableColumnCheck[]>('columns', {
   default: () => []
+});
+
+const confirmDeleteVisible = ref(false);
+
+const alignClass = computed(() => {
+  if (props.itemAlign === 'start') return 'justify-start';
+
+  if (props.itemAlign === 'center') return 'justify-center';
+
+  return 'justify-end';
 });
 
 function add() {
@@ -30,6 +42,7 @@ function add() {
 }
 
 function batchDelete() {
+  confirmDeleteVisible.value = false;
   emit('delete');
 }
 
@@ -39,36 +52,44 @@ function refresh() {
 </script>
 
 <template>
-  <NSpace :align="itemAlign" wrap justify="end" class="lt-sm:w-200px">
+  <div class="flex flex-wrap items-center gap-2 lt-sm:w-200px" :class="alignClass">
     <slot name="prefix"></slot>
     <slot name="default">
-      <NButton size="small" ghost type="primary" @click="add">
-        <template #icon>
-          <icon-ic-round-plus class="text-icon" />
-        </template>
+      <VBtn size="small" variant="outlined" color="primary" prepend-icon="mdi-plus" @click="add">
         {{ $t('common.add') }}
-      </NButton>
-      <NPopconfirm @positive-click="batchDelete">
-        <template #trigger>
-          <NButton size="small" ghost type="error" :disabled="disabledDelete">
-            <template #icon>
-              <icon-ic-round-delete class="text-icon" />
-            </template>
-            {{ $t('common.batchDelete') }}
-          </NButton>
-        </template>
-        {{ $t('common.confirmDelete') }}
-      </NPopconfirm>
+      </VBtn>
+      <VBtn
+        size="small"
+        variant="outlined"
+        color="error"
+        prepend-icon="mdi-delete"
+        :disabled="disabledDelete"
+        @click="confirmDeleteVisible = true"
+      >
+        {{ $t('common.batchDelete') }}
+      </VBtn>
     </slot>
-    <NButton size="small" @click="refresh">
-      <template #icon>
-        <icon-mdi-refresh class="text-icon" :class="{ 'animate-spin': loading }" />
+    <VBtn size="small" variant="text" @click="refresh">
+      <template #prepend>
+        <VIcon icon="mdi-refresh" :class="{ 'animate-spin': loading }" />
       </template>
       {{ $t('common.refresh') }}
-    </NButton>
+    </VBtn>
     <TableColumnSetting v-model:columns="columns" />
     <slot name="suffix"></slot>
-  </NSpace>
+  </div>
+
+  <VDialog v-model="confirmDeleteVisible" max-width="400">
+    <VCard>
+      <VCardTitle>{{ $t('common.tip') }}</VCardTitle>
+      <VCardText>{{ $t('common.confirmDelete') }}</VCardText>
+      <VCardActions>
+        <VSpacer />
+        <VBtn variant="text" @click="confirmDeleteVisible = false">{{ $t('common.cancel') }}</VBtn>
+        <VBtn color="error" variant="flat" @click="batchDelete">{{ $t('common.confirm') }}</VBtn>
+      </VCardActions>
+    </VCard>
+  </VDialog>
 </template>
 
 <style scoped></style>

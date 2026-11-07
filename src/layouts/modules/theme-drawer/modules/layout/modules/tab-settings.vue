@@ -13,25 +13,36 @@ const themeStore = useThemeStore();
 </script>
 
 <template>
-  <NDivider>{{ $t('theme.layout.tab.title') }}</NDivider>
+  <VDivider>{{ $t('theme.layout.tab.title') }}</VDivider>
   <TransitionGroup tag="div" name="setting-list" class="flex-col-stretch gap-12px">
     <SettingItem key="1" :label="$t('theme.layout.tab.visible')">
-      <NSwitch v-model:value="themeStore.tab.visible" />
+      <VSwitch v-model="themeStore.tab.visible" color="primary" density="compact" hide-details inset />
     </SettingItem>
     <SettingItem v-if="themeStore.tab.visible" key="2" :label="$t('theme.layout.tab.cache')">
       <template #suffix>
         <IconTooltip :desc="$t('theme.layout.tab.cacheTip')" />
       </template>
-      <NSwitch v-model:value="themeStore.tab.cache" />
+      <VSwitch v-model="themeStore.tab.cache" color="primary" density="compact" hide-details inset />
     </SettingItem>
     <SettingItem v-if="themeStore.tab.visible" key="3" :label="$t('theme.layout.tab.height')">
-      <NInputNumber v-model:value="themeStore.tab.height" size="small" :step="1" class="w-120px" />
+      <VNumberInput
+        v-model="themeStore.tab.height"
+        :step="1"
+        density="compact"
+        variant="outlined"
+        hide-details
+        class="w-120px"
+      />
     </SettingItem>
     <SettingItem v-if="themeStore.tab.visible" key="4" :label="$t('theme.layout.tab.mode.title')">
-      <NSelect
-        v-model:value="themeStore.tab.mode"
-        :options="translateOptions(themeTabModeOptions)"
-        size="small"
+      <VSelect
+        v-model="themeStore.tab.mode"
+        :items="translateOptions(themeTabModeOptions)"
+        item-title="label"
+        item-value="value"
+        density="compact"
+        variant="outlined"
+        hide-details
         class="w-120px"
       />
     </SettingItem>
@@ -39,7 +50,7 @@ const themeStore = useThemeStore();
       <template #suffix>
         <IconTooltip :desc="$t('theme.layout.tab.closeByMiddleClickTip')" />
       </template>
-      <NSwitch v-model:value="themeStore.tab.closeTabByMiddleClick" />
+      <VSwitch v-model="themeStore.tab.closeTabByMiddleClick" color="primary" density="compact" hide-details inset />
     </SettingItem>
   </TransitionGroup>
 </template>

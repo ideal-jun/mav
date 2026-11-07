@@ -14,14 +14,10 @@ const gap = computed(() => (appStore.isMobile ? 0 : 16));
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
-    <VAlert type="warning" variant="tonal">
-      <template #title>{{ $t('common.tip') }}</template>
-      {{ $t('page.home.branchDesc') }}
-    </VAlert>
-    <HeaderBanner />
-    <CardData />
-    <VRow :gutter="gap">
+  <div class="flex flex-col">
+    <HeaderBanner class="mb-4" />
+    <CardData class="mb-4" />
+    <VRow :gap="gap">
       <VCol cols="12" md="7">
         <VCard class="card-wrapper">
           <VCardText class="p-4">
@@ -37,7 +33,7 @@ const gap = computed(() => (appStore.isMobile ? 0 : 16));
         </VCard>
       </VCol>
     </VRow>
-    <VRow :gutter="gap">
+    <VRow :gap="gap">
       <VCol cols="12" md="7">
         <ProjectNews />
       </VCol>

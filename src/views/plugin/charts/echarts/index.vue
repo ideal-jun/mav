@@ -63,29 +63,43 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <NSpace vertical :size="16">
-    <NCard :bordered="false" class="card-wrapper">
-      <div ref="pieRef" class="h-400px" />
-    </NCard>
-    <NCard :bordered="false" class="card-wrapper">
-      <div ref="lineRef" class="h-400px" />
-    </NCard>
-    <NCard :bordered="false" class="card-wrapper">
-      <div ref="barRef" class="h-400px" />
-    </NCard>
-    <NCard :bordered="false" class="card-wrapper">
-      <div ref="radarRef" class="h-400px"></div>
-    </NCard>
-    <NCard :bordered="false" class="card-wrapper">
-      <div ref="scatterRef" class="h-600px"></div>
-    </NCard>
-    <NCard :bordered="false" class="card-wrapper">
-      <div ref="pictorialBarRef" class="h-600px" />
-    </NCard>
-    <NCard :bordered="false" class="card-wrapper">
-      <div ref="gaugeRef" class="h-640px" />
-    </NCard>
-  </NSpace>
+  <div class="flex flex-col gap-4">
+    <VCard class="card-wrapper">
+      <VCardText>
+        <div ref="pieRef" class="h-400px" />
+      </VCardText>
+    </VCard>
+    <VCard class="card-wrapper">
+      <VCardText>
+        <div ref="lineRef" class="h-400px" />
+      </VCardText>
+    </VCard>
+    <VCard class="card-wrapper">
+      <VCardText>
+        <div ref="barRef" class="h-400px" />
+      </VCardText>
+    </VCard>
+    <VCard class="card-wrapper">
+      <VCardText>
+        <div ref="radarRef" class="h-400px"></div>
+      </VCardText>
+    </VCard>
+    <VCard class="card-wrapper">
+      <VCardText>
+        <div ref="scatterRef" class="h-600px"></div>
+      </VCardText>
+    </VCard>
+    <VCard class="card-wrapper">
+      <VCardText>
+        <div ref="pictorialBarRef" class="h-600px" />
+      </VCardText>
+    </VCard>
+    <VCard class="card-wrapper">
+      <VCardText>
+        <div ref="gaugeRef" class="h-640px" />
+      </VCardText>
+    </VCard>
+  </div>
 </template>
 
 <style scoped></style>

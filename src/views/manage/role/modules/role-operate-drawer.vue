@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
+import type { ValidationRule } from 'vuetify';
 import { useBoolean } from '@sa/hooks';
 import { jsonClone } from '@sa/utils';
 import { enableStatusOptions } from '@/constants/business';
 import { $t } from '@/locales';
-import { useFormRules, useNaiveForm } from '@/hooks/common/form';
+import { useVuetifyForm } from '@/hooks/common/form';
+import type { TableOperateType } from '@/hooks/common/table';
 import ButtonAuthModal from './button-auth-modal.vue';
 import MenuAuthModal from './menu-auth-modal.vue';
 
@@ -14,7 +16,7 @@ defineOptions({
 
 interface Props {
   /** the type of operation */
-  operateType: NaiveUI.TableOperateType;
+  operateType: TableOperateType;
   /** the edit row data */
   rowData?: Api.SystemManage.Role | null;
 }
@@ -31,13 +33,16 @@ const visible = defineModel<boolean>('visible', {
   default: false
 });
 
-const { formRef, validate, restoreValidation } = useNaiveForm();
-const { defaultRequiredRule } = useFormRules();
+const { formRef, validate, restoreValidation } = useVuetifyForm();
 const { bool: menuAuthVisible, setTrue: openMenuAuthModal } = useBoolean();
 const { bool: buttonAuthVisible, setTrue: openButtonAuthModal } = useBoolean();
 
+function createRequiredRule(message: string): ValidationRule {
+  return value => (value !== null && value !== undefined && String(value).trim() !== '') || message;
+}
+
 const title = computed(() => {
-  const titles: Record<NaiveUI.TableOperateType, string> = {
+  const titles: Record<TableOperateType, string> = {
     add: $t('page.manage.role.addRole'),
     edit: $t('page.manage.role.editRole')
   };
@@ -59,10 +64,10 @@ function createDefaultModel(): Model {
 
 type RuleKey = Exclude<keyof Model, 'roleDesc'>;
 
-const rules: Record<RuleKey, App.Global.FormRule> = {
-  roleName: defaultRequiredRule,
-  roleCode: defaultRequiredRule,
-  status: defaultRequiredRule
+const rules: Record<RuleKey, ValidationRule[]> = {
+  roleName: [createRequiredRule($t('form.required'))],
+  roleCode: [createRequiredRule($t('form.required'))],
+  status: [createRequiredRule($t('form.required'))]
 };
 
 const roleId = computed(() => props.rowData?.id || -1);
@@ -82,7 +87,8 @@ function closeDrawer() {
 }
 
 async function handleSubmit() {
-  await validate();
+  if (!(await validate())) return;
+
   // request
   window.$message?.success($t('common.updateSuccess'));
   closeDrawer();
@@ -98,38 +104,58 @@ watch(visible, () => {
 </script>
 
 <template>
-  <NDrawer v-model:show="visible" display-directive="show" :width="360">
-    <NDrawerContent :title="title" :native-scrollbar="false" closable>
-      <NForm ref="formRef" :model="model" :rules="rules">
-        <NFormItem :label="$t('page.manage.role.roleName')" path="roleName">
-          <NInput v-model:value="model.roleName" :placeholder="$t('page.manage.role.form.roleName')" />
-        </NFormItem>
-        <NFormItem :label="$t('page.manage.role.roleCode')" path="roleCode">
-          <NInput v-model:value="model.roleCode" :placeholder="$t('page.manage.role.form.roleCode')" />
-        </NFormItem>
-        <NFormItem :label="$t('page.manage.role.roleStatus')" path="status">
-          <NRadioGroup v-model:value="model.status">
-            <NRadio v-for="item in enableStatusOptions" :key="item.value" :value="item.value" :label="$t(item.label)" />
-          </NRadioGroup>
-        </NFormItem>
-        <NFormItem :label="$t('page.manage.role.roleDesc')" path="roleDesc">
-          <NInput v-model:value="model.roleDesc" :placeholder="$t('page.manage.role.form.roleDesc')" />
-        </NFormItem>
-      </NForm>
-      <NSpace v-if="isEdit">
-        <NButton @click="openMenuAuthModal">{{ $t('page.manage.role.menuAuth') }}</NButton>
-        <MenuAuthModal v-model:visible="menuAuthVisible" :role-id="roleId" />
-        <NButton @click="openButtonAuthModal">{{ $t('page.manage.role.buttonAuth') }}</NButton>
-        <ButtonAuthModal v-model:visible="buttonAuthVisible" :role-id="roleId" />
-      </NSpace>
-      <template #footer>
-        <NSpace :size="16">
-          <NButton @click="closeDrawer">{{ $t('common.cancel') }}</NButton>
-          <NButton type="primary" @click="handleSubmit">{{ $t('common.confirm') }}</NButton>
-        </NSpace>
-      </template>
-    </NDrawerContent>
-  </NDrawer>
+  <VNavigationDrawer v-model="visible" temporary location="right" :width="360">
+    <div class="flex h-full flex-col">
+      <div class="flex items-center justify-between px-4 py-3">
+        <h2 class="text-lg font-medium">{{ title }}</h2>
+        <VBtn icon="mdi-close" variant="text" density="comfortable" @click="closeDrawer" />
+      </div>
+      <VDivider />
+      <div class="min-h-0 flex-1 overflow-y-auto px-4 py-4">
+        <VForm ref="formRef" validate-on="input">
+          <VTextField
+            v-model="model.roleName"
+            :label="$t('page.manage.role.roleName')"
+            :placeholder="$t('page.manage.role.form.roleName')"
+            :rules="rules.roleName"
+            class="mb-2"
+          />
+          <VTextField
+            v-model="model.roleCode"
+            :label="$t('page.manage.role.roleCode')"
+            :placeholder="$t('page.manage.role.form.roleCode')"
+            :rules="rules.roleCode"
+            class="mb-2"
+          />
+          <VRadioGroup
+            v-model="model.status"
+            :label="$t('page.manage.role.roleStatus')"
+            :rules="rules.status"
+            inline
+            class="mb-2"
+          >
+            <VRadio v-for="item in enableStatusOptions" :key="item.value" :value="item.value" :label="$t(item.label)" />
+          </VRadioGroup>
+          <VTextField
+            v-model="model.roleDesc"
+            :label="$t('page.manage.role.roleDesc')"
+            :placeholder="$t('page.manage.role.form.roleDesc')"
+          />
+        </VForm>
+        <div v-if="isEdit" class="mt-4 flex flex-wrap gap-2">
+          <VBtn variant="outlined" @click="openMenuAuthModal">{{ $t('page.manage.role.menuAuth') }}</VBtn>
+          <MenuAuthModal v-model:visible="menuAuthVisible" :role-id="roleId" />
+          <VBtn variant="outlined" @click="openButtonAuthModal">{{ $t('page.manage.role.buttonAuth') }}</VBtn>
+          <ButtonAuthModal v-model:visible="buttonAuthVisible" :role-id="roleId" />
+        </div>
+      </div>
+      <VDivider />
+      <div class="flex justify-end gap-4 px-4 py-3">
+        <VBtn variant="text" @click="closeDrawer">{{ $t('common.cancel') }}</VBtn>
+        <VBtn color="primary" variant="flat" @click="handleSubmit">{{ $t('common.confirm') }}</VBtn>
+      </div>
+    </div>
+  </VNavigationDrawer>
 </template>
 
 <style scoped></style>

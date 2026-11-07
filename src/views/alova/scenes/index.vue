@@ -8,27 +8,32 @@ import PollingRequest from './modules/polling-request.vue';
 </script>
 
 <template>
-  <NSpace vertical :size="16">
-    <NCard :title="$t('page.alova.scenes.captchaSend')" :bordered="false" size="small" segmented class="card-wrapper">
-      <CaptchaVerification class="w-1/3" />
-    </NCard>
-    <NCard :title="$t('page.alova.scenes.autoRequest')" :bordered="false" size="small" segmented class="card-wrapper">
-      <NSpace :wrap="false">
-        <BrowserVisibilityRequest />
-        <PollingRequest />
-        <NetworkToggleRequest />
-      </NSpace>
-    </NCard>
-    <NCard
-      :title="$t('page.alova.scenes.requestCrossComponent')"
-      :bordered="false"
-      size="small"
-      segmented
-      class="card-wrapper"
-    >
-      <CrossComponentRequest />
-    </NCard>
-  </NSpace>
+  <div class="flex flex-col gap-4">
+    <VCard class="card-wrapper">
+      <VCardTitle>{{ $t('page.alova.scenes.captchaSend') }}</VCardTitle>
+      <VCardText>
+        <CaptchaVerification class="w-1/3" />
+      </VCardText>
+    </VCard>
+
+    <VCard class="card-wrapper">
+      <VCardTitle>{{ $t('page.alova.scenes.autoRequest') }}</VCardTitle>
+      <VCardText>
+        <div class="flex gap-4">
+          <BrowserVisibilityRequest />
+          <PollingRequest />
+          <NetworkToggleRequest />
+        </div>
+      </VCardText>
+    </VCard>
+
+    <VCard class="card-wrapper">
+      <VCardTitle>{{ $t('page.alova.scenes.requestCrossComponent') }}</VCardTitle>
+      <VCardText>
+        <CrossComponentRequest />
+      </VCardText>
+    </VCard>
+  </div>
 </template>
 
 <style scoped></style>
