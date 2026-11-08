@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { RouteKey } from '@elegant-router/types';
-import AppMenuNodes from './app-menu-nodes.vue';
+import MenuGroup from '@/layouts/modules/global-menu/components/MenuGroup.vue';
 
 defineOptions({ name: 'AppMenu' });
 
@@ -39,46 +39,18 @@ const opened = computed({
 </script>
 
 <template>
-  <VList
-    v-model:opened="opened"
-    nav
-    density="compact"
-    class="app-menu h-full overflow-y-auto py-1"
-    :class="{ 'app-menu--inverted': inverted, 'app-menu--collapsed': collapsed }"
-  >
-    <AppMenuNodes
-      :menus="menus"
-      :level="0"
-      :collapsed="collapsed"
-      :selected-key="selectedKey"
-      @select="key => emit('select', key)"
-    />
+  <VList v-model:opened="opened" color="primary" nav density="compact" prepend-gap="12" indent="32">
+    <template v-for="menu in menus" :key="menu.key">
+      <MenuGroup v-if="menu.children?.length" :menu="menu" />
+      <VListItem
+        v-else
+        :value="menu.key"
+        :title="menu.label"
+        :prepend-icon="menu.icon"
+        :to="menu.routePath"
+      ></VListItem>
+    </template>
   </VList>
 </template>
 
-<style scoped>
-.app-menu :deep(.v-list-item) {
-  min-height: 40px;
-  border-radius: 8px;
-}
-
-.app-menu--inverted :deep(.v-list-item) {
-  color: rgba(255, 255, 255, 0.82);
-}
-
-.app-menu--inverted :deep(.v-list-item--active) {
-  color: #fff;
-}
-
-.app-menu--inverted :deep(.v-list-group__items .v-list-item) {
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.app-menu--inverted :deep(.v-list-item:hover) {
-  background-color: rgba(255, 255, 255, 0.08);
-}
-
-.app-menu--collapsed :deep(.v-list-item) {
-  border-radius: 8px;
-}
-</style>
+<style scoped></style>

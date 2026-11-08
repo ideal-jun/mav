@@ -43,16 +43,14 @@ watch(
 
 <template>
   <Teleport :to="`#${GLOBAL_SIDER_MENU_ID}`">
-    <div class="h-full overflow-hidden">
-      <AppMenu
-        v-model:expanded-keys="expandedKeys"
-        :menus="routeStore.menus"
-        :selected-key="selectedKey"
-        :collapsed="appStore.siderCollapse"
-        :inverted="inverted"
-        @select="routerPushByKeyWithMetaQuery"
-      />
-    </div>
+    <AppMenu
+      v-model:expanded-keys="expandedKeys"
+      :menus="routeStore.menus"
+      :selected-key="selectedKey"
+      :collapsed="appStore.siderCollapse"
+      :inverted="inverted"
+      @select="routerPushByKeyWithMetaQuery"
+    />
   </Teleport>
 </template>
 

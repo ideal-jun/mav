@@ -153,7 +153,13 @@ function getSiderAndCollapsedWidth(isCollapsed: boolean) {
 </script>
 
 <template>
-  <VNavigationDrawer v-model="drawerModel" :permanent="!appStore.isMobile" :width="currentSiderWidth">
+  <VNavigationDrawer
+    v-model="drawerModel"
+    :rail="appStore.siderRail"
+    expand-on-hover
+    :permanent="!appStore.isMobile"
+    :width="currentSiderWidth"
+  >
     <GlobalSider />
   </VNavigationDrawer>
 

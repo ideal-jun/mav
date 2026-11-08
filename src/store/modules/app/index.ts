@@ -22,6 +22,7 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
   const { bool: fullContent, toggle: toggleFullContent } = useBoolean();
   const { bool: contentXScrollable, setBool: setContentXScrollable } = useBoolean();
   const { bool: siderCollapse, setBool: setSiderCollapse, toggle: toggleSiderCollapse } = useBoolean();
+  const { bool: siderRail, setBool: setSiderRail, toggle: toggleSiderRail } = useBoolean(false);
   const {
     bool: mixSiderFixed,
     setBool: setMixSiderFixed,
@@ -159,6 +160,9 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
     siderCollapse,
     setSiderCollapse,
     toggleSiderCollapse,
+    siderRail,
+    setSiderRail,
+    toggleSiderRail,
     mixSiderFixed,
     setMixSiderFixed,
     toggleMixSiderFixed

@@ -33,7 +33,7 @@ const { isFullscreen, toggle } = useFullscreen();
   <div class="h-full w-full px-3">
     <div class="flex h-full items-center">
       <GlobalLogo v-if="showLogo" class="h-full" :style="{ width: themeStore.sider.width + 'px' }" />
-      <MenuToggler v-if="showMenuToggler" :collapsed="appStore.siderCollapse" @click="appStore.toggleSiderCollapse" />
+      <MenuToggler v-if="showMenuToggler" :collapsed="appStore.siderRail" @click="appStore.toggleSiderRail()" />
       <div v-if="showMenu" :id="GLOBAL_HEADER_MENU_ID" class="h-full flex flex-1 items-center overflow-hidden"></div>
       <div v-else class="h-full flex flex-1 items-center overflow-hidden">
         <GlobalBreadcrumb v-if="!appStore.isMobile" class="ml-3" />
