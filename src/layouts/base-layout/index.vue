@@ -84,26 +84,38 @@ const siderWidth = computed(() => getSiderAndCollapsedWidth(false));
 
 const siderCollapsedWidth = computed(() => getSiderAndCollapsedWidth(true));
 
-const showSider = computed(
-  () => !appStore.fullContent && siderVisible.value && (siderWidth.value > 0 || siderCollapsedWidth.value > 0)
-);
+/** Whether the sider takes part in the current layout (layout mode and width) */
+const siderEnabled = computed(() => siderVisible.value && (siderWidth.value > 0 || siderCollapsedWidth.value > 0));
 
 const currentSiderWidth = computed(() => (appStore.siderCollapse ? siderCollapsedWidth.value : siderWidth.value));
 
-const showHeader = computed(() => !appStore.fullContent);
+/** The app bar height, it collapses to 0 in full content mode so only the tab extension is kept */
+const headerHeight = computed(() => (appStore.fullContent ? 0 : themeStore.header.height));
 
 const showTab = computed(() => themeStore.tab.visible);
 
 const showFooter = computed(() => !appStore.fullContent && themeStore.footer.visible);
 
-/** On mobile the sider becomes a temporary Vuetify drawer controlled by the sider-collapse state. */
-const drawerModel = computed(() => (appStore.isMobile ? !appStore.siderCollapse : true));
+/**
+ * The drawer model, it is driven by the component properties instead of `v-if`:
+ * - full content mode closes the drawer
+ * - the horizontal layout family has no sider
+ * - on mobile the sider becomes a temporary drawer controlled by the sider-collapse state
+ */
+const drawerModel = computed({
+  get: () => {
+    if (appStore.fullContent || !siderEnabled.value) {
+      return false;
+    }
 
-function handleDrawerModelUpdate(value: boolean) {
-  if (appStore.isMobile) {
-    appStore.setSiderCollapse(!value);
+    return appStore.isMobile ? !appStore.siderCollapse : true;
+  },
+  set: (value: boolean) => {
+    if (appStore.isMobile) {
+      appStore.setSiderCollapse(!value);
+    }
   }
-}
+});
 
 function getSiderAndCollapsedWidth(isCollapsed: boolean) {
   const {
@@ -141,18 +153,12 @@ function getSiderAndCollapsedWidth(isCollapsed: boolean) {
 </script>
 
 <template>
-  <VNavigationDrawer
-    v-if="showSider"
-    :model-value="drawerModel"
-    :permanent="!appStore.isMobile"
-    :width="currentSiderWidth"
-    @update:model-value="handleDrawerModelUpdate"
-  >
+  <VNavigationDrawer v-model="drawerModel" :permanent="!appStore.isMobile" :width="currentSiderWidth">
     <GlobalSider />
   </VNavigationDrawer>
 
-  <VAppBar v-if="showHeader" :height="themeStore.header.height">
-    <GlobalHeader v-bind="headerProps" />
+  <VAppBar :height="headerHeight">
+    <GlobalHeader v-show="!appStore.fullContent" v-bind="headerProps" />
     <template v-if="showTab" #extension>
       <GlobalTab />
     </template>

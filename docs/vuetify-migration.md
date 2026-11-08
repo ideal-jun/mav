@@ -150,6 +150,15 @@ grep -r "naive" src                   # 仅剩路由名/文档等非组件文本
 
 > 注意（Vuetify layout item）：`VAppBar` / `VNavigationDrawer` / `VSystemBar` 默认就是 layout item，但 **`VFooter` 的 `app` prop 默认是 false**。漏写 `app` 时它不参与 layout，会变成普通文档流元素（`flex: 1 1 auto` 撑满高度），并且在 `VMain scrollable`（绝对定位）的情况下盖在内容之上，表现为"页面空白"。必须写成 `<VFooter app>`。
 
+### 内容全屏（页签条右侧 ⛶）
+
+`appStore.fullContent` 用**组件属性**实现，不再用 `v-if` 卸载布局组件：
+
+- `<VAppBar :height="fullContent ? 0 : themeStore.header.height">`：高度属性归零，`#extension` 里的页签条（48px）保留，因此"退出全屏"按钮始终可用；顶栏内容用 `v-show="!fullContent"` 隐藏，避免 0 高度下内容溢出。
+- 侧边栏用 `v-model="drawerModel"`（组件属性）：`fullContent` / 横向布局无 sider / 移动端抽屉开合都合并进这个 computed，因此收起时有 Vuetify 自带的 0.2s 滑动动画，不会像 `v-if` 那样直接消失。
+- 页脚仍用 `v-if`（`VFooter` 没有 `model-value` 属性）。
+- 旧实现用 `v-if` 卸载整个 `VAppBar`，页签条和退出按钮一起消失，全屏后只能刷新页面才能退出；现实现已修复。
+
 ## 图标体系：MDI + 本地 svg 图标
 
 - **移除 iconify**：`@iconify/vue`、`@iconify/json`、`unplugin-icons`（以及 `<icon-local-*>` / `<icon-*-*>` 组件写法）、`VITE_ICONIFY_URL`、`src/plugins/iconify.ts`、`setupIconifyOffline()` 全部移除。

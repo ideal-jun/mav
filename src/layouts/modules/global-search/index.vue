@@ -105,7 +105,11 @@ function handleSelect(item: unknown) {
   router.push(toSearchItem(item).routePath);
 }
 
-const borderRadius = computed(() => `rounded-${themeStore.themeRadius}px`);
+const borderRadiusStyle = computed(() => {
+  return {
+    borderRadius: themeStore.themeRadius + 'px'
+  };
+});
 </script>
 
 <template>
@@ -119,7 +123,7 @@ const borderRadius = computed(() => `rounded-${themeStore.themeRadius}px`);
       prependGap: 10
     }"
     offset-top="10vh"
-    :class="borderRadius"
+    :style="borderRadiusStyle"
     @click:item="handleSelect"
   >
     <template #activator="{ props }">
