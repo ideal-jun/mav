@@ -29,7 +29,10 @@ function handleClickMenu(key: string) {
     <!-- define component start: BreadcrumbContent -->
     <DefineBreadcrumbContent v-slot="{ breadcrumb }">
       <span class="inline-flex items-center">
-        <component :is="breadcrumb.icon" v-if="themeStore.header.breadcrumb.showIcon" class="mr-1 text-icon" />
+        <template v-if="themeStore.header.breadcrumb.showIcon">
+          <SvgIcon v-if="breadcrumb.localIcon" :local-icon="breadcrumb.localIcon" class="mr-1" size="16" />
+          <VIcon v-else-if="breadcrumb.icon" :icon="breadcrumb.icon" class="mr-1" size="16" />
+        </template>
         {{ breadcrumb.label }}
       </span>
     </DefineBreadcrumbContent>

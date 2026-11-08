@@ -40,12 +40,13 @@ const location = computed<Anchor>(() => placements[props.placement] ?? 'top');
 </script>
 
 <template>
-  <VTooltip :location="location">
+  <VTooltip :location="location" interactive close-delay="200">
     <template #activator="{ props: activatorProps }">
       <span v-bind="activatorProps">
         <slot name="trigger">
           <div class="cursor-pointer">
-            <SvgIcon :icon="icon" :local-icon="localIcon" />
+            <SvgIcon v-if="localIcon" :local-icon="localIcon" />
+            <VIcon v-else :icon="icon" size="small" />
           </div>
         </slot>
       </span>

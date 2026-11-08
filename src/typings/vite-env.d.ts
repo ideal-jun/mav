@@ -16,9 +16,7 @@ declare namespace Env {
     readonly VITE_APP_TITLE: string;
     /** The description of the application */
     readonly VITE_APP_DESC: string;
-    /** The router history mode */
-    readonly VITE_ROUTER_HISTORY_MODE?: RouterHistoryMode;
-    /** The prefix of the iconify icon */
+    /** The prefix of the icon name */
     readonly VITE_ICON_PREFIX: 'icon';
     /**
      * The prefix of the local icon
@@ -26,6 +24,8 @@ declare namespace Env {
      * This prefix is start with the icon prefix
      */
     readonly VITE_ICON_LOCAL_PREFIX: 'icon-local';
+    /** The router history mode */
+    readonly VITE_ROUTER_HISTORY_MODE?: RouterHistoryMode;
     /** backend service base url */
     readonly VITE_SERVICE_BASE_URL: string;
     /**
@@ -89,19 +89,11 @@ declare namespace Env {
     /**
      * Default menu icon if menu icon is not set
      *
-     * Iconify icon name
+     * Material Design Icons name
      */
     readonly VITE_MENU_ICON: string;
     /** Whether to build with sourcemap */
     readonly VITE_SOURCE_MAP?: CommonType.YesOrNo;
-    /**
-     * Iconify api provider url
-     *
-     * If the project is deployed in intranet, you can set the api provider url to the local iconify server
-     *
-     * @link https://docs.iconify.design/api/providers.html
-     */
-    readonly VITE_ICONIFY_URL?: string;
     /** Used to differentiate storage across different domains */
     readonly VITE_STORAGE_PREFIX?: string;
     /** Whether to automatically detect updates after configuring application packaging */

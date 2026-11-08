@@ -2,12 +2,12 @@
 import { computed, ref, watch } from 'vue';
 import type { ValidationRule } from 'vuetify';
 import { enableStatusOptions, menuIconTypeOptions, menuTypeOptions } from '@/constants/business';
+import { mdiIcons } from '@/constants/icon';
 import { getLocalIcons } from '@/utils/icon';
 import { fetchGetAllRoles } from '@/service/api';
 import { $t } from '@/locales';
 import { useVuetifyForm } from '@/hooks/common/form';
 import type { TableOperateType } from '@/hooks/common/table';
-import SvgIcon from '@/components/custom/svg-icon.vue';
 import {
   getLayoutAndPage,
   getPathParamFromRoutePath,
@@ -134,6 +134,12 @@ const localIconItems = localIcons.map(item => ({
   value: item
 }));
 
+const mdiIconItems = computed(() => mdiIcons.map(icon => ({ title: icon, value: icon })));
+
+const menuIconTypeItems = computed(() =>
+  menuIconTypeOptions.map(item => ({ title: $t(item.label), value: item.value }))
+);
+
 const showLayout = computed(() => model.value.parentId === 0);
 
 const showPage = computed(() => model.value.menuType === '2');
@@ -163,10 +169,6 @@ const layoutOptions: { title: string; value: string }[] = [
 ];
 
 const menuTypeItems = computed(() => menuTypeOptions.map(item => ({ title: $t(item.label), value: item.value })));
-
-const menuIconTypeItems = computed(() =>
-  menuIconTypeOptions.map(item => ({ title: $t(item.label), value: item.value }))
-);
 
 const enableStatusItems = computed(() =>
   enableStatusOptions.map(item => ({ title: $t(item.label), value: item.value }))
@@ -391,38 +393,56 @@ watch(
               </VRadioGroup>
             </VCol>
             <VCol cols="12" md="6">
-              <VTextField
+              <VSelect
                 v-if="model.iconType === '1'"
                 v-model="model.icon"
                 :label="$t('page.manage.menu.icon')"
                 :placeholder="$t('page.manage.menu.form.icon')"
-              >
-                <template #append-inner>
-                  <SvgIcon v-if="model.icon" :icon="model.icon" class="text-icon" />
-                </template>
-              </VTextField>
-              <VSelect
-                v-else
-                v-model="model.icon"
-                :label="$t('page.manage.menu.icon')"
-                :placeholder="$t('page.manage.menu.form.localIcon')"
-                :items="localIconItems"
+                :items="mdiIconItems"
+                clearable
               >
                 <template #item="{ props: itemProps, item }">
                   <VListItem v-bind="itemProps">
                     <template #prepend>
-                      <SvgIcon :local-icon="item.value" />
+                      <VIcon :icon="item.value" size="20" />
                     </template>
                     <template #title>{{ item.title }}</template>
                   </VListItem>
                 </template>
                 <template #selection="{ item }">
                   <div class="flex items-center gap-2">
-                    <SvgIcon :local-icon="item.value" />
+                    <VIcon :icon="item.value" size="20" />
                     <span>{{ item.title }}</span>
                   </div>
                 </template>
               </VSelect>
+              <VSelect
+                v-else
+                v-model="model.icon"
+                :label="$t('page.manage.menu.icon')"
+                :placeholder="$t('page.manage.menu.form.localIcon')"
+                :items="localIconItems"
+                clearable
+              >
+                <template #item="{ props: itemProps, item }">
+                  <VListItem v-bind="itemProps">
+                    <template #prepend>
+                      <SvgIcon :local-icon="item.value" size="20" />
+                    </template>
+                    <template #title>{{ item.title }}</template>
+                  </VListItem>
+                </template>
+                <template #selection="{ item }">
+                  <div class="flex items-center gap-2">
+                    <SvgIcon :local-icon="item.value" size="20" />
+                    <span>{{ item.title }}</span>
+                  </div>
+                </template>
+              </VSelect>
+              <div v-if="model.icon" class="mt-2 flex justify-center">
+                <SvgIcon v-if="model.iconType === '2'" :local-icon="model.icon" :size="40" class="text-primary" />
+                <VIcon v-else :icon="model.icon" :size="40" class="text-primary" />
+              </div>
             </VCol>
             <VCol cols="12" md="6">
               <VRadioGroup

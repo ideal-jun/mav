@@ -83,8 +83,8 @@ declare namespace Api {
     /**
      * icon type
      *
-     * - "1": iconify icon
-     * - "2": local icon
+     * - "1": icon
+     * - "2": local icon (deprecated)
      */
     type IconType = '1' | '2';
 
@@ -115,7 +115,7 @@ declare namespace Api {
       routePath: string;
       /** component */
       component?: string;
-      /** iconify icon name or local icon name */
+      /** Material Design Icons name */
       icon: string;
       /** icon type */
       iconType: IconType;

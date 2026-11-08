@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import './plugins/assets';
 import { setupVueRootValidator } from 'vite-plugin-vue-transition-root-validator/client';
-import { setupAppVersionNotification, setupDayjs, setupIconifyOffline, setupLoading, setupNProgress } from './plugins';
+import { setupAppVersionNotification, setupDayjs, setupLoading, setupNProgress } from './plugins';
 import { setupAppServices } from './plugins/app-services';
 import { setupStore } from './store';
 import { setupRouter } from './router';
@@ -15,8 +15,6 @@ async function setupApp() {
   setupAppServices();
 
   setupNProgress();
-
-  setupIconifyOffline();
 
   setupDayjs();
 

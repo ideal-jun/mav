@@ -88,23 +88,23 @@ defineExpose({ selectNode, graph: graphRef });
     <div class="absolute left-0 right-0 z-1 flex items-stretch justify-between">
       <VBtnGroup density="compact" variant="outlined" class="bg-white!">
         <VBtn @click="zoomOut">
-          <SvgIcon icon="mingcute:zoom-out-line" />
+          <VIcon icon="mdi-magnify-minus-outline" />
         </VBtn>
         <VBtn @click="zoomIn">
-          <SvgIcon icon="mingcute:zoom-in-line" />
+          <VIcon icon="mdi-magnify-plus-outline" />
         </VBtn>
         <VBtn @click="resetZoom">
-          <SvgIcon icon="icon-park-outline:equal-ratio" />
+          <VIcon icon="mdi-fit-to-page-outline" />
         </VBtn>
         <VBtn @click="fitZoom">
-          <SvgIcon icon="gg:ratio" />
+          <VIcon icon="mdi-aspect-ratio" />
         </VBtn>
       </VBtnGroup>
       <div class="flex items-center gap-3">
         <VMenu location="bottom end">
           <template #activator="{ props: activatorProps }">
             <VBtn v-bind="activatorProps" density="compact" variant="outlined" class="bg-white!">
-              <SvgIcon icon="fe:question" />
+              <VIcon icon="mdi-help-circle-outline" />
             </VBtn>
           </template>
           <div class="flex flex-col gap-2 p-4">
@@ -112,8 +112,8 @@ defineExpose({ selectNode, graph: graphRef });
             <div class="grid w-180px! grid-cols-2 gap-y-2">
               <div v-for="(config, status) in nodeStatus" :key="status" class="flex items-center justify-center">
                 <VChip size="small" variant="tonal" rounded="pill">
-                  <SvgIcon
-                    :icon="status === 'MILESTONE' ? 'f7:flag-circle-fill' : 'f7:circle-fill'"
+                  <VIcon
+                    :icon="status === 'MILESTONE' ? 'mdi-flag-variant' : 'mdi-circle'"
                     :style="{ color: config.color }"
                     class="mr-1"
                   />

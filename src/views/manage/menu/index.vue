@@ -6,8 +6,8 @@ import { enableStatusRecord, menuTypeRecord } from '@/constants/business';
 import { yesOrNoRecord } from '@/constants/common';
 import { fetchGetAllPages, fetchGetMenuList } from '@/service/api';
 import { $t, hasI18nKey } from '@/locales';
+import { resolveMdiIcon } from '@/utils/icon';
 import { defaultTransform, useTableOperate, useVuetifyPaginatedTable } from '@/hooks/common/table';
-import SvgIcon from '@/components/custom/svg-icon.vue';
 import MenuOperateModal from './modules/menu-operate-modal.vue';
 import type { OperateType } from './modules/menu-operate-modal.vue';
 
@@ -195,11 +195,8 @@ init();
           </template>
           <template #item.icon="{ item }">
             <div class="flex-center">
-              <SvgIcon
-                :icon="item.iconType === '1' ? item.icon : undefined"
-                :local-icon="item.iconType === '2' ? item.icon : undefined"
-                class="text-icon"
-              />
+              <SvgIcon v-if="item.iconType === '2'" :local-icon="item.icon" size="20" />
+              <VIcon v-else :icon="resolveMdiIcon(item.icon)" size="20" />
             </div>
           </template>
           <template #item.status="{ item }">

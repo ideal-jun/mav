@@ -39,6 +39,9 @@ const local: App.I18n.Schema = {
     refresh: '刷新',
     reset: '重置',
     search: '搜索',
+    searchPlaceholder: '搜索页面…',
+    searchEmpty: '没有匹配的页面',
+    searchPrompt: '您的搜索结果将显示在这里',
     switch: '切换',
     tip: '提示',
     trigger: '触发',
@@ -507,7 +510,7 @@ const local: App.I18n.Schema = {
           page: '请选择页面组件',
           layout: '请选择布局组件',
           i18nKey: '请输入国际化key',
-          icon: '请输入图标',
+          icon: '请选择图标',
           localIcon: '请选择本地图标',
           order: '请输入排序',
           keepAlive: '请选择是否缓存路由',
@@ -532,7 +535,7 @@ const local: App.I18n.Schema = {
           menu: '菜单'
         },
         iconType: {
-          iconify: 'iconify图标',
+          icon: '图标',
           local: '本地图标'
         }
       }

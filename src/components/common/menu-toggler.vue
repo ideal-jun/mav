@@ -22,12 +22,12 @@ type NumberBool = 0 | 1;
 const icon = computed(() => {
   const icons: Record<NumberBool, Record<NumberBool, string>> = {
     0: {
-      0: 'line-md:menu-fold-left',
-      1: 'line-md:menu-fold-right'
+      0: 'mdi-menu-open',
+      1: 'mdi-menu'
     },
     1: {
-      0: 'ph-caret-double-left-bold',
-      1: 'ph-caret-double-right-bold'
+      0: 'mdi-chevron-double-left',
+      1: 'mdi-chevron-double-right'
     }
   };
 
@@ -46,7 +46,7 @@ const icon = computed(() => {
     tooltip-placement="bottom-start"
     :z-index="zIndex"
   >
-    <SvgIcon :icon="icon" />
+    <VIcon :icon="icon" />
   </ButtonIcon>
 </template>
 

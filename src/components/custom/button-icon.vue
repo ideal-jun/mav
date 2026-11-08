@@ -11,13 +11,14 @@ defineOptions({
 interface Props {
   /** Button class */
   class?: string;
-  /** Iconify icon name */
+  /** Material Design Icons (MDI) icon name */
   icon?: string;
   /** Tooltip content */
   tooltipContent?: string;
   /** Tooltip placement */
   tooltipPlacement?: string;
   zIndex?: number;
+  density?: null | 'default' | 'comfortable' | 'compact';
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -25,10 +26,11 @@ const props = withDefaults(defineProps<Props>(), {
   icon: '',
   tooltipContent: '',
   tooltipPlacement: 'bottom',
-  zIndex: 98
+  zIndex: 98,
+  density: 'default'
 });
 
-const DEFAULT_CLASS = 'h-9 w-9 text-icon';
+const DEFAULT_CLASS = 'text-medium-emphasis';
 
 const placements: Record<string, Anchor> = {
   top: 'top',
@@ -49,17 +51,18 @@ const location = computed<Anchor>(() => placements[props.tooltipPlacement] ?? 'b
 </script>
 
 <template>
-  <VTooltip :location="location" :disabled="!tooltipContent" :z-index="zIndex">
+  <VTooltip :location="location" :disabled="!tooltipContent" :z-index="zIndex" interactive>
     <template #activator="{ props: activatorProps }">
       <VBtn
         v-bind="{ ...activatorProps, ...$attrs }"
         :class="twMerge(DEFAULT_CLASS, props.class)"
-        density="comfortable"
         icon
+        :density="density"
+        size="small"
         variant="text"
       >
         <slot>
-          <SvgIcon :icon="icon" />
+          <VIcon :icon="icon" />
         </slot>
       </VBtn>
     </template>

@@ -1,52 +1,69 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { icons } from './icons';
+import { mdiIcons } from '@/constants/icon';
+import { getLocalIcons } from '@/utils/icon';
 
 const selectValue = ref('');
 
-const localIcons = ['custom-icon', 'activity', 'at-sign', 'cast', 'chrome', 'copy', 'wind'];
+const localIcons = getLocalIcons();
+
+/** the MDI icons used by the menus */
+const menuIcons = [
+  'mdi-home',
+  'mdi-monitor-dashboard',
+  'mdi-shield-account-outline',
+  'mdi-account-supervisor-outline',
+  'mdi-routes',
+  'mdi-cog-outline'
+];
 </script>
 
 <template>
   <div class="h-full">
     <VCard class="card-wrapper">
-      <VCardTitle>Icon组件示例</VCardTitle>
+      <VCardTitle>Material Design Icons 示例</VCardTitle>
       <VCardText>
         <div class="grid grid-cols-10">
-          <template v-for="item in icons" :key="item">
-            <div class="mt-5px flex justify-center">
-              <SvgIcon :icon="item" class="text-30px" />
-            </div>
-          </template>
+          <div v-for="item in mdiIcons" :key="item" class="mt-5px flex justify-center">
+            <VIcon :icon="item" size="30" />
+          </div>
         </div>
         <div class="mt-50px">
-          <h1 class="mb-20px text-18px font-500">Icon图标选择器</h1>
-          <CustomIconSelect v-model:value="selectValue" :icons="icons" />
+          <h1 class="mb-20px text-18px font-500">MDI 图标选择器</h1>
+          <CustomIconSelect v-model:value="selectValue" :icons="mdiIcons" />
         </div>
       </VCardText>
-      <VCardActions>
-        <WebSiteLink label="iconify地址：" link="https://icones.js.org/" class="mt-10px" />
-      </VCardActions>
     </VCard>
+
     <VCard class="mt-10px card-wrapper">
-      <VCardTitle>自定义图标示例</VCardTitle>
+      <VCardTitle>使用说明</VCardTitle>
       <VCardText>
         <div class="pb-12px text-16px">
-          在src/assets/svg-icon文件夹下的svg文件，通过在template里面以 icon - local - {文件名} 直接渲染,
-          其中icon-local为.env文件里的 VITE_ICON_LOCAL_PREFIX
+          MDI 图标用 Vuetify 的 VIcon 渲染（图标名形如 mdi-home），本地 svg 图标用 SvgIcon 渲染（local-icon 传文件名）。
+        </div>
+        <div class="pb-12px text-16px">
+          MDI 中不存在的图标，直接把 svg 文件放到 src/assets/svg-icon 目录，用 SvgIcon 的 local-icon 渲染即可。
+        </div>
+        <div class="flex flex-wrap items-center gap-6 pt-8px">
+          <div v-for="item in menuIcons" :key="item" class="flex flex-col items-center gap-1">
+            <VIcon :icon="item" size="30" class="text-primary" />
+            <span class="text-12px">{{ item }}</span>
+          </div>
+        </div>
+      </VCardText>
+    </VCard>
+
+    <VCard class="mt-10px card-wrapper">
+      <VCardTitle>本地 svg 图标示例</VCardTitle>
+      <VCardText>
+        <div class="pb-16px text-16px">
+          src/assets/svg-icon 目录下的 svg 文件，通过 SvgIcon 的 local-icon 属性渲染（图标 id 前缀来自
+          VITE_ICON_LOCAL_PREFIX），MDI 中缺失的图标可以用这种方式补充。
         </div>
         <div class="grid grid-cols-10">
-          <div class="mt-5px flex justify-center">
-            <icon-local-activity class="text-40px text-success" />
-          </div>
-          <div class="mt-5px flex justify-center">
-            <icon-local-cast class="text-20px text-error" />
-          </div>
-        </div>
-        <div class="py-12px text-16px">通过SvgIcon组件动态渲染, 菜单通过meta的localIcon属性渲染自定义图标</div>
-        <div class="grid grid-cols-10">
-          <div v-for="(fileName, index) in localIcons" :key="index" class="mt-5px flex justify-center">
+          <div v-for="fileName in localIcons" :key="fileName" class="mt-5px flex flex-col items-center gap-1">
             <SvgIcon :local-icon="fileName" class="text-30px text-primary" />
+            <span class="text-12px">{{ fileName }}</span>
           </div>
         </div>
       </VCardText>

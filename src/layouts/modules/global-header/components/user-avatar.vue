@@ -34,7 +34,7 @@ function confirmLogout() {
     <VMenu location="bottom end">
       <template #activator="{ props }">
         <VBtn v-bind="props" class="h-9 px-2" variant="text">
-          <SvgIcon icon="ph:user-circle" class="text-2xl" />
+          <VIcon icon="mdi-account-circle-outline" size="24" />
           <span class="ml-2 text-base font-medium">{{ authStore.userInfo.userName }}</span>
         </VBtn>
       </template>

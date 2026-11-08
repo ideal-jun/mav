@@ -17,27 +17,27 @@
 
 ## 2. 常用映射
 
-| Naive                        | Vuetify                                                                                                                                   |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---- | -------- | ------------------------------------------------------------------- |
-| NCard / NCard title          | `VCard` + `VCardTitle` + `VCardText`（`:title` 用 `VCardTitle` 或 `:title` prop）                                                         |
-| NButton / NButton text       | `VBtn`（`variant="flat                                                                                                                    | text | outlined | tonal"` `color="primary"` `size="small"` `prepend-icon="mdi-xxx"`） |
-| NInput                       | `VTextField`（`:rules`、`variant="outlined"` 已是全局默认）                                                                               |
-| NInputNumber                 | `VNumberInput`                                                                                                                            |
-| NSelect                      | `VSelect`，items 用 `{ title, value }`（Naive 的 `{label,value}` 要改）                                                                   |
-| NSwitch / NCheckbox / NRadio | `VSwitch` / `VCheckbox` / `VRadioGroup`+`VRadio`                                                                                          |
-| NTag                         | `VChip`（`:color` `:variant="tonal"`）                                                                                                    |
-| NTooltip                     | `VTooltip` + activator（`VIcon`/`VBtn`）                                                                                                  |
-| NPopover / NPopconfirm       | `VMenu`（activator + `VList` 操作项）；确认类可 `VDialog`                                                                                 |
-| NDrawer（右滑表单）          | `<VNavigationDrawer temporary location="right" :width="...">`                                                                             |
-| NModal / NDialog             | `VDialog` + `VCard`                                                                                                                       |
-| NForm / NFormItem            | `VForm` + `VTextField` 自带 label/messages；分组用 `VRow/VCol`                                                                            |
-| NDataTable                   | `VDataTableServer`（后端分页）或 `VDataTable`（前端分页）                                                                                 |
-| NPagination                  | `VDataTableServer` 自带 `bottom` 插槽 / `VPagination`                                                                                     |
-| NSpace                       | `<div class="d-flex flex-column ga-4">` 或 UnoCSS `flex gap-4`                                                                            |
-| NDivider                     | `VDivider`                                                                                                                                |
-| NScrollbar                   | `@sa/materials` 的 `SimpleScrollbar` 或原生 overflow                                                                                      |
-| NWatermark                   | `AppWatermark`（Lead 新增，`src/components/common/app-watermark.vue`）                                                                    |
-| NIcon / icons                | `<VIcon icon="mdi-xxx" />`（@mdi/font 已加载）；本地 svg 用 `<SvgIcon local-icon="activity" />`；iconify 用 `<SvgIcon icon="mdi:menu" />` |
+| Naive                        | Vuetify                                                                                                                                                                                                                              |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---- | -------- | ------------------------------------------------------------------- |
+| NCard / NCard title          | `VCard` + `VCardTitle` + `VCardText`（`:title` 用 `VCardTitle` 或 `:title` prop）                                                                                                                                                    |
+| NButton / NButton text       | `VBtn`（`variant="flat                                                                                                                                                                                                               | text | outlined | tonal"` `color="primary"` `size="small"` `prepend-icon="mdi-xxx"`） |
+| NInput                       | `VTextField`（`:rules`、`variant="outlined"` 已是全局默认）                                                                                                                                                                          |
+| NInputNumber                 | `VNumberInput`                                                                                                                                                                                                                       |
+| NSelect                      | `VSelect`，items 用 `{ title, value }`（Naive 的 `{label,value}` 要改）                                                                                                                                                              |
+| NSwitch / NCheckbox / NRadio | `VSwitch` / `VCheckbox` / `VRadioGroup`+`VRadio`                                                                                                                                                                                     |
+| NTag                         | `VChip`（`:color` `:variant="tonal"`）                                                                                                                                                                                               |
+| NTooltip                     | `VTooltip` + activator（`VIcon`/`VBtn`）                                                                                                                                                                                             |
+| NPopover / NPopconfirm       | `VMenu`（activator + `VList` 操作项）；确认类可 `VDialog`                                                                                                                                                                            |
+| NDrawer（右滑表单）          | `<VNavigationDrawer temporary location="right" :width="...">`                                                                                                                                                                        |
+| NModal / NDialog             | `VDialog` + `VCard`                                                                                                                                                                                                                  |
+| NForm / NFormItem            | `VForm` + `VTextField` 自带 label/messages；分组用 `VRow/VCol`                                                                                                                                                                       |
+| NDataTable                   | `VDataTableServer`（后端分页）或 `VDataTable`（前端分页）                                                                                                                                                                            |
+| NPagination                  | `VDataTableServer` 自带 `bottom` 插槽 / `VPagination`                                                                                                                                                                                |
+| NSpace                       | `<div class="d-flex flex-column ga-4">` 或 UnoCSS `flex gap-4`                                                                                                                                                                       |
+| NDivider                     | `VDivider`                                                                                                                                                                                                                           |
+| NScrollbar                   | `@sa/materials` 的 `SimpleScrollbar` 或原生 overflow                                                                                                                                                                                 |
+| NWatermark                   | `AppWatermark`（Lead 新增，`src/components/common/app-watermark.vue`）                                                                                                                                                               |
+| NIcon / icons                | MDI 用 Vuetify `<VIcon icon="mdi-xxx" />`（@mdi/font 已加载）；本地 svg 用 `<SvgIcon local-icon="activity" />`（`src/assets/svg-icon`）。iconify / unplugin-icons 已移除，旧图标名用 `resolveMdiIcon()`（`src/utils/icon.ts`）归一化 |
 
 ## 3. 表格规范（VDataTableServer）
 
@@ -149,3 +149,25 @@ grep -r "naive" src                   # 仅剩路由名/文档等非组件文本
 4. tab 的 chrome/slider/button 三种模式改为近似样式（`VBtn` + 类名），不再是 CSS Modules 的 chrome 造型。
 
 > 注意（Vuetify layout item）：`VAppBar` / `VNavigationDrawer` / `VSystemBar` 默认就是 layout item，但 **`VFooter` 的 `app` prop 默认是 false**。漏写 `app` 时它不参与 layout，会变成普通文档流元素（`flex: 1 1 auto` 撑满高度），并且在 `VMain scrollable`（绝对定位）的情况下盖在内容之上，表现为"页面空白"。必须写成 `<VFooter app>`。
+
+## 图标体系：MDI + 本地 svg 图标
+
+- **移除 iconify**：`@iconify/vue`、`@iconify/json`、`unplugin-icons`（以及 `<icon-local-*>` / `<icon-*-*>` 组件写法）、`VITE_ICONIFY_URL`、`src/plugins/iconify.ts`、`setupIconifyOffline()` 全部移除。
+- **保留本地 svg 图标**：`src/assets/svg-icon/*.svg` + `vite-plugin-svg-icons`（`virtual:svg-icons-register`，symbol id 为 `${VITE_ICON_LOCAL_PREFIX}-[name]`，即 `icon-local-activity`）。MDI 里没有的图标，直接把 svg 放进该目录，用 `local-icon` 渲染。
+- **分工明确**：
+  - MDI 图标 → Vuetify `<VIcon icon="mdi-xxx" />`（样式来自 `@mdi/font`，已在 `src/plugins/vuetify.ts` 引入）
+  - 本地 svg 图标 → `<SvgIcon local-icon="activity" />`（`src/components/custom/svg-icon.vue` **只负责本地 svg**，渲染 `src/assets/svg-icon/activity.svg`）
+  - 两者都支持的 `size`（数字按 px）；动态图标处用 `v-if="localIcon" / v-else` 分流
+- **图标名归一化**：`src/utils/icon.ts` 的 `resolveMdiIcon()` 兼容后端/历史 iconify 名称（`mdi:home` → `mdi-home`、`not-found` → `mdi-map-search-outline`）。
+- **菜单/面包屑/标签页**：`App.Global.Menu` / `App.Global.Tab` 同时有 `icon`（MDI 名称字符串）与 `localIcon`（本地 svg 名称），渲染统一走 `<SvgIcon>`。
+- **菜单表单**：图标类型 `iconType`（`1` = 图标/MDI，`2` = 本地 svg）保留，分别用 `mdiIcons` 与 `getLocalIcons()` 作为下拉数据，后端字段不变。
+- **图标示例页**：`/plugin/icon` 同时展示 MDI 与本地 svg 图标。
+
+## 全局搜索：VCommandPalette（Vuetify labs）
+
+- 全局搜索（`src/layouts/modules/global-search/index.vue`）改用 `VCommandPalette`（`vuetify/labs/VCommandPalette`）实现，替换了原来自写的 `VDialog + VTextField + VList` 弹窗（`search-modal.vue` / `search-result.vue` 已删除）。
+- 数据：`useRouteStore().searchMenus`（叶子菜单）映射为 palette items，`title` = 菜单 i18n 标题，`subtitle` = 路由路径；palette 内置按 `title`/`subtitle` 过滤（`filterKeys` 默认值）。
+- 图标：`#item.prepend` 插槽，`localIcon` 用 `<SvgIcon>`，否则用 `<VIcon>`（MDI）。
+- 交互全部由组件内置：输入聚焦、↑/↓ 切换、Enter 执行、Esc 关闭、点击外部关闭、无数据文案；`@click:item` 里 `router.push` 跳转。
+- 页脚提示复用 `SearchFooter`，通过 `#append` 插槽注入（移动端隐藏）。
+- 注意：labs 组件不会被 `vite-plugin-vuetify` 的 autoImport 处理，必须显式 `import { VCommandPalette } from 'vuetify/labs/VCommandPalette'`（组件自带 CSS）。

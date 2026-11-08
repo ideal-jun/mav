@@ -39,6 +39,9 @@ const local: App.I18n.Schema = {
     refresh: 'Refresh',
     reset: 'Reset',
     search: 'Search',
+    searchPlaceholder: 'Search pages…',
+    searchEmpty: 'No matching pages',
+    searchPrompt: 'Your search results will appear here',
     switch: 'Switch',
     tip: 'Tip',
     trigger: 'Trigger',
@@ -511,8 +514,8 @@ const local: App.I18n.Schema = {
           page: 'Please select page component',
           layout: 'Please select layout component',
           i18nKey: 'Please enter i18n key',
-          icon: 'Please enter iconify name',
-          localIcon: 'Please enter local icon name',
+          icon: 'Please select icon',
+          localIcon: 'Please select local icon',
           order: 'Please enter order',
           keepAlive: 'Please select whether to cache route',
           href: 'Please enter href',
@@ -536,7 +539,7 @@ const local: App.I18n.Schema = {
           menu: 'Menu'
         },
         iconType: {
-          iconify: 'Iconify Icon',
+          icon: 'Icon',
           local: 'Local Icon'
         }
       }

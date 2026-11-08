@@ -210,15 +210,21 @@ init();
             @contextmenu="handleContextMenu($event, tab.id)"
           >
             <template #prefix>
-              <SvgIcon :icon="tab.icon" :local-icon="tab.localIcon" class="inline-block align-text-bottom text-16px" />
+              <SvgIcon
+                v-if="tab.localIcon"
+                :local-icon="tab.localIcon"
+                size="16"
+                class="inline-block align-text-bottom"
+              />
+              <VIcon v-else :icon="tab.icon" size="16" class="inline-block align-text-bottom" />
             </template>
             <div class="max-w-240px ellipsis-text">{{ tab.label }}</div>
           </PageTab>
         </div>
       </BetterScroll>
     </div>
-    <ReloadButton :loading="!appStore.reloadFlag" @click="refresh" />
-    <FullScreen :full="appStore.fullContent" @click="appStore.toggleFullContent" />
+    <ReloadButton :loading="!appStore.reloadFlag" density="comfortable" @click="refresh" />
+    <FullScreen :full="appStore.fullContent" density="comfortable" @click="appStore.toggleFullContent" />
   </VSheet>
   <ContextMenu
     :visible="dropdown.visible"

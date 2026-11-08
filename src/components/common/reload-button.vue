@@ -13,8 +13,8 @@ defineProps<Props>();
 </script>
 
 <template>
-  <ButtonIcon :tooltip-content="$t('icon.reload')">
-    <icon-ant-design-reload-outlined :class="{ 'animate-spin animate-duration-750': loading }" />
+  <ButtonIcon :tooltip-content="$t('icon.reload')" icon="mdi-refresh" density="comfortable">
+    <VIcon icon="mdi-refresh" :class="{ 'animate-spin animate-duration-750': loading }" />
   </ButtonIcon>
 </template>
 

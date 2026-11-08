@@ -31,6 +31,8 @@ interface MixMenuItemProps {
   label: App.Global.Menu['label'];
   /** Menu item icon */
   icon: App.Global.Menu['icon'];
+  /** Menu item local icon */
+  localIcon: App.Global.Menu['localIcon'];
   /** Active menu item */
   active: boolean;
   /** Mini size */
@@ -58,7 +60,7 @@ function toggleSiderCollapse() {
 
 <template>
   <!-- define component: MixMenuItem -->
-  <DefineMixMenuItem v-slot="{ label, icon, active, isMini }">
+  <DefineMixMenuItem v-slot="{ label, icon, localIcon, active, isMini }">
     <div
       class="mx-4px mb-6px flex-col-center cursor-pointer rounded-8px bg-transparent px-4px py-8px transition-300 hover:bg-[rgb(0,0,0,0.08)]"
       :class="{
@@ -67,7 +69,8 @@ function toggleSiderCollapse() {
         '!text-white !bg-primary': active && inverted
       }"
     >
-      <component :is="icon" :class="[isMini ? 'text-icon-small' : 'text-icon-large']" />
+      <SvgIcon v-if="localIcon" :local-icon="localIcon" :size="isMini ? 18 : 22" />
+      <VIcon v-else :icon="icon" :size="isMini ? 18 : 22" />
       <p
         class="w-full ellipsis-text text-center text-12px transition-height-300"
         :class="[isMini ? 'h-0 pt-0' : 'h-20px pt-4px']"
@@ -86,6 +89,7 @@ function toggleSiderCollapse() {
         :key="menu.key"
         :label="menu.label"
         :icon="menu.icon"
+        :local-icon="menu.localIcon"
         :active="menu.key === activeMenuKey"
         :is-mini="siderCollapse"
         @click="handleClickMixMenu(menu.routeKey)"

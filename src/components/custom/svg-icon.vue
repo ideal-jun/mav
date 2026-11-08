@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import { computed, useAttrs } from 'vue';
-import { Icon } from '@iconify/vue';
 
 defineOptions({ name: 'SvgIcon', inheritAttrs: false });
 
 /**
  * Props
  *
- * - Support iconify and local svg icon
- * - If icon and localIcon are passed at the same time, localIcon will be rendered first
+ * - Render the local svg icons in `src/assets/svg-icon` only, the icon sprite is injected by
+ *   `vite-plugin-svg-icons` (`virtual:svg-icons-register`)
+ * - Material Design Icons are rendered by the Vuetify `<VIcon>` component, not by this component
  */
 interface Props {
-  /** Iconify icon name */
-  icon?: string;
-  /** Local svg icon name */
+  /** Local svg icon name, it is the file name in `src/assets/svg-icon` */
   localIcon?: string;
+  /** Icon size, a `number` is treated as `px` */
+  size?: number | string;
 }
 
 const props = defineProps<Props>();
@@ -29,26 +29,23 @@ const bindAttrs = computed<{ class: string; style: string }>(() => ({
 const symbolId = computed(() => {
   const { VITE_ICON_LOCAL_PREFIX: prefix } = import.meta.env;
 
-  const defaultLocalIcon = 'no-icon';
-
-  const icon = props.localIcon || defaultLocalIcon;
-
-  return `#${prefix}-${icon}`;
+  return `#${prefix}-${props.localIcon || 'no-icon'}`;
 });
 
-/** If localIcon is passed, render localIcon first */
-const renderLocalIcon = computed(() => props.localIcon || !props.icon);
+/** The svg is `1em` wide and high, so it is sized with font-size */
+const iconStyle = computed(() => {
+  const fontSize = typeof props.size === 'number' ? `${props.size}px` : props.size;
+
+  if (!fontSize) {
+    return bindAttrs.value.style;
+  }
+
+  return bindAttrs.value.style ? `font-size:${fontSize};${bindAttrs.value.style}` : `font-size:${fontSize}`;
+});
 </script>
 
 <template>
-  <template v-if="renderLocalIcon">
-    <svg aria-hidden="true" width="1em" height="1em" v-bind="bindAttrs">
-      <use :xlink:href="symbolId" fill="currentColor" />
-    </svg>
-  </template>
-  <template v-else>
-    <Icon v-if="icon" :icon="icon" v-bind="bindAttrs" />
-  </template>
+  <svg aria-hidden="true" width="1em" height="1em" :class="bindAttrs.class" :style="iconStyle">
+    <use :xlink:href="symbolId" fill="currentColor" />
+  </svg>
 </template>
-
-<style scoped></style>

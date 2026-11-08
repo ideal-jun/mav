@@ -38,15 +38,16 @@ function changeLang(lang: App.I18n.LangType) {
       <VBtn
         v-bind="activatorProps"
         :aria-label="tooltipContent"
-        class="h-9 w-9"
-        density="comfortable"
+        class="h-9 w-9 text-medium-emphasis"
+        density="compact"
         icon
+        size="small"
         variant="text"
       >
         <VTooltip :text="tooltipContent" :disabled="!tooltipContent" location="left">
           <template #activator="{ props: tooltipProps }">
             <span v-bind="tooltipProps" class="inline-flex">
-              <SvgIcon icon="heroicons:language" />
+              <VIcon icon="mdi-translate" />
             </span>
           </template>
         </VTooltip>

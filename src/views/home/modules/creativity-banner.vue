@@ -10,7 +10,7 @@ defineOptions({
   <VCard class="card-wrapper h-full">
     <VCardTitle>{{ $t('page.home.creativity') }}</VCardTitle>
     <VCardText class="flex h-full items-center justify-center">
-      <icon-local-banner class="text-400px text-primary sm:text-320px" />
+      <SvgIcon local-icon="banner" class="text-400px text-primary sm:text-320px" />
     </VCardText>
   </VCard>
 </template>

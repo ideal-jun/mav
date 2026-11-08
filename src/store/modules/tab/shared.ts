@@ -2,6 +2,7 @@ import type { Router } from 'vue-router';
 import type { LastLevelRouteKey, RouteKey, RouteMap } from '@elegant-router/types';
 import { $t } from '@/locales';
 import { getRoutePath } from '@/router/elegant/transform';
+import { resolveMdiIcon } from '@/utils/icon';
 
 /**
  * Get all tabs
@@ -104,7 +105,7 @@ export function getRouteIcons(route: App.Global.TabRoute) {
     localIcon = currentRoute?.meta?.localIcon;
   }
 
-  return { icon, localIcon };
+  return { icon: resolveMdiIcon(icon) ?? icon, localIcon };
 }
 
 /**

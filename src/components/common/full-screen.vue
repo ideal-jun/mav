@@ -7,15 +7,23 @@ defineOptions({
 
 interface Props {
   full?: boolean;
+  density?: null | 'default' | 'comfortable' | 'compact';
 }
 
-defineProps<Props>();
+withDefaults(defineProps<Props>(), {
+  full: false,
+  density: 'default'
+});
 </script>
 
 <template>
-  <ButtonIcon :key="String(full)" :tooltip-content="full ? $t('icon.fullscreenExit') : $t('icon.fullscreen')">
-    <icon-gridicons-fullscreen-exit v-if="full" />
-    <icon-gridicons-fullscreen v-else />
+  <ButtonIcon
+    :key="String(full)"
+    :tooltip-content="full ? $t('icon.fullscreenExit') : $t('icon.fullscreen')"
+    :density="density"
+  >
+    <VIcon v-if="full" icon="mdi-fullscreen-exit" />
+    <VIcon v-else icon="mdi-fullscreen" />
   </ButtonIcon>
 </template>
 

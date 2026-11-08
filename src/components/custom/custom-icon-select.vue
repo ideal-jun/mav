@@ -4,7 +4,7 @@ defineOptions({
 });
 
 interface Props {
-  /** iconify icon names */
+  /** Material Design Icons (MDI) icon names */
   icons: string[];
   /** select placeholder */
   placeholder?: string;
@@ -32,19 +32,19 @@ const value = defineModel<string>('value', { default: '' });
       <template #item="{ item, props: itemProps }">
         <VListItem v-bind="itemProps" :title="undefined">
           <template #prepend>
-            <SvgIcon :icon="item" class="text-20px" />
+            <VIcon :icon="item" size="20" />
           </template>
           <VListItemTitle>{{ item }}</VListItemTitle>
         </VListItem>
       </template>
       <template #selection="{ item }">
         <div class="flex items-center gap-2">
-          <SvgIcon :icon="item" class="text-20px" />
+          <VIcon :icon="item" size="20" />
           <span>{{ item }}</span>
         </div>
       </template>
     </VSelect>
-    <SvgIcon v-if="value" :icon="value" class="text-40px text-primary" />
+    <VIcon v-if="value" :icon="value" size="40" class="text-primary" />
   </div>
 </template>
 

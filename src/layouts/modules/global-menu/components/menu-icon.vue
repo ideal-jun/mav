@@ -1,24 +1,26 @@
 <script setup lang="ts">
-import type { VNode } from 'vue';
-
 defineOptions({ name: 'MenuIcon' });
 
 interface Props {
-  /** The menu icon render function from the route store */
-  icon?: () => VNode;
+  /** The Material Design Icons name of the menu */
+  icon?: string;
+  /** The local svg icon name of the menu */
+  localIcon?: string;
   /** icon size in px */
   size?: number;
 }
 
 withDefaults(defineProps<Props>(), {
   icon: undefined,
+  localIcon: undefined,
   size: 20
 });
 </script>
 
 <template>
-  <span v-if="icon" class="menu-icon flex shrink-0 items-center justify-center" :style="{ fontSize: `${size}px` }">
-    <component :is="icon" />
+  <span v-if="icon || localIcon" class="menu-icon flex shrink-0 items-center justify-center">
+    <SvgIcon v-if="localIcon" :local-icon="localIcon" :size="size" />
+    <VIcon v-else :icon="icon" :size="size" />
   </span>
 </template>
 

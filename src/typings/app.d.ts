@@ -182,7 +182,6 @@ declare namespace App {
 
   /** Global namespace */
   namespace Global {
-    type VNode = import('vue').VNode;
     type RouteLocationNormalizedLoaded = import('vue-router').RouteLocationNormalizedLoaded;
     type RouteKey = import('@elegant-router/types').RouteKey;
     type RouteMap = import('@elegant-router/types').RouteMap;
@@ -222,8 +221,10 @@ declare namespace App {
       routeKey: RouteKey;
       /** The route path */
       routePath: RoutePath;
-      /** The menu icon */
-      icon?: () => VNode;
+      /** The menu icon, a Material Design Icons name */
+      icon?: string;
+      /** The local svg icon name */
+      localIcon?: string;
       /** The menu children */
       children?: Menu[];
     };
@@ -265,14 +266,10 @@ declare namespace App {
       /**
        * Tab icon
        *
-       * Iconify icon
+       * Material Design Icons name
        */
       icon?: string;
-      /**
-       * Tab local icon
-       *
-       * Local icon
-       */
+      /** The local svg icon name */
       localIcon?: string;
       /** I18n key */
       i18nKey?: I18n.I18nKey | null;
@@ -347,6 +344,9 @@ declare namespace App {
         refresh: string;
         reset: string;
         search: string;
+        searchPlaceholder: string;
+        searchEmpty: string;
+        searchPrompt: string;
         switch: string;
         tip: string;
         trigger: string;
@@ -730,7 +730,7 @@ declare namespace App {
               menu: string;
             };
             iconType: {
-              iconify: string;
+              icon: string;
               local: string;
             };
           };

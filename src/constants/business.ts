@@ -22,7 +22,7 @@ export const menuTypeRecord: Record<Api.SystemManage.MenuType, App.I18n.I18nKey>
 export const menuTypeOptions = transformRecordToOption(menuTypeRecord);
 
 export const menuIconTypeRecord: Record<Api.SystemManage.IconType, App.I18n.I18nKey> = {
-  '1': 'page.manage.menu.iconType.iconify',
+  '1': 'page.manage.menu.iconType.icon',
   '2': 'page.manage.menu.iconType.local'
 };
 

@@ -30,7 +30,7 @@ const cardData = computed<CardData[]>(() => [
       start: '#ec4786',
       end: '#b955a4'
     },
-    icon: 'ant-design:bar-chart-outlined'
+    icon: 'mdi-chart-bar'
   },
   {
     key: 'turnover',
@@ -41,7 +41,7 @@ const cardData = computed<CardData[]>(() => [
       start: '#865ec0',
       end: '#5144b4'
     },
-    icon: 'ant-design:money-collect-outlined'
+    icon: 'mdi-cash-multiple'
   },
   {
     key: 'downloadCount',
@@ -52,7 +52,7 @@ const cardData = computed<CardData[]>(() => [
       start: '#56cdf3',
       end: '#719de3'
     },
-    icon: 'carbon:document-download'
+    icon: 'mdi-file-download-outline'
   },
   {
     key: 'dealCount',
@@ -63,7 +63,7 @@ const cardData = computed<CardData[]>(() => [
       start: '#fcbc25',
       end: '#f68057'
     },
-    icon: 'ant-design:trademark-circle-outlined'
+    icon: 'mdi-certificate-outline'
   }
 ]);
 
@@ -99,7 +99,7 @@ function getGradientColor(color: CardData['color']) {
           <GradientBg :gradient-color="getGradientColor(item.color)" class="flex-1">
             <h3 class="text-base">{{ item.title }}</h3>
             <div class="flex justify-between pt-3">
-              <SvgIcon :icon="item.icon" class="text-3xl" />
+              <VIcon :icon="item.icon" size="32" />
               <CountTo
                 :prefix="item.unit"
                 :start-value="1"
