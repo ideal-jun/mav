@@ -188,7 +188,7 @@ init();
 </script>
 
 <template>
-  <VSheet class="flex size-full items-center px-4 shadow-sm" color="surface" rounded="0">
+  <VSheet class="flex size-full items-center px-4 text-high-emphasis shadow-sm" color="surface" rounded="0">
     <div ref="bsWrapper" class="h-full flex-1 overflow-hidden">
       <BetterScroll ref="bsScroll" :options="{ scrollX: true, scrollY: false, click: !isPCFlag }" @click="removeFocus">
         <div
@@ -213,21 +213,16 @@ init();
             @contextmenu="handleContextMenu($event, tab.id)"
           >
             <template #prefix>
-              <SvgIcon
-                v-if="tab.localIcon"
-                :local-icon="tab.localIcon"
-                size="16"
-                class="inline-block align-text-bottom"
-              />
-              <VIcon v-else :icon="tab.icon" size="16" class="inline-block align-text-bottom" />
+              <SvgIcon v-if="tab.localIcon" :local-icon="tab.localIcon" size="18" />
+              <VIcon v-else :icon="tab.icon" size="18" />
             </template>
             <div class="max-w-240px ellipsis-text">{{ tab.label }}</div>
           </PageTab>
         </div>
       </BetterScroll>
     </div>
-    <ReloadButton :loading="!appStore.reloadFlag" density="comfortable" @click="refresh" />
-    <FullScreen :full="appStore.fullContent" density="comfortable" @click="appStore.toggleFullContent" />
+    <ReloadButton :loading="!appStore.reloadFlag" @click="refresh" />
+    <FullScreen :full="appStore.fullContent" @click="appStore.toggleFullContent" />
   </VSheet>
   <ContextMenu
     :visible="dropdown.visible"

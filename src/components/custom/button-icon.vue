@@ -57,8 +57,8 @@ const location = computed<Anchor>(() => placements[props.tooltipPlacement] ?? 'b
         v-bind="{ ...activatorProps, ...$attrs }"
         :class="twMerge(DEFAULT_CLASS, props.class)"
         icon
-        :density="density"
         size="small"
+        :density="density"
         variant="text"
       >
         <slot>

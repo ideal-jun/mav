@@ -14,7 +14,7 @@ defineProps<Props>();
 </script>
 
 <template>
-  <ButtonIcon :tooltip-content="$t('icon.reload')" icon="mdi-refresh" density="comfortable">
+  <ButtonIcon :tooltip-content="$t('icon.reload')" icon="mdi-refresh">
     <VIcon icon="mdi-refresh" :class="{ 'animate-spin animate-duration-750': loading }" />
   </ButtonIcon>
 </template>
