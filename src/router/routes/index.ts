@@ -118,7 +118,8 @@ export const menuRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/about/index.vue'),
     meta: {
       title: 'about',
-      i18nKey: 'route.about'
+      i18nKey: 'route.about',
+      icon: 'mdi-information-outline'
     }
   },
   {
@@ -126,7 +127,8 @@ export const menuRoutes: RouteRecordRaw[] = [
     path: '/alova',
     meta: {
       title: 'alova',
-      i18nKey: 'route.alova'
+      i18nKey: 'route.alova',
+      icon: 'mdi-api'
     },
     children: [
       {
@@ -135,7 +137,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/alova/request/index.vue'),
         meta: {
           title: 'alova_request',
-          i18nKey: 'route.alova_request'
+          i18nKey: 'route.alova_request',
+          icon: 'mdi-send-outline'
         }
       },
       {
@@ -144,7 +147,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/alova/scenes/index.vue'),
         meta: {
           title: 'alova_scenes',
-          i18nKey: 'route.alova_scenes'
+          i18nKey: 'route.alova_scenes',
+          icon: 'mdi-sitemap-outline'
         }
       }
     ]
@@ -154,7 +158,8 @@ export const menuRoutes: RouteRecordRaw[] = [
     path: '/function',
     meta: {
       title: 'function',
-      i18nKey: 'route.function'
+      i18nKey: 'route.function',
+      icon: 'mdi-view-dashboard-outline'
     },
     children: [
       {
@@ -162,7 +167,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         path: '/function/hide-child',
         meta: {
           title: 'function_hide-child',
-          i18nKey: 'route.function_hide-child'
+          i18nKey: 'route.function_hide-child',
+          icon: 'mdi-eye-off-outline'
         },
         children: [
           {
@@ -171,7 +177,8 @@ export const menuRoutes: RouteRecordRaw[] = [
             component: () => import('@/views/function/hide-child/one/index.vue'),
             meta: {
               title: 'function_hide-child_one',
-              i18nKey: 'route.function_hide-child_one'
+              i18nKey: 'route.function_hide-child_one',
+              icon: 'mdi-numeric-1-circle-outline'
             }
           },
           {
@@ -180,7 +187,8 @@ export const menuRoutes: RouteRecordRaw[] = [
             component: () => import('@/views/function/hide-child/three/index.vue'),
             meta: {
               title: 'function_hide-child_three',
-              i18nKey: 'route.function_hide-child_three'
+              i18nKey: 'route.function_hide-child_three',
+              icon: 'mdi-numeric-3-circle-outline'
             }
           },
           {
@@ -189,7 +197,8 @@ export const menuRoutes: RouteRecordRaw[] = [
             component: () => import('@/views/function/hide-child/two/index.vue'),
             meta: {
               title: 'function_hide-child_two',
-              i18nKey: 'route.function_hide-child_two'
+              i18nKey: 'route.function_hide-child_two',
+              icon: 'mdi-numeric-2-circle-outline'
             }
           }
         ]
@@ -200,7 +209,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/function/multi-tab/index.vue'),
         meta: {
           title: 'function_multi-tab',
-          i18nKey: 'route.function_multi-tab'
+          i18nKey: 'route.function_multi-tab',
+          icon: 'mdi-tab-plus'
         }
       },
       {
@@ -209,7 +219,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/function/request/index.vue'),
         meta: {
           title: 'function_request',
-          i18nKey: 'route.function_request'
+          i18nKey: 'route.function_request',
+          icon: 'mdi-swap-horizontal'
         }
       },
       {
@@ -218,7 +229,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/function/super-page/index.vue'),
         meta: {
           title: 'function_super-page',
-          i18nKey: 'route.function_super-page'
+          i18nKey: 'route.function_super-page',
+          icon: 'mdi-shield-account-outline'
         }
       },
       {
@@ -227,7 +239,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/function/tab/index.vue'),
         meta: {
           title: 'function_tab',
-          i18nKey: 'route.function_tab'
+          i18nKey: 'route.function_tab',
+          icon: 'mdi-tab'
         }
       },
       {
@@ -236,7 +249,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/function/toggle-auth/index.vue'),
         meta: {
           title: 'function_toggle-auth',
-          i18nKey: 'route.function_toggle-auth'
+          i18nKey: 'route.function_toggle-auth',
+          icon: 'mdi-account-switch-outline'
         }
       }
     ]
@@ -270,7 +284,8 @@ export const menuRoutes: RouteRecordRaw[] = [
     path: '/manage',
     meta: {
       title: 'manage',
-      i18nKey: 'route.manage'
+      i18nKey: 'route.manage',
+      icon: 'mdi-cog-outline'
     },
     children: [
       {
@@ -279,7 +294,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/manage/menu/index.vue'),
         meta: {
           title: 'manage_menu',
-          i18nKey: 'route.manage_menu'
+          i18nKey: 'route.manage_menu',
+          icon: 'mdi-menu'
         }
       },
       {
@@ -288,7 +304,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/manage/role/index.vue'),
         meta: {
           title: 'manage_role',
-          i18nKey: 'route.manage_role'
+          i18nKey: 'route.manage_role',
+          icon: 'mdi-shield-account-outline'
         }
       },
       {
@@ -297,7 +314,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/manage/user/index.vue'),
         meta: {
           title: 'manage_user',
-          i18nKey: 'route.manage_user'
+          i18nKey: 'route.manage_user',
+          icon: 'mdi-account-multiple-outline'
         }
       },
       {
@@ -316,7 +334,8 @@ export const menuRoutes: RouteRecordRaw[] = [
     path: '/multi-menu',
     meta: {
       title: 'multi-menu',
-      i18nKey: 'route.multi-menu'
+      i18nKey: 'route.multi-menu',
+      icon: 'mdi-file-tree-outline'
     },
     children: [
       {
@@ -324,7 +343,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         path: '/multi-menu/first',
         meta: {
           title: 'multi-menu_first',
-          i18nKey: 'route.multi-menu_first'
+          i18nKey: 'route.multi-menu_first',
+          icon: 'mdi-numeric-1-box-outline'
         },
         children: [
           {
@@ -333,7 +353,8 @@ export const menuRoutes: RouteRecordRaw[] = [
             component: () => import('@/views/multi-menu/first_child/index.vue'),
             meta: {
               title: 'multi-menu_first_child',
-              i18nKey: 'route.multi-menu_first_child'
+              i18nKey: 'route.multi-menu_first_child',
+              icon: 'mdi-file-document-outline'
             }
           }
         ]
@@ -343,7 +364,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         path: '/multi-menu/second',
         meta: {
           title: 'multi-menu_second',
-          i18nKey: 'route.multi-menu_second'
+          i18nKey: 'route.multi-menu_second',
+          icon: 'mdi-numeric-2-box-outline'
         },
         children: [
           {
@@ -351,7 +373,8 @@ export const menuRoutes: RouteRecordRaw[] = [
             path: '/multi-menu/second/child',
             meta: {
               title: 'multi-menu_second_child',
-              i18nKey: 'route.multi-menu_second_child'
+              i18nKey: 'route.multi-menu_second_child',
+              icon: 'mdi-folder-outline'
             },
             children: [
               {
@@ -360,7 +383,8 @@ export const menuRoutes: RouteRecordRaw[] = [
                 component: () => import('@/views/multi-menu/second_child_home/index.vue'),
                 meta: {
                   title: 'multi-menu_second_child_home',
-                  i18nKey: 'route.multi-menu_second_child_home'
+                  i18nKey: 'route.multi-menu_second_child_home',
+                  icon: 'mdi-home-outline'
                 }
               }
             ]
@@ -374,7 +398,8 @@ export const menuRoutes: RouteRecordRaw[] = [
     path: '/plugin',
     meta: {
       title: 'plugin',
-      i18nKey: 'route.plugin'
+      i18nKey: 'route.plugin',
+      icon: 'mdi-puzzle-outline'
     },
     children: [
       {
@@ -383,7 +408,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/plugin/barcode/index.vue'),
         meta: {
           title: 'plugin_barcode',
-          i18nKey: 'route.plugin_barcode'
+          i18nKey: 'route.plugin_barcode',
+          icon: 'mdi-barcode'
         }
       },
       {
@@ -391,7 +417,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         path: '/plugin/charts',
         meta: {
           title: 'plugin_charts',
-          i18nKey: 'route.plugin_charts'
+          i18nKey: 'route.plugin_charts',
+          icon: 'mdi-chart-box-outline'
         },
         children: [
           {
@@ -400,7 +427,8 @@ export const menuRoutes: RouteRecordRaw[] = [
             component: () => import('@/views/plugin/charts/antv/index.vue'),
             meta: {
               title: 'plugin_charts_antv',
-              i18nKey: 'route.plugin_charts_antv'
+              i18nKey: 'route.plugin_charts_antv',
+              icon: 'mdi-chart-line'
             }
           },
           {
@@ -409,7 +437,8 @@ export const menuRoutes: RouteRecordRaw[] = [
             component: () => import('@/views/plugin/charts/echarts/index.vue'),
             meta: {
               title: 'plugin_charts_echarts',
-              i18nKey: 'route.plugin_charts_echarts'
+              i18nKey: 'route.plugin_charts_echarts',
+              icon: 'mdi-chart-areaspline'
             }
           },
           {
@@ -418,7 +447,8 @@ export const menuRoutes: RouteRecordRaw[] = [
             component: () => import('@/views/plugin/charts/vchart/index.vue'),
             meta: {
               title: 'plugin_charts_vchart',
-              i18nKey: 'route.plugin_charts_vchart'
+              i18nKey: 'route.plugin_charts_vchart',
+              icon: 'mdi-chart-donut'
             }
           }
         ]
@@ -429,7 +459,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/plugin/copy/index.vue'),
         meta: {
           title: 'plugin_copy',
-          i18nKey: 'route.plugin_copy'
+          i18nKey: 'route.plugin_copy',
+          icon: 'mdi-content-copy'
         }
       },
       {
@@ -437,7 +468,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         path: '/plugin/editor',
         meta: {
           title: 'plugin_editor',
-          i18nKey: 'route.plugin_editor'
+          i18nKey: 'route.plugin_editor',
+          icon: 'mdi-pencil-outline'
         },
         children: [
           {
@@ -446,7 +478,8 @@ export const menuRoutes: RouteRecordRaw[] = [
             component: () => import('@/views/plugin/editor/markdown/index.vue'),
             meta: {
               title: 'plugin_editor_markdown',
-              i18nKey: 'route.plugin_editor_markdown'
+              i18nKey: 'route.plugin_editor_markdown',
+              icon: 'mdi-language-markdown'
             }
           },
           {
@@ -455,7 +488,8 @@ export const menuRoutes: RouteRecordRaw[] = [
             component: () => import('@/views/plugin/editor/quill/index.vue'),
             meta: {
               title: 'plugin_editor_quill',
-              i18nKey: 'route.plugin_editor_quill'
+              i18nKey: 'route.plugin_editor_quill',
+              icon: 'mdi-text-box-edit-outline'
             }
           }
         ]
@@ -466,7 +500,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/plugin/excel/index.vue'),
         meta: {
           title: 'plugin_excel',
-          i18nKey: 'route.plugin_excel'
+          i18nKey: 'route.plugin_excel',
+          icon: 'mdi-file-excel-outline'
         }
       },
       {
@@ -474,7 +509,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         path: '/plugin/gantt',
         meta: {
           title: 'plugin_gantt',
-          i18nKey: 'route.plugin_gantt'
+          i18nKey: 'route.plugin_gantt',
+          icon: 'mdi-chart-gantt'
         },
         children: [
           {
@@ -483,7 +519,8 @@ export const menuRoutes: RouteRecordRaw[] = [
             component: () => import('@/views/plugin/gantt/dhtmlx/index.vue'),
             meta: {
               title: 'plugin_gantt_dhtmlx',
-              i18nKey: 'route.plugin_gantt_dhtmlx'
+              i18nKey: 'route.plugin_gantt_dhtmlx',
+              icon: 'mdi-chart-timeline-variant'
             }
           },
           {
@@ -492,7 +529,8 @@ export const menuRoutes: RouteRecordRaw[] = [
             component: () => import('@/views/plugin/gantt/vtable/index.vue'),
             meta: {
               title: 'plugin_gantt_vtable',
-              i18nKey: 'route.plugin_gantt_vtable'
+              i18nKey: 'route.plugin_gantt_vtable',
+              icon: 'mdi-table-large'
             }
           }
         ]
@@ -503,7 +541,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/plugin/icon/index.vue'),
         meta: {
           title: 'plugin_icon',
-          i18nKey: 'route.plugin_icon'
+          i18nKey: 'route.plugin_icon',
+          icon: 'mdi-shape-outline'
         }
       },
       {
@@ -512,7 +551,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/plugin/map/index.vue'),
         meta: {
           title: 'plugin_map',
-          i18nKey: 'route.plugin_map'
+          i18nKey: 'route.plugin_map',
+          icon: 'mdi-map-outline'
         }
       },
       {
@@ -521,7 +561,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/plugin/pdf/index.vue'),
         meta: {
           title: 'plugin_pdf',
-          i18nKey: 'route.plugin_pdf'
+          i18nKey: 'route.plugin_pdf',
+          icon: 'mdi-file-pdf-box'
         }
       },
       {
@@ -530,7 +571,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/plugin/pinyin/index.vue'),
         meta: {
           title: 'plugin_pinyin',
-          i18nKey: 'route.plugin_pinyin'
+          i18nKey: 'route.plugin_pinyin',
+          icon: 'mdi-translate'
         }
       },
       {
@@ -539,7 +581,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/plugin/print/index.vue'),
         meta: {
           title: 'plugin_print',
-          i18nKey: 'route.plugin_print'
+          i18nKey: 'route.plugin_print',
+          icon: 'mdi-printer-outline'
         }
       },
       {
@@ -548,7 +591,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/plugin/swiper/index.vue'),
         meta: {
           title: 'plugin_swiper',
-          i18nKey: 'route.plugin_swiper'
+          i18nKey: 'route.plugin_swiper',
+          icon: 'mdi-view-carousel-outline'
         }
       },
       {
@@ -556,7 +600,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         path: '/plugin/tables',
         meta: {
           title: 'plugin_tables',
-          i18nKey: 'route.plugin_tables'
+          i18nKey: 'route.plugin_tables',
+          icon: 'mdi-table'
         },
         children: [
           {
@@ -565,7 +610,8 @@ export const menuRoutes: RouteRecordRaw[] = [
             component: () => import('@/views/plugin/tables/vtable/index.vue'),
             meta: {
               title: 'plugin_tables_vtable',
-              i18nKey: 'route.plugin_tables_vtable'
+              i18nKey: 'route.plugin_tables_vtable',
+              icon: 'mdi-table-large'
             }
           }
         ]
@@ -576,7 +622,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/plugin/typeit/index.vue'),
         meta: {
           title: 'plugin_typeit',
-          i18nKey: 'route.plugin_typeit'
+          i18nKey: 'route.plugin_typeit',
+          icon: 'mdi-keyboard-outline'
         }
       },
       {
@@ -585,7 +632,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/plugin/video/index.vue'),
         meta: {
           title: 'plugin_video',
-          i18nKey: 'route.plugin_video'
+          i18nKey: 'route.plugin_video',
+          icon: 'mdi-play-circle-outline'
         }
       }
     ]
@@ -596,7 +644,8 @@ export const menuRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/user-center/index.vue'),
     meta: {
       title: 'user-center',
-      i18nKey: 'route.user-center'
+      i18nKey: 'route.user-center',
+      icon: 'mdi-account-circle-outline'
     }
   }
 ];
