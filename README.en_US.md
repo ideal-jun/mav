@@ -65,7 +65,7 @@
 
 ## Introduction
 
-[`SoybeanAdmin`](https://github.com/soybeanjs/soybean-admin) is a clean, elegant, beautiful and powerful admin template, based on the latest front-end technology stack, including Vue3, Vite7, TypeScript, Pinia and UnoCSS. It has built-in rich theme configuration and components, strict code specifications, and an automated file routing system. In addition, it also uses the online mock data solution based on ApiFox. `SoybeanAdmin` provides you with a one-stop admin solution, no additional configuration, and out of the box. It is also a best practice for learning cutting-edge technologies quickly.
+[`SoybeanAdmin`](https://github.com/soybeanjs/soybean-admin) is a clean, elegant, beautiful and powerful admin template, based on the latest front-end technology stack, including Vue3, Vite7, TypeScript, Pinia and UnoCSS. It has built-in rich theme configuration and components, strict code specifications, and hand-written routes based on standard Vue Router. In addition, it also uses the online mock data solution based on ApiFox. `SoybeanAdmin` provides you with a one-stop admin solution, no additional configuration, and out of the box. It is also a best practice for learning cutting-edge technologies quickly.
 
 ## Features
 
@@ -75,8 +75,8 @@
 - **TypeScript**: support strict type checking to improve code maintainability.
 - **Rich theme configuration**: built-in a variety of theme configurations, perfectly integrated with UnoCSS.
 - **Built-in internationalization solution**: easily realize multi-language support.
-- **Automated file routing system**: automatically generate route import, declaration and type. For more details, please refer to [Elegant Router](https://github.com/soybeanjs/elegant-router).
-- **Flexible permission routing**: support both front-end static routing and back-end dynamic routing.
+- **Hand-written route table**: routes use the standard Vue Router API with lazy-loaded page components, making them clear and easy to change.
+- **Flexible permission routing**: front-end permission control based on route `meta.roles`.
 - **Rich page components**: built-in a variety of pages and components, including 403, 404, 500 pages, as well as layout components, tag components, theme configuration components, etc.
 - **Command line tool**: built-in efficient command line tool, git commit, delete file, release, etc.
 - **Mobile adaptation**: perfectly support mobile terminal to realize adaptive layout.

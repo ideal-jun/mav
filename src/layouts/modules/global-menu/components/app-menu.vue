@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { RouteKey } from '@elegant-router/types';
 import MenuGroup from '@/layouts/modules/global-menu/components/MenuGroup.vue';
 
 defineOptions({ name: 'AppMenu' });
@@ -27,7 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   /** menu item selected */
-  (e: 'select', key: RouteKey): void;
+  (e: 'select', key: string): void;
   /** expanded keys changed */
   (e: 'update:expandedKeys', keys: string[]): void;
 }>();

@@ -19,7 +19,6 @@ const darkMenu = computed(
     !themeStore.darkMode && !isTopHybridSidebarFirst.value && !isTopHybridHeaderFirst.value && themeStore.sider.inverted
 );
 const showLogo = computed(() => themeStore.layout.mode === 'vertical');
-const menuWrapperClass = computed(() => (showLogo.value ? 'flex-1 overflow-hidden' : 'h-full'));
 
 const siderStyle = computed(() =>
   darkMenu.value ? { backgroundColor: 'rgb(var(--inverted-bg-color))', color: '#1f1f1f' } : undefined

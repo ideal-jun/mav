@@ -1,7 +1,6 @@
 import { computed, ref } from 'vue';
 import { useEventListener } from '@vueuse/core';
 import { defineStore } from 'pinia';
-import type { RouteKey } from '@elegant-router/types';
 import { router } from '@/router';
 import { useRouteStore } from '@/store/modules/route';
 import { useRouterPush } from '@/hooks/common/router';
@@ -99,7 +98,7 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
     const removeTabIndex = tabs.value.findIndex(tab => tab.id === tabId);
     if (removeTabIndex === -1) return;
 
-    const removedTabRouteKey = tabs.value[removeTabIndex].routeKey;
+    const removedTabstring = tabs.value[removeTabIndex].routeKey;
     const isRemoveActiveTab = activeTabId.value === tabId;
 
     // if remove the last tab, then switch to the second last tab
@@ -114,7 +113,7 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
     }
 
     // reset route cache
-    routeStore.resetRouteCache(removedTabRouteKey);
+    routeStore.resetRouteCache(removedTabstring);
   }
 
   /** remove active tab */
@@ -127,7 +126,7 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
    *
    * @param routeName route name
    */
-  async function removeTabByRouteName(routeName: RouteKey) {
+  async function removeTabByRouteName(routeName: string) {
     const tab = findTabByRouteName(routeName, tabs.value);
     if (!tab) return;
 
@@ -144,7 +143,7 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
 
     // Identify tabs to be removed and collect their routeKeys if strategy is 'close'
     const tabsToRemove = tabs.value.filter(tab => !remainTabIds.includes(tab.id));
-    const routeKeysToReset: RouteKey[] = [];
+    const routeKeysToReset: string[] = [];
 
     for (const tab of tabsToRemove) {
       routeKeysToReset.push(tab.routeKey);
@@ -191,7 +190,7 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
    * @param key Route key
    * @param options Router push options
    */
-  async function replaceTab(key: RouteKey, options?: App.Global.RouterPushOptions) {
+  async function replaceTab(key: string, options?: App.Global.RouterPushOptions) {
     const oldTabId = activeTabId.value;
 
     // push new route

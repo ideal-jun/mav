@@ -87,4 +87,10 @@ For example:
   const filePath = path.join(routeDir, fileName);
 
   await writeFile(filePath, vueTemplate);
+
+  console.log(
+    green(
+      `Route view created at ${path.relative(cwd, filePath)}. Add the route entry manually in src/router/routes/index.ts.`
+    )
+  );
 }

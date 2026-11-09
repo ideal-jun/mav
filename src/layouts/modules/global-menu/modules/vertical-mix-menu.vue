@@ -4,7 +4,6 @@ import PinToggler from '@/components/common/pin-toggler.vue';
 import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useBoolean } from '@sa/hooks';
-import type { RouteKey } from '@elegant-router/types';
 import { GLOBAL_SIDER_MENU_ID } from '@/constants/app';
 import { useAppStore } from '@/store/modules/app';
 import { useThemeStore } from '@/store/modules/theme';
@@ -42,7 +41,7 @@ const hasChildMenus = computed(() => secondLevelMenus.value.length > 0);
 
 const showDrawer = computed(() => hasChildMenus.value && (drawerVisible.value || appStore.mixSiderFixed));
 
-function handleSelectMenu(key: RouteKey) {
+function handleSelectMenu(key: string) {
   handleSelectFirstLevelMenu(key);
 
   if (isActiveFirstLevelMenuHasChildren.value) {

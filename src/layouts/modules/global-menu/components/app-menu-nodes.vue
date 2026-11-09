@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { RouteKey } from '@elegant-router/types';
 import MenuIcon from './menu-icon.vue';
 
 defineOptions({ name: 'AppMenuNodes' });
@@ -20,7 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   /** menu item selected */
-  (e: 'select', key: RouteKey): void;
+  (e: 'select', key: string): void;
 }>();
 
 /** only the first level is rendered as icon-only when the sider is collapsed */
@@ -36,7 +35,7 @@ function isActive(menu: App.Global.Menu) {
   return menu.key === selected || selected.startsWith(`${menu.key}_`);
 }
 
-function handleSelect(key: RouteKey) {
+function handleSelect(key: string) {
   emit('select', key);
 }
 </script>

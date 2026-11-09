@@ -1,7 +1,6 @@
 import type { Router } from 'vue-router';
-import type { LastLevelRouteKey, RouteKey, RouteMap } from '@elegant-router/types';
 import { $t } from '@/locales';
-import { getRoutePath } from '@/router/elegant/transform';
+import { getRoutePath } from '@/router/route-helpers';
 import { resolveMdiIcon } from '@/utils/icon';
 
 /**
@@ -73,8 +72,8 @@ export function getTabByRoute(route: App.Global.TabRoute) {
   const tab: App.Global.Tab = {
     id: getTabIdByRoute(route),
     label,
-    routeKey: name as LastLevelRouteKey,
-    routePath: path as RouteMap[LastLevelRouteKey],
+    routeKey: name as string,
+    routePath: path,
     fullPath,
     fixedIndex: fixedIndexInTab,
     icon,
@@ -114,7 +113,7 @@ export function getRouteIcons(route: App.Global.TabRoute) {
  * @param router
  * @param homeRouteName routeHome in useRouteStore
  */
-export function getDefaultHomeTab(router: Router, homeRouteName: LastLevelRouteKey) {
+export function getDefaultHomeTab(router: Router, homeRouteName: string) {
   const homeRoutePath = getRoutePath(homeRouteName);
   const i18nLabel = $t(`route.${homeRouteName}`);
 
@@ -254,7 +253,7 @@ export function updateTabsByI18nKey(tabs: App.Global.Tab[]) {
  * @param name
  * @param tabs
  */
-export function findTabByRouteName(name: RouteKey, tabs: App.Global.Tab[]) {
+export function findTabByRouteName(name: string, tabs: App.Global.Tab[]) {
   const routePath = getRoutePath(name);
 
   const tabId = routePath;

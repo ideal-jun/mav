@@ -5,7 +5,6 @@ import progress from 'vite-plugin-progress';
 import vueRootValidator from 'vite-plugin-vue-transition-root-validator';
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 import Fonts from 'unplugin-fonts/vite';
-import { setupElegantRouter } from './router';
 import { setupUnocss } from './unocss';
 import { setupUnplugin } from './unplugin';
 import { setupHtmlPlugin } from './html';
@@ -37,7 +36,6 @@ export function setupVitePlugins(viteEnv: Env.ImportMeta, buildTime: string) {
     }),
     vueJsx(),
     setupDevtoolsPlugin(viteEnv),
-    setupElegantRouter(),
     setupUnocss(),
     ...setupUnplugin(viteEnv),
     progress(),

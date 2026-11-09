@@ -1,7 +1,6 @@
 import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useContext } from '@sa/hooks';
-import type { RouteKey } from '@elegant-router/types';
 import { useRouteStore } from '@/store/modules/route';
 import { useThemeStore } from '@/store/modules/theme';
 import { useRouterPush } from '@/hooks/common/router';
@@ -53,7 +52,7 @@ function useMixMenu() {
     return Boolean(findItem?.children?.length);
   });
 
-  function handleSelectFirstLevelMenu(key: RouteKey) {
+  function handleSelectFirstLevelMenu(key: string) {
     setActiveFirstLevelMenuKey(key);
 
     if (!isActiveFirstLevelMenuHasChildren.value) {
@@ -96,7 +95,7 @@ function useMixMenu() {
     return Boolean(findItem?.children?.length);
   });
 
-  function handleSelectSecondLevelMenu(key: RouteKey) {
+  function handleSelectSecondLevelMenu(key: string) {
     setActiveSecondLevelMenuKey(key);
 
     if (!isActiveSecondLevelMenuHasChildren.value) {
@@ -110,7 +109,7 @@ function useMixMenu() {
 
   const hasChildLevelMenus = computed(() => childLevelMenus.value.length > 0);
 
-  function getDeepestLevelMenuKey(): RouteKey | null {
+  function getDeepestLevelMenuKey(): string | null {
     if (!secondLevelMenus.value.length || !themeStore.sider.autoSelectFirstMenu) {
       return null;
     }
@@ -121,7 +120,7 @@ function useMixMenu() {
       return null;
     }
 
-    function findDeepest(menu: App.Global.Menu): RouteKey {
+    function findDeepest(menu: App.Global.Menu): string {
       if (!menu.children?.length) {
         return menu.routeKey;
       }

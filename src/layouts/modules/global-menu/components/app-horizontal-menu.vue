@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { RouteKey } from '@elegant-router/types';
 import MenuIcon from './menu-icon.vue';
 import AppMenuNodes from './app-menu-nodes.vue';
 
@@ -18,7 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   /** menu item selected */
-  (e: 'select', key: RouteKey): void;
+  (e: 'select', key: string): void;
 }>();
 
 function isActive(menu: App.Global.Menu) {

@@ -4,7 +4,6 @@ import MenuToggler from '@/components/common/menu-toggler.vue';
 import { computed } from 'vue';
 import { createReusableTemplate } from '@vueuse/core';
 import { transformColorWithOpacity } from '@sa/color';
-import type { RouteKey } from '@elegant-router/types';
 
 defineOptions({
   name: 'FirstLevelMenu'
@@ -22,7 +21,7 @@ interface Props {
 const props = defineProps<Props>();
 
 interface Emits {
-  (e: 'select', menuKey: RouteKey): boolean;
+  (e: 'select', menuKey: string): boolean;
   (e: 'toggleSiderCollapse'): void;
 }
 
@@ -51,7 +50,7 @@ const selectedBgColor = computed(() => {
   return darkMode ? dark : light;
 });
 
-function handleClickMixMenu(menuKey: RouteKey) {
+function handleClickMixMenu(menuKey: string) {
   emit('select', menuKey);
 }
 

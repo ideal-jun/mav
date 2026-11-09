@@ -183,10 +183,6 @@ declare namespace App {
   /** Global namespace */
   namespace Global {
     type RouteLocationNormalizedLoaded = import('vue-router').RouteLocationNormalizedLoaded;
-    type RouteKey = import('@elegant-router/types').RouteKey;
-    type RouteMap = import('@elegant-router/types').RouteMap;
-    type RoutePath = import('@elegant-router/types').RoutePath;
-    type LastLevelRouteKey = import('@elegant-router/types').LastLevelRouteKey;
 
     /** The router push options */
     type RouterPushOptions = {
@@ -218,9 +214,9 @@ declare namespace App {
       /** The menu i18n key */
       i18nKey?: I18n.I18nKey | null;
       /** The route key */
-      routeKey: RouteKey;
+      routeKey: string;
       /** The route path */
-      routePath: RoutePath;
+      routePath: string;
       /** The menu icon, a Material Design Icons name */
       icon?: string;
       /** The local svg icon name */
@@ -256,9 +252,9 @@ declare namespace App {
        */
       oldLabel?: string;
       /** The tab route key */
-      routeKey: LastLevelRouteKey;
+      routeKey: string;
       /** The tab route path */
-      routePath: RouteMap[LastLevelRouteKey];
+      routePath: string;
       /** The tab route full path */
       fullPath: string;
       /** The tab fixed index */
@@ -287,16 +283,12 @@ declare namespace App {
    * Locales type
    */
   namespace I18n {
-    type RouteKey = import('@elegant-router/types').RouteKey;
-
     type LangType = 'en-US' | 'zh-CN';
 
     type LangOption = {
       label: string;
       key: LangType;
     };
-
-    type I18nRouteKey = Exclude<RouteKey, 'root' | 'not-found'>;
 
     type FormMsg = {
       required: string;
@@ -475,7 +467,7 @@ declare namespace App {
           resetSuccessMsg: string;
         };
       };
-      route: Record<I18nRouteKey, string>;
+      route: Record<string, string>;
       page: {
         login: {
           common: {
