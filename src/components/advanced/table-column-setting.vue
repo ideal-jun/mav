@@ -59,6 +59,10 @@ function toggleSelectAll(checked: boolean) {
     column.checked = checked;
   });
 }
+
+function toggleColumn(column: TableColumnCheck) {
+  column.checked = !column.checked;
+}
 </script>
 
 <template>
@@ -68,47 +72,52 @@ function toggleSelectAll(checked: boolean) {
         {{ $t('common.columnSetting') }}
       </VBtn>
     </template>
-    <VCard class="min-w-[220px] p-2" max-height="300">
-      <div class="flex items-center px-2">
-        <VCheckbox
-          :model-value="selectAllChecked"
-          :indeterminate="selectAllIndeterminate"
-          :disabled="visibleStats.total === 0"
-          :label="$t('common.selectAll')"
-          hide-details
-          density="compact"
-          @update:model-value="value => toggleSelectAll(Boolean(value))"
-        />
-      </div>
-      <VDivider class="my-1" />
-      <VueDraggable v-model="columns" :animation="150" filter=".none_draggable" class="max-h-[200px] overflow-y-auto">
-        <div
+    <VList class="min-w-[240px]" density="compact" nav prepend-gap="10">
+      <VListItem class="none_draggable" min-height="32">
+        <template #prepend>
+          <VCheckbox
+            :model-value="selectAllChecked"
+            :indeterminate="selectAllIndeterminate"
+            :disabled="visibleStats.total === 0"
+            hide-details
+            density="compact"
+            @update:model-value="value => toggleSelectAll(Boolean(value))"
+          />
+        </template>
+        <VListItemTitle>{{ $t('common.selectAll') }}</VListItemTitle>
+      </VListItem>
+      <VDivider />
+      <VueDraggable v-model="columns" :animation="150" filter=".none_draggable" class="max-h-[320px] overflow-y-auto">
+        <VListItem
           v-for="item in columns"
           :key="item.key"
-          class="flex items-center justify-between gap-2"
+          class="justify-between mt-0"
+          min-height="32"
           :class="{ hidden: !item.visible }"
+          density="compact"
         >
-          <div class="flex min-w-0 flex-1 items-center">
-            <VIcon icon="mdi-drag" size="small" class="mr-2 cursor-move" />
-            <VCheckbox v-model="item.checked" class="none_draggable flex-1" hide-details density="compact">
-              <template v-if="typeof item.title === 'function'">
-                <component :is="item.title" />
-              </template>
-              <template v-else>{{ item.title }}</template>
-            </VCheckbox>
-          </div>
-          <ButtonIcon
-            :disabled="!item.checked"
-            :tooltip-content="$t(tooltipRecord[item.fixed])"
-            @click="handleFixed(item)"
-          >
-            <VIcon v-if="item.fixed === 'unFixed'" icon="mdi-pin-outline" size="small" />
-            <VIcon v-else-if="item.fixed === 'left'" icon="mdi-pin" size="small" class="rotate-270" />
-            <VIcon v-else icon="mdi-pin-off" size="small" />
-          </ButtonIcon>
-        </div>
+          <template #prepend>
+            <VIcon icon="mdi-drag" size="small" class="mr-1 cursor-move" />
+            <VCheckbox v-model="item.checked" class="none_draggable shrink-0" hide-details density="compact" />
+          </template>
+          <VListItemTitle class="min-w-0 truncate text-sm" @click="toggleColumn(item)">
+            <component :is="item.title" v-if="typeof item.title === 'function'" />
+            <template v-else>{{ item.title }}</template>
+          </VListItemTitle>
+          <template #append>
+            <ButtonIcon
+              :disabled="!item.checked"
+              :tooltip-content="$t(tooltipRecord[item.fixed])"
+              @click="handleFixed(item)"
+            >
+              <VIcon v-if="item.fixed === 'unFixed'" icon="mdi-pin-outline" size="small" />
+              <VIcon v-else-if="item.fixed === 'left'" icon="mdi-pin" size="small" class="rotate-270" />
+              <VIcon v-else icon="mdi-pin-off" size="small" />
+            </ButtonIcon>
+          </template>
+        </VListItem>
       </VueDraggable>
-    </VCard>
+    </VList>
   </VMenu>
 </template>
 
