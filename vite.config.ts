@@ -19,14 +19,6 @@ export default defineConfig(configEnv => {
         '@': fileURLToPath(new URL('./src', import.meta.url))
       }
     },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: 'modern-compiler',
-          additionalData: `@use "@/styles/scss/global.scss" as *;`
-        }
-      }
-    },
     plugins: setupVitePlugins(viteEnv, buildTime),
     optimizeDeps: {
       // Vuetify components are auto-imported per route. Pre-bundle them all so a
