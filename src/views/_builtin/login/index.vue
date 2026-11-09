@@ -56,7 +56,7 @@ const bgColor = computed(() => {
 
 <template>
   <div
-    class="relative size-full flex items-center justify-center overflow-hidden"
+    class="relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden"
     :style="{ backgroundColor: bgColor }"
   >
     <WaveBg :theme-color="bgThemeColor" />

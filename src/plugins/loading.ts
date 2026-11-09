@@ -16,7 +16,7 @@ export function setupLoading() {
 
   const svgCssVars = Array.from(palette.entries())
     .map(([key, value]) => `--logo-color-${key}: ${value}`)
-    .join(';');
+    .join('; ');
 
   const cssVars = `${primaryColor}; ${svgCssVars}`;
 
@@ -24,30 +24,34 @@ export function setupLoading() {
     toggleHtmlClass(DARK_CLASS).add();
   }
 
-  const loadingClasses = [
-    'left-0 top-0',
-    'left-0 bottom-0 animate-delay-500',
-    'right-0 top-0 animate-delay-1000',
-    'right-0 bottom-0 animate-delay-1500'
-  ];
-
-  const dot = loadingClasses
-    .map(item => {
-      return `<div class="absolute w-16px h-16px bg-primary rounded-8px animate-pulse ${item}"></div>`;
-    })
+  const dotBase = `position: absolute; width: 16px; height: 16px; border-radius: 8px; background: ${themeColor}; animation: soybean-loading-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;`;
+  const dots = [
+    ['left: 0; top: 0;', ''],
+    ['left: 0; bottom: 0;', 'animation-delay: 0.5s;'],
+    ['right: 0; top: 0;', 'animation-delay: 1s;'],
+    ['right: 0; bottom: 0;', 'animation-delay: 1.5s;']
+  ]
+    .map(([position, delay]) => `<div style="${dotBase} ${position} ${delay}"></div>`)
     .join('\n');
 
   const loading = `
-<div class="fixed-center flex-col bg-layout" style="${cssVars}">
-  <div class="w-128px h-128px">
+<style>
+  @keyframes soybean-loading-spin {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes soybean-loading-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+</style>
+<div style="position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: ${darkMode ? '#121212' : 'rgb(247, 250, 252)'}; ${cssVars}">
+  <div style="width: 128px; height: 128px">
     ${getLogoSvg()}
   </div>
-  <div class="w-56px h-56px my-36px">
-    <div class="relative h-full animate-spin">
-      ${dot}
-    </div>
+  <div style="position: relative; width: 56px; height: 56px; margin: 36px 0; animation: soybean-loading-spin 1s linear infinite">
+    ${dots}
   </div>
-  <h2 class="text-28px font-500 text-primary">${$t('system.title')}</h2>
+  <h2 style="margin: 0; font-family: Roboto, sans-serif; font-size: 28px; font-weight: 500; color: ${themeColor}">${$t('system.title')}</h2>
 </div>`;
 
   const app = document.getElementById('app');
@@ -56,7 +60,6 @@ export function setupLoading() {
     app.innerHTML = loading;
   }
 }
-
 function getLogoSvg() {
   const logoSvg = `<svg
         width="100%"
