@@ -474,6 +474,8 @@ const local: App.I18n.Schema = {
       menu: {
         home: '首页',
         title: '菜单列表',
+        mockNotice:
+          '当前菜单数据为 mock 演示，实际路由由 src/router/routes/index.ts 手写维护；接入后端菜单后此页才会与路由联动。',
         id: 'ID',
         parentId: '父级菜单ID',
         menuType: '菜单类型',
@@ -481,8 +483,7 @@ const local: App.I18n.Schema = {
         routeName: '路由名称',
         routePath: '路由路径',
         pathParam: '路径参数',
-        layout: '布局',
-        page: '页面组件',
+        component: '组件标识',
         i18nKey: '国际化key',
         icon: '图标',
         localIcon: '本地图标',
@@ -507,8 +508,7 @@ const local: App.I18n.Schema = {
           routeName: '请输入路由名称',
           routePath: '请输入路由路径',
           pathParam: '请输入路径参数',
-          page: '请选择页面组件',
-          layout: '请选择布局组件',
+          component: '请输入组件标识',
           i18nKey: '请输入国际化key',
           icon: '请选择图标',
           localIcon: '请选择本地图标',

@@ -478,6 +478,8 @@ const local: App.I18n.Schema = {
       menu: {
         home: 'Home',
         title: 'Menu List',
+        mockNotice:
+          'Menu data on this page is mock demo data. Actual routes are hand-written in src/router/routes/index.ts and will be linked after backend menu integration.',
         id: 'ID',
         parentId: 'Parent ID',
         menuType: 'Menu Type',
@@ -485,8 +487,7 @@ const local: App.I18n.Schema = {
         routeName: 'Route Name',
         routePath: 'Route Path',
         pathParam: 'Path Param',
-        layout: 'Layout Component',
-        page: 'Page Component',
+        component: 'Component Key',
         i18nKey: 'I18n Key',
         icon: 'Icon',
         localIcon: 'Local Icon',
@@ -511,8 +512,7 @@ const local: App.I18n.Schema = {
           routeName: 'Please enter route name',
           routePath: 'Please enter route path',
           pathParam: 'Please enter path param',
-          page: 'Please select page component',
-          layout: 'Please select layout component',
+          component: 'Please enter component key',
           i18nKey: 'Please enter i18n key',
           icon: 'Please select icon',
           localIcon: 'Please select local icon',

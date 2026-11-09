@@ -661,6 +661,7 @@ declare namespace App {
           menu: {
             home: string;
             title: string;
+            mockNotice: string;
             id: string;
             parentId: string;
             menuType: string;
@@ -668,8 +669,7 @@ declare namespace App {
             routeName: string;
             routePath: string;
             pathParam: string;
-            layout: string;
-            page: string;
+            component: string;
             i18nKey: string;
             icon: string;
             localIcon: string;
@@ -694,8 +694,7 @@ declare namespace App {
               routeName: string;
               routePath: string;
               pathParam: string;
-              layout: string;
-              page: string;
+              component: string;
               i18nKey: string;
               icon: string;
               localIcon: string;

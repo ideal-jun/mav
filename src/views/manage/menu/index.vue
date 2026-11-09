@@ -6,7 +6,7 @@ import type { Ref } from 'vue';
 import { useBoolean } from '@sa/hooks';
 import { enableStatusRecord, menuTypeRecord } from '@/constants/business';
 import { yesOrNoRecord } from '@/constants/common';
-import { fetchGetAllPages, fetchGetMenuList } from '@/service/api';
+import { fetchGetMenuList } from '@/service/api';
 import { $t, hasI18nKey } from '@/locales';
 import { resolveMdiIcon } from '@/utils/icon';
 import { defaultTransform, useTableOperate, useVuetifyPaginatedTable } from '@/hooks/common/table';
@@ -165,24 +165,13 @@ function handleAddChildMenu(item: Api.SystemManage.Menu) {
 
   openModal();
 }
-
-const allPages = ref<string[]>([]);
-
-async function getAllPages() {
-  const { data: pages } = await fetchGetAllPages();
-  allPages.value = pages || [];
-}
-
-function init() {
-  getAllPages();
-}
-
-// init
-init();
 </script>
 
 <template>
   <div class="flex h-full min-h-0 flex-col gap-4">
+    <VAlert type="info" variant="tonal" density="compact" class="shrink-0">
+      {{ $t('page.manage.menu.mockNotice') }}
+    </VAlert>
     <VCard class="card-wrapper flex min-h-0 flex-1 flex-col">
       <VCardTitle class="flex shrink-0 flex-wrap items-center justify-between gap-2">
         <span>{{ $t('page.manage.menu.title') }}</span>
@@ -265,7 +254,6 @@ init();
       v-model:visible="visible"
       :operate-type="operateType"
       :row-data="editingData"
-      :all-pages="allPages"
       @submitted="getDataByPage"
     />
 

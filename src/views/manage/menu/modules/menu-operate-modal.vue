@@ -9,13 +9,7 @@ import { fetchGetAllRoles } from '@/service/api';
 import { $t } from '@/locales';
 import { useVuetifyForm } from '@/hooks/common/form';
 import type { TableOperateType } from '@/hooks/common/table';
-import {
-  getLayoutAndPage,
-  getPathParamFromRoutePath,
-  getRoutePathByRouteName,
-  getRoutePathWithParam,
-  transformLayoutAndPageToComponent
-} from './shared';
+import { getPathParamFromRoutePath, getRoutePathByRouteName, getRoutePathWithParam } from './shared';
 
 defineOptions({
   name: 'MenuOperateModal'
@@ -28,8 +22,6 @@ interface Props {
   operateType: OperateType;
   /** the edit menu data or the parent menu data when adding a child menu */
   rowData?: Api.SystemManage.Menu | null;
-  /** all pages */
-  allPages: string[];
 }
 
 const props = defineProps<Props>();
@@ -82,8 +74,6 @@ type Model = Pick<
 > & {
   query: NonNullable<Api.SystemManage.Menu['query']>;
   buttons: NonNullable<Api.SystemManage.Menu['buttons']>;
-  layout: string;
-  page: string;
   pathParam: string;
 };
 
@@ -97,8 +87,6 @@ function createDefaultModel(): Model {
     routePath: '',
     pathParam: '',
     component: '',
-    layout: '',
-    page: '',
     i18nKey: null,
     icon: '',
     iconType: '1',
@@ -141,34 +129,6 @@ const menuIconTypeItems = computed(() =>
   menuIconTypeOptions.map(item => ({ title: $t(item.label), value: item.value }))
 );
 
-const showLayout = computed(() => model.value.parentId === 0);
-
-const showPage = computed(() => model.value.menuType === '2');
-
-const pageOptions = computed(() => {
-  const allPages = [...props.allPages];
-
-  if (model.value.routeName && !allPages.includes(model.value.routeName)) {
-    allPages.unshift(model.value.routeName);
-  }
-
-  return allPages.map(page => ({
-    title: page,
-    value: page
-  }));
-});
-
-const layoutOptions: { title: string; value: string }[] = [
-  {
-    title: 'base',
-    value: 'base'
-  },
-  {
-    title: 'blank',
-    value: 'blank'
-  }
-];
-
 const menuTypeItems = computed(() => menuTypeOptions.map(item => ({ title: $t(item.label), value: item.value })));
 
 const enableStatusItems = computed(() =>
@@ -203,12 +163,11 @@ function handleInitModel() {
   }
 
   if (props.operateType === 'edit') {
-    const { component, ...rest } = props.rowData;
+    const { routePath, ...rest } = props.rowData;
 
-    const { layout, page } = getLayoutAndPage(component);
-    const { path, param } = getPathParamFromRoutePath(rest.routePath);
+    const { path, param } = getPathParamFromRoutePath(routePath);
 
-    Object.assign(model.value, rest, { layout, page, routePath: path, pathParam: param });
+    Object.assign(model.value, rest, { routePath: path, pathParam: param });
   }
 
   if (!model.value.query) {
@@ -267,13 +226,9 @@ function removeButtonItem(index: number) {
 }
 
 function getSubmitParams() {
-  const { layout, page, pathParam, ...params } = model.value;
+  const { pathParam, ...params } = model.value;
 
-  const component = transformLayoutAndPageToComponent(layout, page);
-  const routePath = getRoutePathWithParam(model.value.routePath, pathParam);
-
-  params.component = component;
-  params.routePath = routePath;
+  params.routePath = getRoutePathWithParam(model.value.routePath, pathParam);
 
   return params;
 }
@@ -357,20 +312,11 @@ watch(
                 :placeholder="$t('page.manage.menu.form.pathParam')"
               />
             </VCol>
-            <VCol v-if="showLayout" cols="12" md="6">
-              <VSelect
-                v-model="model.layout"
-                :label="$t('page.manage.menu.layout')"
-                :placeholder="$t('page.manage.menu.form.layout')"
-                :items="layoutOptions"
-              />
-            </VCol>
-            <VCol v-if="showPage" cols="12" md="6">
-              <VSelect
-                v-model="model.page"
-                :label="$t('page.manage.menu.page')"
-                :placeholder="$t('page.manage.menu.form.page')"
-                :items="pageOptions"
+            <VCol cols="12" md="6">
+              <VTextField
+                v-model="model.component"
+                :label="$t('page.manage.menu.component')"
+                :placeholder="$t('page.manage.menu.form.component')"
               />
             </VCol>
             <VCol cols="12" md="6">
@@ -481,11 +427,10 @@ watch(
               </VRadioGroup>
             </VCol>
             <VCol v-if="model.hideInMenu" cols="12" md="6">
-              <VSelect
+              <VTextField
                 v-model="model.activeMenu"
                 :label="$t('page.manage.menu.activeMenu')"
                 :placeholder="$t('page.manage.menu.form.activeMenu')"
-                :items="pageOptions"
                 clearable
               />
             </VCol>
