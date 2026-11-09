@@ -17,16 +17,12 @@ export function getColorName(color: string) {
   let cl = -1;
   let df = -1;
 
-  let name = '';
-
   colorNames.some((item, index) => {
-    const [hexValue, colorName] = item;
+    const [hexValue] = item;
 
     const match = hex === hexValue;
 
-    if (match) {
-      name = colorName;
-    } else {
+    if (!match) {
       const { r, g, b } = getRgb(hexValue);
       const { h, s, l } = getHsl(hexValue);
 
@@ -43,7 +39,5 @@ export function getColorName(color: string) {
     return match;
   });
 
-  name = colorNames[cl][1];
-
-  return name;
+  return colorNames[cl][1];
 }

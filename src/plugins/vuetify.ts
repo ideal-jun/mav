@@ -1,4 +1,5 @@
-import { App, computed } from 'vue';
+import { computed } from 'vue';
+import type { App } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { createVuetify } from 'vuetify';
 import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n';

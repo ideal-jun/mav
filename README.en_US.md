@@ -83,12 +83,6 @@
 
 ## Version
 
-- **NaiveUI Version:**
-  - [Preview Link](https://naive.soybeanjs.cn/)
-  - [Github Repository](https://github.com/soybeanjs/soybean-admin)
-  - [Gitee Repository](https://gitee.com/honghuangdc/soybean-admin)
-  - [Gitcode Repository](https://gitcode.com/soybeanjs/soybean-admin)
-
 - **AntDesignVue Version:**
   - [Preview Link](https://antd.soybeanjs.cn/)
   - [Github Repository](https://github.com/soybeanjs/soybean-admin-antd)

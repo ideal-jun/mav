@@ -138,7 +138,7 @@ export function useVuetifyPaginatedTable<ResponseData, ApiData>(
   });
 
   /** jump to the target page and fetch the data, it is used by the search form */
-  async function getDataByPage(page: number = 1) {
+  async function getDataByPage(page = 1) {
     if (page !== pagination.page) {
       pagination.page = page;
 
