@@ -18,11 +18,11 @@ defineOptions({
       </clipPath>
     </defs>
     <svg width="51%" height="100%">
-      <use xlink:href="#geometry-left" width="214" height="36" fill="currentColor" />
+      <use xlink:href="#geometry-left" width="214" height="40" fill="currentColor" />
     </svg>
     <g transform="scale(-1, 1)">
       <svg width="51%" height="100%" x="-100%" y="0">
-        <use xlink:href="#geometry-right" width="214" height="36" fill="currentColor" />
+        <use xlink:href="#geometry-right" width="214" height="40" fill="currentColor" />
       </svg>
     </g>
   </svg>
