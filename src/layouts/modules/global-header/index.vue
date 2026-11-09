@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import MenuToggler from '@/components/common/menu-toggler.vue';
+import FullScreen from '@/components/common/full-screen.vue';
+import LangSwitch from '@/components/common/lang-switch.vue';
+import ThemeSchemaSwitch from '@/components/common/theme-schema-switch.vue';
 import { useFullscreen } from '@vueuse/core';
 import { GLOBAL_HEADER_MENU_ID } from '@/constants/app';
 import { useAppStore } from '@/store/modules/app';

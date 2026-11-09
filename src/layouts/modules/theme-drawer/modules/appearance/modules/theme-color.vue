@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import IconTooltip from '@/components/common/icon-tooltip.vue';
 import { computed } from 'vue';
 import { useThemeStore } from '@/store/modules/theme';
 import { $t } from '@/locales';
@@ -9,6 +10,17 @@ defineOptions({
 });
 
 const themeStore = useThemeStore();
+
+const recommendColor = computed(() => themeStore.recommendColor);
+const infoFollowPrimary = computed(() => themeStore.isInfoFollowPrimary);
+
+function setRecommendColor(value: boolean | null) {
+  themeStore.recommendColor = Boolean(value);
+}
+
+function setInfoFollowPrimary(value: boolean | null) {
+  themeStore.isInfoFollowPrimary = Boolean(value);
+}
 
 const themeColorEntries = computed(() => Object.entries(themeStore.themeColors) as [App.Theme.ThemeColorKey, string][]);
 
@@ -59,23 +71,23 @@ const swatchColumns: string[][] = [
         </IconTooltip>
       </template>
       <VSwitch
-        :model-value="themeStore.recommendColor"
+        :model-value="recommendColor"
         color="primary"
         hide-details
         density="compact"
-        @update:model-value="value => (themeStore.recommendColor = Boolean(value))"
+        @update:model-value="setRecommendColor"
       />
     </SettingItem>
 
     <SettingItem v-for="[key, color] in themeColorEntries" :key="key" :label="getColorLabel(key)">
       <template v-if="key === 'info'" #suffix>
         <VCheckbox
-          :model-value="themeStore.isInfoFollowPrimary"
+          :model-value="infoFollowPrimary"
           color="primary"
           density="compact"
           hide-details
           :label="$t('theme.appearance.themeColor.followPrimary')"
-          @update:model-value="value => (themeStore.isInfoFollowPrimary = Boolean(value))"
+          @update:model-value="setInfoFollowPrimary"
         />
       </template>
       <VColorInput

@@ -28,6 +28,11 @@ export default defineConfig(configEnv => {
       }
     },
     plugins: setupVitePlugins(viteEnv, buildTime),
+    optimizeDeps: {
+      // Vuetify components are auto-imported per route. Pre-bundle them all so a
+      // first visit to a page does not trigger Vite's full-page reload.
+      include: ['vuetify/components/!(VOverflowBtn)', 'vuetify/directives/*']
+    },
     define: {
       BUILD_TIME: JSON.stringify(buildTime)
     },

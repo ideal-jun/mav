@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WebSiteLink from '@/components/common/web-site-link.vue';
 import { computed, onMounted, ref } from 'vue';
 import VChart from '@visactor/vchart';
 import {

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import GithubLink from '@/components/common/github-link.vue';
+import WebSiteLink from '@/components/common/web-site-link.vue';
 import { onMounted, ref } from 'vue';
 import domPurify from 'dompurify';
 import { html } from 'pinyin-pro';

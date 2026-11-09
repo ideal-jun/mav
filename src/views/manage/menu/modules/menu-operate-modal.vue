@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SvgIcon from '@/components/custom/svg-icon.vue';
 import { computed, ref, watch } from 'vue';
 import type { ValidationRule } from 'vuetify';
 import { enableStatusOptions, menuIconTypeOptions, menuTypeOptions } from '@/constants/business';

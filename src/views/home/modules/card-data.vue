@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CountTo from '@/components/custom/count-to.vue';
 import { computed } from 'vue';
 import { createReusableTemplate } from '@vueuse/core';
 import { useThemeStore } from '@/store/modules/theme';

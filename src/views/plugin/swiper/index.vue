@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import GithubLink from '@/components/common/github-link.vue';
+import WebSiteLink from '@/components/common/web-site-link.vue';
 import SwiperCore from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
 import type { SwiperOptions } from 'swiper/types';

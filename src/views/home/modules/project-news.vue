@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SoybeanAvatar from '@/components/custom/soybean-avatar.vue';
 import { computed } from 'vue';
 import { $t } from '@/locales';
 

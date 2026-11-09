@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import IconTooltip from '@/components/common/icon-tooltip.vue';
 import { themeLayoutModeRecord } from '@/constants/app';
 import { $t } from '@/locales';
 

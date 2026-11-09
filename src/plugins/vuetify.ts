@@ -1,4 +1,4 @@
-import { computed } from 'vue';
+import { App, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { createVuetify } from 'vuetify';
 import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n';
@@ -23,71 +23,75 @@ const localeAdapter = {
   numericGroupSeparator: computed(() => ',')
 };
 
-export default createVuetify({
-  locale: {
-    adapter: localeAdapter,
-    fallback: 'en'
-  },
-  defaults: {
-    VCard: {
-      elevation: 1
+export function setupVuetify(app: App): void {
+  const vuetify = createVuetify({
+    locale: {
+      adapter: localeAdapter,
+      fallback: 'en'
     },
-    VSheet: {
-      elevation: 1
-    },
-    VTextField: {
-      color: 'primary',
-      density: 'compact',
-      variant: 'outlined'
-    },
-    VCheckbox: {
-      color: 'primary',
-      density: 'compact',
-      variant: 'outlined'
-    },
-
-    VCheckboxBtn: {
-      color: 'primary',
-      density: 'compact',
-      variant: 'outlined'
-    },
-    VRadio: {
-      color: 'primary',
-      density: 'compact',
-      variant: 'outlined'
-    },
-    VSelect: {
-      color: 'primary',
-      density: 'compact',
-      variant: 'outlined'
-    },
-    VSwitch: {
-      color: 'primary',
-      density: 'compact'
-    }
-  },
-  theme: {
-    defaultTheme: 'system',
-    themes: {
-      light: {
-        colors: {
-          background: '#f5f9fb'
-        },
-        variables: {
-          'high-emphasis-opacity': 0.82,
-          'medium-emphasis-opacity': 0.6
-        }
+    defaults: {
+      VCard: {
+        elevation: 1
       },
-      dark: {
-        variables: {
-          'high-emphasis-opacity': 0.82,
-          'medium-emphasis-opacity': 0.6
+      VSheet: {
+        elevation: 1
+      },
+      VTextField: {
+        color: 'primary',
+        density: 'compact',
+        variant: 'outlined'
+      },
+      VCheckbox: {
+        color: 'primary',
+        density: 'compact',
+        variant: 'outlined'
+      },
+
+      VCheckboxBtn: {
+        color: 'primary',
+        density: 'compact',
+        variant: 'outlined'
+      },
+      VRadio: {
+        color: 'primary',
+        density: 'compact',
+        variant: 'outlined'
+      },
+      VSelect: {
+        color: 'primary',
+        density: 'compact',
+        variant: 'outlined'
+      },
+      VSwitch: {
+        color: 'primary',
+        density: 'compact'
+      }
+    },
+    theme: {
+      defaultTheme: 'system',
+      themes: {
+        light: {
+          colors: {
+            background: '#f5f9fb'
+          },
+          variables: {
+            'high-emphasis-opacity': 0.82,
+            'medium-emphasis-opacity': 0.6
+          }
+        },
+        dark: {
+          variables: {
+            'high-emphasis-opacity': 0.82,
+            'medium-emphasis-opacity': 0.6
+          }
         }
       }
+    },
+    display: {
+      mobileBreakpoint: 'md',
+      thresholds: forVuetify
     }
-  },
-  display: {
-    mobileBreakpoint: 'md',
-    thresholds: forVuetify
-  }
-});
+  });
+
+  app.use(vuetify);
+}

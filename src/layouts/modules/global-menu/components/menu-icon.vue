@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SvgIcon from '@/components/custom/svg-icon.vue';
 defineOptions({ name: 'MenuIcon' });
 
 interface Props {

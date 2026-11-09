@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LookForward from '@/components/custom/look-forward.vue';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { $t } from '@/locales';

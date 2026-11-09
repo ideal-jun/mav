@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import SvgIcon from '@/components/custom/svg-icon.vue';
 import { computed, shallowRef } from 'vue';
 import { useRouter } from 'vue-router';
 import { VCommandPalette } from 'vuetify/labs/VCommandPalette';

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import AppProvider from '@/components/common/app-provider.vue';
+import AppWatermark from '@/components/common/app-watermark.vue';
 import { computed } from 'vue';
 import type { DefaultsInstance } from 'vuetify';
 import { useThemeStore } from './store/modules/theme';

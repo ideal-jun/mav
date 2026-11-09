@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import CustomIconSelect from '@/components/custom/custom-icon-select.vue';
+import SvgIcon from '@/components/custom/svg-icon.vue';
 import { ref } from 'vue';
 import { mdiIcons } from '@/constants/icon';
 import { getLocalIcons } from '@/utils/icon';

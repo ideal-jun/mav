@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import TableColumnSetting from '@/components/advanced/table-column-setting.vue';
 import { computed, ref } from 'vue';
 import type { TableColumnCheck } from '@sa/hooks';
 import { $t } from '@/locales';

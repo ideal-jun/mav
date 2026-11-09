@@ -27,13 +27,13 @@ const siderStyle = computed(() =>
 </script>
 
 <template>
-  <div class="size-full flex flex-col" :style="siderStyle">
+  <div :style="siderStyle">
     <GlobalLogo
       v-if="showLogo"
       :show-title="!appStore.siderCollapse"
       :style="{ height: themeStore.header.height + 'px' }"
     />
-    <div :id="GLOBAL_SIDER_MENU_ID" :class="menuWrapperClass"></div>
+    <div :id="GLOBAL_SIDER_MENU_ID"></div>
   </div>
 </template>
 

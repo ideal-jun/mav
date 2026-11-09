@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WebSiteLink from '@/components/common/web-site-link.vue';
 import { useVChart } from '@/hooks/common/vchart';
 import {
   barMarkPointSpec,

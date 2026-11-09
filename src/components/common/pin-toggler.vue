@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ButtonIcon from '@/components/custom/button-icon.vue';
 import { computed } from 'vue';
 import { $t } from '@/locales';
 

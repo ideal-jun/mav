@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import SvgIcon from '@/components/custom/svg-icon.vue';
 import { computed } from 'vue';
 import { useRouterPush } from '@/hooks/common/router';
 import { $t } from '@/locales';

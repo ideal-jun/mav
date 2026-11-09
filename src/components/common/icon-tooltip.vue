@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import SvgIcon from '@/components/custom/svg-icon.vue';
 import { computed, useSlots } from 'vue';
 import type { Anchor } from 'vuetify';
 

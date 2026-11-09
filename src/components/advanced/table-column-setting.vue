@@ -1,4 +1,5 @@
 <script setup lang="ts" generic="T extends Record<string, unknown>, K = never">
+import ButtonIcon from '@/components/custom/button-icon.vue';
 import { computed } from 'vue';
 import type { TableColumnCheck } from '@sa/hooks';
 import { VueDraggable } from 'vue-draggable-plus';

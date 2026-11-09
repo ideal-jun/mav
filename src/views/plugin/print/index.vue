@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import GithubLink from '@/components/common/github-link.vue';
 import printJS from 'print-js';
 
 function printTable() {

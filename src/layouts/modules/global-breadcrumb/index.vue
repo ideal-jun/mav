@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SvgIcon from '@/components/custom/svg-icon.vue';
 import { createReusableTemplate } from '@vueuse/core';
 import type { RouteKey } from '@elegant-router/types';
 import { useThemeStore } from '@/store/modules/theme';

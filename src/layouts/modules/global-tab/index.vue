@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import SvgIcon from '@/components/custom/svg-icon.vue';
+import ReloadButton from '@/components/common/reload-button.vue';
+import FullScreen from '@/components/common/full-screen.vue';
 import { nextTick, reactive, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useElementBounding } from '@vueuse/core';

@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { ref, shallowRef } from 'vue';
+import GithubLink from '@/components/common/github-link.vue';
+import WebSiteLink from '@/components/common/web-site-link.vue';
+import ButtonIcon from '@/components/custom/button-icon.vue';
+import { computed, ref, shallowRef } from 'vue';
 import VuePdfEmbed from 'vue-pdf-embed';
 import { useLoading } from '@sa/hooks';
 
@@ -27,6 +30,7 @@ function showAllPagesChange(value: boolean | null) {
 
 const rotations = [0, 90, 180, 270];
 const currentRotation = ref(0);
+const rotation = computed(() => rotations[currentRotation.value]);
 
 function handleRotate() {
   currentRotation.value = (currentRotation.value + 1) % 4;
@@ -66,7 +70,7 @@ async function handleDownload() {
             ref="pdfRef"
             class="container overflow-auto"
             :class="{ 'h-0': loading }"
-            :rotation="rotations[currentRotation]"
+            :rotation="rotation"
             :page="currentPage"
             :source="source"
             @rendered="onPdfRendered"

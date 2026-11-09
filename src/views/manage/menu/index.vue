@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import TableHeaderOperation from '@/components/advanced/table-header-operation.vue';
+import SvgIcon from '@/components/custom/svg-icon.vue';
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 import { useBoolean } from '@sa/hooks';

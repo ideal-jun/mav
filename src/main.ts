@@ -1,12 +1,11 @@
 import { createApp } from 'vue';
 import './plugins/assets';
 import { setupVueRootValidator } from 'vite-plugin-vue-transition-root-validator/client';
-import { setupAppVersionNotification, setupDayjs, setupLoading, setupNProgress } from './plugins';
+import { setupAppVersionNotification, setupDayjs, setupLoading, setupNProgress, setupVuetify } from './plugins';
 import { setupAppServices } from './plugins/app-services';
 import { setupStore } from './store';
 import { setupRouter } from './router';
 import { getLocale, setupI18n } from './locales';
-import vuetify from './plugins/vuetify';
 import App from './App.vue';
 
 async function setupApp() {
@@ -20,13 +19,13 @@ async function setupApp() {
 
   const app = createApp(App);
 
+  setupVuetify(app);
+
   setupStore(app);
 
   await setupRouter(app);
 
   setupI18n(app);
-
-  app.use(vuetify);
 
   setupAppVersionNotification();
 

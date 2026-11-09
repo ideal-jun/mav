@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import TableHeaderOperation from '@/components/advanced/table-header-operation.vue';
 import { ref } from 'vue';
 import { enableStatusRecord, userGenderRecord } from '@/constants/business';
 import { fetchGetUserList } from '@/service/api';

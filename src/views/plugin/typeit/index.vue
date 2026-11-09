@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import GithubLink from '@/components/common/github-link.vue';
+import WebSiteLink from '@/components/common/web-site-link.vue';
 import { onMounted, shallowRef } from 'vue';
 import TypeIt from 'typeit';
 import type { Options } from 'typeit';

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GithubLink from '@/components/common/github-link.vue';
 import { onMounted, ref } from 'vue';
 import WangEditor from 'wangeditor';
 

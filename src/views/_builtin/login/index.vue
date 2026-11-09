@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import WaveBg from '@/components/custom/wave-bg.vue';
+import SystemLogo from '@/components/common/system-logo.vue';
+import ThemeSchemaSwitch from '@/components/common/theme-schema-switch.vue';
+import LangSwitch from '@/components/common/lang-switch.vue';
 import { computed } from 'vue';
 import type { Component } from 'vue';
 import { getPaletteColorByNumber, mixColor } from '@sa/color';

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import IconTooltip from '@/components/common/icon-tooltip.vue';
 import { themeTabModeOptions } from '@/constants/app';
 import { useThemeStore } from '@/store/modules/theme';
 import { translateOptions } from '@/utils/common';

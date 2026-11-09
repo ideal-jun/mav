@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import IconTooltip from '@/components/common/icon-tooltip.vue';
 import { computed } from 'vue';
 import { themePageAnimationModeOptions, themeScrollModeOptions } from '@/constants/app';
 import { useThemeStore } from '@/store/modules/theme';

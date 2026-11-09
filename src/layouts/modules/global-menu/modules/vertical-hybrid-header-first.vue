@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import DarkModeContainer from '@/components/common/dark-mode-container.vue';
+import PinToggler from '@/components/common/pin-toggler.vue';
 import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import type { RouteKey } from '@elegant-router/types';
