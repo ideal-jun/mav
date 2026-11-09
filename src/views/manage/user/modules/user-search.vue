@@ -67,66 +67,62 @@ async function search() {
       <VExpansionPanel :title="$t('common.search')">
         <VExpansionPanelText>
           <VForm ref="formRef" @submit.prevent="search">
-            <VRow>
-              <VCol cols="12" sm="12" md="6" class="pr-6">
-                <VTextField
-                  v-model="model.userName"
-                  :label="$t('page.manage.user.userName')"
-                  :placeholder="$t('page.manage.user.form.userName')"
-                />
-              </VCol>
-              <VCol cols="12" sm="12" md="6" class="pr-6">
-                <VSelect
-                  v-model="model.userGender"
-                  :label="$t('page.manage.user.userGender')"
-                  :placeholder="$t('page.manage.user.form.userGender')"
-                  :items="userGenderItems"
-                  clearable
-                />
-              </VCol>
-              <VCol cols="12" sm="12" md="6" class="pr-6">
-                <VTextField
-                  v-model="model.nickName"
-                  :label="$t('page.manage.user.nickName')"
-                  :placeholder="$t('page.manage.user.form.nickName')"
-                />
-              </VCol>
-              <VCol cols="12" sm="12" md="6" class="pr-6">
-                <VTextField
-                  v-model="model.userPhone"
-                  :label="$t('page.manage.user.userPhone')"
-                  :placeholder="$t('page.manage.user.form.userPhone')"
-                  :rules="rules.userPhone"
-                />
-              </VCol>
-              <VCol cols="12" sm="12" md="6" class="pr-6">
-                <VTextField
-                  v-model="model.userEmail"
-                  :label="$t('page.manage.user.userEmail')"
-                  :placeholder="$t('page.manage.user.form.userEmail')"
-                  :rules="rules.userEmail"
-                />
-              </VCol>
-              <VCol cols="12" sm="12" md="6" class="pr-6">
-                <VSelect
-                  v-model="model.status"
-                  :label="$t('page.manage.user.userStatus')"
-                  :placeholder="$t('page.manage.user.form.userStatus')"
-                  :items="enableStatusItems"
-                  clearable
-                />
-              </VCol>
-              <VCol cols="12" class="pr-6">
-                <div class="flex justify-end gap-2">
-                  <VBtn variant="text" prepend-icon="mdi-refresh" @click="reset">
-                    {{ $t('common.reset') }}
-                  </VBtn>
-                  <VBtn color="primary" variant="outlined" prepend-icon="mdi-magnify" @click="search">
-                    {{ $t('common.search') }}
-                  </VBtn>
-                </div>
-              </VCol>
-            </VRow>
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-6">
+              <VTextField
+                v-model="model.userName"
+                :label="$t('page.manage.user.userName')"
+                :placeholder="$t('page.manage.user.form.userName')"
+                density="compact"
+                hide-details="auto"
+              />
+              <VSelect
+                v-model="model.userGender"
+                :label="$t('page.manage.user.userGender')"
+                :placeholder="$t('page.manage.user.form.userGender')"
+                :items="userGenderItems"
+                clearable
+                density="compact"
+                hide-details="auto"
+              />
+              <VTextField
+                v-model="model.nickName"
+                :label="$t('page.manage.user.nickName')"
+                :placeholder="$t('page.manage.user.form.nickName')"
+                density="compact"
+                hide-details="auto"
+              />
+              <VTextField
+                v-model="model.userPhone"
+                :label="$t('page.manage.user.userPhone')"
+                :placeholder="$t('page.manage.user.form.userPhone')"
+                :rules="rules.userPhone"
+                density="compact"
+                hide-details="auto"
+              />
+              <VTextField
+                v-model="model.userEmail"
+                :label="$t('page.manage.user.userEmail')"
+                :placeholder="$t('page.manage.user.form.userEmail')"
+                :rules="rules.userEmail"
+                density="compact"
+                hide-details="auto"
+              />
+              <VSelect
+                v-model="model.status"
+                :label="$t('page.manage.user.userStatus')"
+                :placeholder="$t('page.manage.user.form.userStatus')"
+                :items="enableStatusItems"
+                clearable
+                density="compact"
+                hide-details="auto"
+              />
+            </div>
+            <div class="flex justify-end gap-2 pt-3">
+              <VBtn variant="text" prepend-icon="mdi-refresh" @click="reset">{{ $t('common.reset') }}</VBtn>
+              <VBtn color="primary" variant="outlined" prepend-icon="mdi-magnify" @click="search">
+                {{ $t('common.search') }}
+              </VBtn>
+            </div>
           </VForm>
         </VExpansionPanelText>
       </VExpansionPanel>

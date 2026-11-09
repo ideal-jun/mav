@@ -24,67 +24,89 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       {
         key: 'id',
         title: $t('page.manage.menu.id'),
-        align: 'center'
+        align: 'center',
+        width: 64,
+        minWidth: 64,
+        sortable: false
       },
       {
         key: 'menuType',
         title: $t('page.manage.menu.menuType'),
         align: 'center',
-        width: 80
+        width: 96,
+        minWidth: 96,
+        sortable: false
       },
       {
         key: 'menuName',
         title: $t('page.manage.menu.menuName'),
         align: 'center',
-        minWidth: 120
+        width: 100,
+        minWidth: 100,
+        sortable: false
       },
       {
         key: 'icon',
         title: $t('page.manage.menu.icon'),
         align: 'center',
-        width: 60
+        width: 64,
+        minWidth: 64,
+        sortable: false
       },
       {
         key: 'routeName',
         title: $t('page.manage.menu.routeName'),
         align: 'center',
-        minWidth: 120
+        width: 100,
+        minWidth: 100,
+        sortable: false
       },
       {
         key: 'routePath',
         title: $t('page.manage.menu.routePath'),
         align: 'center',
-        minWidth: 120
+        width: 100,
+        minWidth: 100,
+        sortable: false
       },
       {
         key: 'status',
         title: $t('page.manage.menu.menuStatus'),
         align: 'center',
-        width: 80
+        width: 96,
+        minWidth: 96,
+        sortable: false
       },
       {
         key: 'hideInMenu',
         title: $t('page.manage.menu.hideInMenu'),
         align: 'center',
-        width: 80
+        width: 96,
+        minWidth: 96,
+        sortable: false
       },
       {
         key: 'parentId',
         title: $t('page.manage.menu.parentId'),
-        width: 90,
-        align: 'center'
+        width: 120,
+        minWidth: 120,
+        align: 'center',
+        sortable: false
       },
       {
         key: 'order',
         title: $t('page.manage.menu.order'),
         align: 'center',
-        width: 60
+        width: 80,
+        minWidth: 80,
+        sortable: false
       },
       {
         key: 'operate',
         title: $t('common.operate'),
         align: 'center',
-        width: 230,
+        width: 200,
+        minWidth: 200,
         sortable: false
       }
     ]
@@ -160,9 +182,9 @@ init();
 </script>
 
 <template>
-  <div class="flex-col-stretch gap-4 overflow-hidden lt-sm:overflow-auto">
-    <VCard class="card-wrapper flex-col sm:flex-1-hidden">
-      <VCardTitle class="flex flex-wrap items-center justify-between gap-2">
+  <div class="flex h-full min-h-0 flex-col gap-4">
+    <VCard class="card-wrapper flex min-h-0 flex-1 flex-col">
+      <VCardTitle class="flex shrink-0 flex-wrap items-center justify-between gap-2">
         <span>{{ $t('page.manage.menu.title') }}</span>
         <TableHeaderOperation
           v-model:columns="columnChecks"
@@ -173,7 +195,7 @@ init();
           @refresh="getData"
         />
       </VCardTitle>
-      <div class="min-h-0 flex-1 overflow-y-auto">
+      <div class="min-h-0 flex-1">
         <VDataTableServer
           v-model:page="pagination.page"
           v-model:items-per-page="pagination.pageSize"
@@ -185,10 +207,11 @@ init();
           :loading="loading"
           :show-select="showSelect"
           item-value="id"
+          class="manage-data-table"
           fixed-header
         >
           <template #item.menuType="{ item }">
-            <VChip :color="item.menuType === '2' ? 'primary' : undefined" size="small" variant="tonal">
+            <VChip :color="item.menuType === '2' ? 'primary' : undefined" size="x-small" variant="tonal">
               {{ $t(menuTypeRecord[item.menuType]) }}
             </VChip>
           </template>
@@ -205,32 +228,32 @@ init();
             <VChip
               v-if="item.status !== null"
               :color="item.status === '1' ? 'success' : 'warning'"
-              size="small"
+              size="x-small"
               variant="tonal"
             >
               {{ $t(enableStatusRecord[item.status]) }}
             </VChip>
           </template>
           <template #item.hideInMenu="{ item }">
-            <VChip :color="item.hideInMenu ? 'error' : undefined" size="small" variant="tonal">
+            <VChip :color="item.hideInMenu ? 'error' : undefined" size="x-small" variant="tonal">
               {{ $t(yesOrNoRecord[item.hideInMenu ? 'Y' : 'N']) }}
             </VChip>
           </template>
           <template #item.operate="{ item }">
-            <div class="flex-center justify-end gap-2">
+            <div class="flex items-center justify-end whitespace-nowrap">
               <VBtn
                 v-if="item.menuType === '1'"
-                size="small"
-                variant="outlined"
+                size="x-small"
+                variant="text"
                 color="primary"
                 @click="handleAddChildMenu(item)"
               >
                 {{ $t('page.manage.menu.addChildMenu') }}
               </VBtn>
-              <VBtn size="small" variant="outlined" color="primary" @click="handleEdit(item)">
+              <VBtn size="x-small" variant="text" color="primary" @click="handleEdit(item)">
                 {{ $t('common.edit') }}
               </VBtn>
-              <VBtn size="small" variant="outlined" color="error" @click="handleDelete(item.id)">
+              <VBtn size="x-small" variant="text" color="error" @click="handleDelete(item.id)">
                 {{ $t('common.delete') }}
               </VBtn>
             </div>

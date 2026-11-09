@@ -33,7 +33,8 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, pagination
         key: 'index',
         title: $t('common.index'),
         align: 'center',
-        width: 64
+        width: 80,
+        sortable: false
       },
       {
         key: 'userName',
@@ -69,7 +70,7 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, pagination
         key: 'status',
         title: $t('page.manage.user.userStatus'),
         align: 'center',
-        width: 100
+        width: 112
       },
       {
         key: 'operate',
@@ -126,10 +127,10 @@ function edit(id: number) {
 </script>
 
 <template>
-  <div class="min-h-500px flex-col-stretch gap-4 overflow-hidden lt-sm:overflow-auto">
-    <UserSearch v-model:model="searchParams" @search="getDataByPage" />
-    <VCard class="card-wrapper flex-col sm:flex-1-hidden">
-      <VCardTitle class="flex flex-wrap items-center justify-between gap-2">
+  <div class="flex h-full min-h-0 flex-col gap-4">
+    <UserSearch v-model:model="searchParams" class="shrink-0" @search="getDataByPage" />
+    <VCard class="card-wrapper flex min-h-0 flex-1 flex-col">
+      <VCardTitle class="flex shrink-0 flex-wrap items-center justify-between gap-2">
         <span>{{ $t('page.manage.user.title') }}</span>
         <TableHeaderOperation
           v-model:columns="columnChecks"
@@ -140,7 +141,7 @@ function edit(id: number) {
           @refresh="getData"
         />
       </VCardTitle>
-      <div class="min-h-0 flex-1 overflow-y-auto">
+      <div class="min-h-0 flex-1">
         <VDataTableServer
           v-model:page="pagination.page"
           v-model:items-per-page="pagination.pageSize"
@@ -152,6 +153,7 @@ function edit(id: number) {
           :loading="loading"
           :show-select="showSelect"
           item-value="id"
+          class="manage-data-table"
           fixed-header
         >
           <template #item.index="{ index }">
@@ -178,11 +180,11 @@ function edit(id: number) {
             </VChip>
           </template>
           <template #item.operate="{ item }">
-            <div class="flex-center gap-2">
-              <VBtn size="small" variant="outlined" color="primary" @click="edit(item.id)">
+            <div class="flex items-center justify-end whitespace-nowrap">
+              <VBtn size="small" variant="text" color="primary" @click="edit(item.id)">
                 {{ $t('common.edit') }}
               </VBtn>
-              <VBtn size="small" variant="outlined" color="error" @click="handleDelete(item.id)">
+              <VBtn size="small" variant="text" color="error" @click="handleDelete(item.id)">
                 {{ $t('common.delete') }}
               </VBtn>
             </div>

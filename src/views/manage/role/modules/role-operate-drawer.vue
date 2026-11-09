@@ -104,58 +104,65 @@ watch(visible, () => {
 </script>
 
 <template>
-  <VNavigationDrawer v-model="visible" temporary location="right" :width="360">
-    <div class="flex h-full flex-col">
-      <div class="flex items-center justify-between px-4 py-3">
-        <h2 class="text-lg font-medium">{{ title }}</h2>
-        <VBtn icon="mdi-close" variant="text" density="comfortable" @click="closeDrawer" />
-      </div>
-      <VDivider />
-      <div class="min-h-0 flex-1 overflow-y-auto px-4 py-4">
-        <VForm ref="formRef" validate-on="input">
-          <VTextField
-            v-model="model.roleName"
-            :label="$t('page.manage.role.roleName')"
-            :placeholder="$t('page.manage.role.form.roleName')"
-            :rules="rules.roleName"
-            class="mb-2"
-          />
-          <VTextField
-            v-model="model.roleCode"
-            :label="$t('page.manage.role.roleCode')"
-            :placeholder="$t('page.manage.role.form.roleCode')"
-            :rules="rules.roleCode"
-            class="mb-2"
-          />
-          <VRadioGroup
-            v-model="model.status"
-            :label="$t('page.manage.role.roleStatus')"
-            :rules="rules.status"
-            inline
-            class="mb-2"
-          >
-            <VRadio v-for="item in enableStatusOptions" :key="item.value" :value="item.value" :label="$t(item.label)" />
-          </VRadioGroup>
-          <VTextField
-            v-model="model.roleDesc"
-            :label="$t('page.manage.role.roleDesc')"
-            :placeholder="$t('page.manage.role.form.roleDesc')"
-          />
-        </VForm>
-        <div v-if="isEdit" class="mt-4 flex flex-wrap gap-2">
-          <VBtn variant="outlined" @click="openMenuAuthModal">{{ $t('page.manage.role.menuAuth') }}</VBtn>
-          <MenuAuthModal v-model:visible="menuAuthVisible" :role-id="roleId" />
-          <VBtn variant="outlined" @click="openButtonAuthModal">{{ $t('page.manage.role.buttonAuth') }}</VBtn>
-          <ButtonAuthModal v-model:visible="buttonAuthVisible" :role-id="roleId" />
+  <Teleport to="body">
+    <VNavigationDrawer v-model="visible" temporary location="right" :width="360" order="-1">
+      <div class="flex h-full flex-col">
+        <div class="flex items-center justify-between px-4 py-3">
+          <h2 class="text-lg font-medium">{{ title }}</h2>
+          <VBtn icon="mdi-close" variant="text" density="comfortable" @click="closeDrawer" />
+        </div>
+        <VDivider />
+        <div class="min-h-0 flex-1 overflow-y-auto px-4 py-4">
+          <VForm ref="formRef" validate-on="input">
+            <VTextField
+              v-model="model.roleName"
+              :label="$t('page.manage.role.roleName')"
+              :placeholder="$t('page.manage.role.form.roleName')"
+              :rules="rules.roleName"
+              class="mb-2"
+            />
+            <VTextField
+              v-model="model.roleCode"
+              :label="$t('page.manage.role.roleCode')"
+              :placeholder="$t('page.manage.role.form.roleCode')"
+              :rules="rules.roleCode"
+              class="mb-2"
+            />
+            <VRadioGroup
+              v-model="model.status"
+              :label="$t('page.manage.role.roleStatus')"
+              :rules="rules.status"
+              inline
+              class="mb-2"
+            >
+              <VRadio
+                v-for="item in enableStatusOptions"
+                :key="item.value"
+                :value="item.value"
+                :label="$t(item.label)"
+              />
+            </VRadioGroup>
+            <VTextField
+              v-model="model.roleDesc"
+              :label="$t('page.manage.role.roleDesc')"
+              :placeholder="$t('page.manage.role.form.roleDesc')"
+            />
+          </VForm>
+          <div v-if="isEdit" class="mt-4 flex flex-wrap gap-2">
+            <VBtn variant="outlined" @click="openMenuAuthModal">{{ $t('page.manage.role.menuAuth') }}</VBtn>
+            <MenuAuthModal v-model:visible="menuAuthVisible" :role-id="roleId" />
+            <VBtn variant="outlined" @click="openButtonAuthModal">{{ $t('page.manage.role.buttonAuth') }}</VBtn>
+            <ButtonAuthModal v-model:visible="buttonAuthVisible" :role-id="roleId" />
+          </div>
+        </div>
+        <VDivider />
+        <div class="flex justify-end gap-4 px-4 py-3">
+          <VBtn variant="text" @click="closeDrawer">{{ $t('common.cancel') }}</VBtn>
+          <VBtn color="primary" variant="flat" @click="handleSubmit">{{ $t('common.confirm') }}</VBtn>
         </div>
       </div>
-      <VDivider />
-      <div class="flex justify-end gap-4 px-4 py-3">
-        <VBtn variant="text" @click="closeDrawer">{{ $t('common.cancel') }}</VBtn>
-        <VBtn color="primary" variant="flat" @click="handleSubmit">{{ $t('common.confirm') }}</VBtn>
-      </div>
-    </div>
-  </VNavigationDrawer>
+    </VNavigationDrawer>
+  </Teleport>
 </template>
 
 <style scoped></style>

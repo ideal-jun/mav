@@ -34,7 +34,7 @@ function resetScroll() {
 </script>
 
 <template>
-  <VContainer fluid :class="!showPadding ? 'p-0' : ''">
+  <VContainer fluid class="h-full" :class="!showPadding ? 'p-0' : ''">
     <RouterView v-slot="{ Component, route }">
       <Transition
         :name="transitionName"
@@ -48,7 +48,7 @@ function resetScroll() {
             :is="Component"
             v-if="appStore.reloadFlag"
             :key="tabStore.getTabIdByRoute(route)"
-            class="flex-grow transition-300"
+            class="h-full flex-grow transition-300"
           />
         </KeepAlive>
       </Transition>

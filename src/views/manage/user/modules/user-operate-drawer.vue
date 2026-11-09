@@ -126,64 +126,71 @@ watch(visible, () => {
 </script>
 
 <template>
-  <VNavigationDrawer v-model="visible" temporary location="right" :width="360">
-    <div class="flex h-full flex-col">
-      <div class="flex items-center justify-between px-4 py-3">
-        <h2 class="text-lg font-medium">{{ title }}</h2>
-        <VBtn icon="mdi-close" variant="text" density="comfortable" @click="closeDrawer" />
+  <Teleport to="body">
+    <VNavigationDrawer v-model="visible" temporary location="right" :width="360" order="-1">
+      <div class="flex h-full flex-col">
+        <div class="flex items-center justify-between px-4 py-3">
+          <h2 class="text-lg font-medium">{{ title }}</h2>
+          <VBtn icon="mdi-close" variant="text" density="comfortable" @click="closeDrawer" />
+        </div>
+        <VDivider />
+        <div class="min-h-0 flex-1 overflow-y-auto px-4 py-4">
+          <VForm ref="formRef" validate-on="input">
+            <VTextField
+              v-model="model.userName"
+              :label="$t('page.manage.user.userName')"
+              :placeholder="$t('page.manage.user.form.userName')"
+              :rules="rules.userName"
+              class="mb-2"
+            />
+            <VRadioGroup v-model="model.userGender" :label="$t('page.manage.user.userGender')" inline class="mb-2">
+              <VRadio v-for="item in userGenderOptions" :key="item.value" :value="item.value" :label="$t(item.label)" />
+            </VRadioGroup>
+            <VTextField
+              v-model="model.nickName"
+              :label="$t('page.manage.user.nickName')"
+              :placeholder="$t('page.manage.user.form.nickName')"
+              class="mb-2"
+            />
+            <VTextField
+              v-model="model.userPhone"
+              :label="$t('page.manage.user.userPhone')"
+              :placeholder="$t('page.manage.user.form.userPhone')"
+              class="mb-2"
+            />
+            <VTextField
+              v-model="model.userEmail"
+              :label="$t('page.manage.user.userEmail')"
+              :placeholder="$t('page.manage.user.form.userEmail')"
+              class="mb-2"
+            />
+            <VRadioGroup v-model="model.status" :label="$t('page.manage.user.userStatus')" inline class="mb-2">
+              <VRadio
+                v-for="item in enableStatusOptions"
+                :key="item.value"
+                :value="item.value"
+                :label="$t(item.label)"
+              />
+            </VRadioGroup>
+            <VSelect
+              v-model="model.userRoles"
+              :label="$t('page.manage.user.userRole')"
+              :placeholder="$t('page.manage.user.form.userRole')"
+              :items="roleOptions"
+              multiple
+              chips
+              closable-chips
+            />
+          </VForm>
+        </div>
+        <VDivider />
+        <div class="flex justify-end gap-4 px-4 py-3">
+          <VBtn variant="text" @click="closeDrawer">{{ $t('common.cancel') }}</VBtn>
+          <VBtn color="primary" variant="flat" @click="handleSubmit">{{ $t('common.confirm') }}</VBtn>
+        </div>
       </div>
-      <VDivider />
-      <div class="min-h-0 flex-1 overflow-y-auto px-4 py-4">
-        <VForm ref="formRef" validate-on="input">
-          <VTextField
-            v-model="model.userName"
-            :label="$t('page.manage.user.userName')"
-            :placeholder="$t('page.manage.user.form.userName')"
-            :rules="rules.userName"
-            class="mb-2"
-          />
-          <VRadioGroup v-model="model.userGender" :label="$t('page.manage.user.userGender')" inline class="mb-2">
-            <VRadio v-for="item in userGenderOptions" :key="item.value" :value="item.value" :label="$t(item.label)" />
-          </VRadioGroup>
-          <VTextField
-            v-model="model.nickName"
-            :label="$t('page.manage.user.nickName')"
-            :placeholder="$t('page.manage.user.form.nickName')"
-            class="mb-2"
-          />
-          <VTextField
-            v-model="model.userPhone"
-            :label="$t('page.manage.user.userPhone')"
-            :placeholder="$t('page.manage.user.form.userPhone')"
-            class="mb-2"
-          />
-          <VTextField
-            v-model="model.userEmail"
-            :label="$t('page.manage.user.userEmail')"
-            :placeholder="$t('page.manage.user.form.userEmail')"
-            class="mb-2"
-          />
-          <VRadioGroup v-model="model.status" :label="$t('page.manage.user.userStatus')" inline class="mb-2">
-            <VRadio v-for="item in enableStatusOptions" :key="item.value" :value="item.value" :label="$t(item.label)" />
-          </VRadioGroup>
-          <VSelect
-            v-model="model.userRoles"
-            :label="$t('page.manage.user.userRole')"
-            :placeholder="$t('page.manage.user.form.userRole')"
-            :items="roleOptions"
-            multiple
-            chips
-            closable-chips
-          />
-        </VForm>
-      </div>
-      <VDivider />
-      <div class="flex justify-end gap-4 px-4 py-3">
-        <VBtn variant="text" @click="closeDrawer">{{ $t('common.cancel') }}</VBtn>
-        <VBtn color="primary" variant="flat" @click="handleSubmit">{{ $t('common.confirm') }}</VBtn>
-      </div>
-    </div>
-  </VNavigationDrawer>
+    </VNavigationDrawer>
+  </Teleport>
 </template>
 
 <style scoped></style>
