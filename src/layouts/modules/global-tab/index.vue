@@ -188,7 +188,11 @@ init();
 </script>
 
 <template>
-  <VSheet class="flex size-full items-center px-4 text-high-emphasis shadow-sm" color="surface" rounded="0">
+  <VSheet
+    class="flex size-full items-center px-2 text-high-emphasis text-body-medium shadow-sm"
+    color="surface"
+    rounded="0"
+  >
     <div ref="bsWrapper" class="h-full flex-1 overflow-hidden">
       <BetterScroll ref="bsScroll" :options="{ scrollX: true, scrollY: false, click: !isPCFlag }" @click="removeFocus">
         <div

@@ -36,8 +36,12 @@ defineSlots<Slots>();
 </script>
 
 <template>
+  <!--
+    The chrome tab background (ChromeTabBg) is drawn in a 214x36 viewBox, so the tab must keep a 36px height,
+    otherwise the bottom flare of the shape is clipped and the tab looks misaligned with the content below.
+  -->
   <div
-    class=":soy: relative inline-flex cursor-pointer items-center justify-center gap-16px whitespace-nowrap px-24px py-6px -mr-18px"
+    class=":soy: relative inline-flex min-h-36px cursor-pointer items-center justify-center gap-16px whitespace-nowrap px-24px py-6px -mr-18px"
     :class="[
       style['chrome-tab'],
       { [style['chrome-tab_dark']]: darkMode },

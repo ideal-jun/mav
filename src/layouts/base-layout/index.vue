@@ -163,7 +163,7 @@ function getSiderAndCollapsedWidth(isCollapsed: boolean) {
     <GlobalSider />
   </VNavigationDrawer>
 
-  <VAppBar :height="headerHeight">
+  <VAppBar :height="headerHeight" :extension-height="themeStore.tab.height">
     <GlobalHeader v-show="!appStore.fullContent" v-bind="headerProps" />
     <template v-if="showTab" #extension>
       <GlobalTab />
