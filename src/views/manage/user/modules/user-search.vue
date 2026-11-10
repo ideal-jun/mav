@@ -63,7 +63,7 @@ async function search() {
 
 <template>
   <VCard class="card-wrapper">
-    <VExpansionPanels variant="accordion">
+    <VExpansionPanels variant="accordion" :hover="false">
       <VExpansionPanel :title="$t('common.search')">
         <VExpansionPanelText>
           <VForm ref="formRef" @submit.prevent="search">

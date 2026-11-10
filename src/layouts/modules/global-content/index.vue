@@ -34,26 +34,34 @@ function resetScroll() {
 </script>
 
 <template>
-  <VContainer fluid class="h-full" :class="!showPadding ? 'p-0' : ''">
-    <RouterView v-slot="{ Component, route }">
-      <Transition
-        :name="transitionName"
-        mode="out-in"
-        @before-leave="appStore.setContentXScrollable(true)"
-        @after-leave="resetScroll"
-        @after-enter="appStore.setContentXScrollable(false)"
-      >
-        <KeepAlive :include="routeStore.cacheRoutes" :exclude="routeStore.excludeCacheRoutes">
-          <component
-            :is="Component"
-            v-if="appStore.reloadFlag"
-            :key="tabStore.getTabIdByRoute(route)"
-            class="h-full flex-grow transition-300"
-          />
-        </KeepAlive>
-      </Transition>
-    </RouterView>
-  </VContainer>
+  <VMain scrollable>
+    <VContainer fluid class="flex flex-col flex-grow h-full" :class="!showPadding ? 'p-0' : ''">
+      <RouterView v-slot="{ Component, route }">
+        <Transition
+          :name="transitionName"
+          mode="out-in"
+          @before-leave="appStore.setContentXScrollable(true)"
+          @after-leave="resetScroll"
+          @after-enter="appStore.setContentXScrollable(false)"
+        >
+          <KeepAlive :include="routeStore.cacheRoutes" :exclude="routeStore.excludeCacheRoutes">
+            <component
+              :is="Component"
+              v-if="appStore.reloadFlag"
+              :key="tabStore.getTabIdByRoute(route)"
+              class="flex-grow transition-300"
+            />
+          </KeepAlive>
+        </Transition>
+      </RouterView>
+    </VContainer>
+  </VMain>
 </template>
 
-<style></style>
+<style lang="scss" scoped>
+:deep(.v-main__scroller) {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+</style>

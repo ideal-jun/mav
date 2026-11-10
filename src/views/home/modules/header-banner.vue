@@ -29,7 +29,7 @@ const statisticData = computed<StatisticData[]>(() => [
 <template>
   <VCard class="card-wrapper">
     <VCardText>
-      <VRow :gutter="gap">
+      <VRow :gap="gap">
         <VCol cols="12" md="8">
           <div class="flex items-center">
             <div class="size-18 shrink-0 overflow-hidden rounded-full">

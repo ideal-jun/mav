@@ -170,9 +170,7 @@ function getSiderAndCollapsedWidth(isCollapsed: boolean) {
     </template>
   </VAppBar>
 
-  <VMain scrollable>
-    <GlobalContent />
-  </VMain>
+  <GlobalContent />
 
   <VFooter v-if="showFooter" app :order="layoutOrder.footer" :height="themeStore.footer.height">
     <GlobalFooter />

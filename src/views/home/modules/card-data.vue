@@ -95,7 +95,7 @@ function getGradientColor(color: CardData['color']) {
       </DefineGradientBg>
       <!-- define component end: GradientBg -->
 
-      <VRow :gutter="16">
+      <VRow :gap="16">
         <VCol v-for="item in cardData" :key="item.key" cols="12" sm="6" lg="3">
           <GradientBg :gradient-color="getGradientColor(item.color)" class="flex-1">
             <h3 class="text-base">{{ item.title }}</h3>
