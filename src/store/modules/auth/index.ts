@@ -2,11 +2,12 @@ import { computed, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { defineStore } from 'pinia';
 import { useLoading } from '@sa/hooks';
-import { fetchGetUserInfo, fetchLogin } from '@/service/api';
+import { getInfo as fetchGetUserInfo, login as fetchLogin, logout as fetchLogout } from '@/service/api/ruoyi/auth';
 import { useRouterPush } from '@/hooks/common/router';
 import { localStg } from '@/utils/storage';
 import { SetupStoreId } from '@/enum';
 import { $t } from '@/locales';
+import { useDictStore } from '../dict';
 import { useRouteStore } from '../route';
 import { useTabStore } from '../tab';
 import { clearAuthStorage, getToken } from './shared';
@@ -24,6 +25,8 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   const userInfo: Api.Auth.UserInfo = reactive({
     userId: '',
     userName: '',
+    nickName: '',
+    avatar: '',
     roles: [],
     buttons: []
   });
@@ -45,6 +48,9 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
 
     tabStore.cacheTabs();
     routeStore.resetStore();
+
+    const dictStore = useDictStore();
+    dictStore.resetDict();
   }
 
   /** Record the user ID of the previous login session Used to compare with the current user ID on next login */
@@ -83,18 +89,20 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   }
 
   /**
-   * Login
+   * Login with the ruoyi backend.
    *
-   * @param userName User name
-   * @param password Password
+   * @param userName the login account
+   * @param password the login password
+   * @param code the captcha code
+   * @param uuid the captcha uuid
    * @param [redirect=true] Whether to redirect after login. Default is `true`
    */
-  async function login(userName: string, password: string, redirect = true) {
+  async function login(userName: string, password: string, code?: string, uuid?: string, redirect = true) {
     startLoading();
 
-    const { data: loginToken, error } = await fetchLogin(userName, password);
+    const { data: loginToken, error } = await fetchLogin({ username: userName, password, code, uuid });
 
-    if (!error) {
+    if (!error && loginToken?.access_token) {
       const pass = await loginByToken(loginToken);
 
       if (pass) {
@@ -123,14 +131,13 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
 
   async function loginByToken(loginToken: Api.Auth.LoginToken) {
     // 1. stored in the localStorage, the later requests need it in headers
-    localStg.set('token', loginToken.token);
-    localStg.set('refreshToken', loginToken.refreshToken);
+    localStg.set('token', loginToken.access_token);
 
     // 2. get user info
     const pass = await getUserInfo();
 
     if (pass) {
-      token.value = loginToken.token;
+      token.value = loginToken.access_token;
 
       return true;
     }
@@ -141,9 +148,18 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   async function getUserInfo() {
     const { data: info, error } = await fetchGetUserInfo();
 
-    if (!error) {
+    if (!error && info) {
+      const { user } = info;
+
       // update store
-      Object.assign(userInfo, info);
+      Object.assign(userInfo, {
+        userId: String(user.userId ?? ''),
+        userName: user.userName ?? '',
+        nickName: user.nickName ?? user.userName ?? '',
+        avatar: user.avatarUrl || user.avatar || '',
+        roles: info.roles ?? [],
+        buttons: info.permissions ?? []
+      });
 
       return true;
     }
@@ -164,6 +180,17 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     }
   }
 
+  /** Logout from the ruoyi backend and reset the local state. */
+  async function logout() {
+    try {
+      await fetchLogout();
+    } catch {
+      // ignore the backend logout error, the local state must be cleared
+    } finally {
+      await resetStore();
+    }
+  }
+
   return {
     token,
     userInfo,
@@ -171,6 +198,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     loginLoading,
     resetStore,
     login,
+    logout,
     initUserInfo
   };
 });

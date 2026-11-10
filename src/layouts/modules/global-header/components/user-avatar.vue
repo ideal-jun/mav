@@ -9,20 +9,24 @@ defineOptions({
 });
 
 const authStore = useAuthStore();
-const { toLogin } = useRouterPush();
+const { toLogin, routerPush } = useRouterPush();
 const logoutDialog = ref(false);
 
 function loginOrRegister() {
   toLogin();
 }
 
+function toUserProfile() {
+  routerPush({ name: 'Profile' });
+}
+
 function logout() {
   logoutDialog.value = true;
 }
 
-function confirmLogout() {
+async function confirmLogout() {
   logoutDialog.value = false;
-  authStore.resetStore();
+  await authStore.logout();
 }
 </script>
 
@@ -34,11 +38,15 @@ function confirmLogout() {
     <VMenu location="bottom end">
       <template #activator="{ props }">
         <VBtn v-bind="props" class="h-9 px-2" variant="text">
-          <VIcon icon="mdi-account-circle-outline" size="24" />
-          <span class="ml-2 text-base font-medium">{{ authStore.userInfo.userName }}</span>
+          <VAvatar v-if="authStore.userInfo.avatar" :image="authStore.userInfo.avatar" size="28" />
+          <VIcon v-else icon="mdi-account-circle-outline" size="24" />
+          <span class="ml-2 text-base font-medium">
+            {{ authStore.userInfo.nickName || authStore.userInfo.userName }}
+          </span>
         </VBtn>
       </template>
       <VList density="compact">
+        <VListItem prepend-icon="mdi-account-circle-outline" title="个人中心" @click="toUserProfile" />
         <VListItem prepend-icon="mdi-logout" :title="$t('common.logout')" @click="logout" />
       </VList>
     </VMenu>

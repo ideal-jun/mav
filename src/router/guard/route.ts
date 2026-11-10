@@ -19,6 +19,11 @@ export function createRouteGuard(router: Router) {
       await routeStore.initAuthRoute();
 
       isLogin = Boolean(localStg.get('token'));
+
+      if (isLogin && routeStore.isInitAuthRoute) {
+        // the ruoyi routes are added after the initial navigation, resolve the target again
+        return { path: to.path, query: to.query, hash: to.hash, replace: true };
+      }
     }
 
     const rootRoute = 'root';

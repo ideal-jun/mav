@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import MenuIcon from './menu-icon.vue';
 
 defineOptions({ name: 'AppMenuNodes' });
@@ -22,10 +23,17 @@ const emit = defineEmits<{
   (e: 'select', key: string): void;
 }>();
 
+const route = useRoute();
+
 /** only the first level is rendered as icon-only when the sider is collapsed */
 const isCollapsed = computed(() => props.collapsed && props.level === 0);
 
 function isActive(menu: App.Global.Menu) {
+  // the ruoyi backend route names are not hierarchical, match the menu by the route path
+  if (menu.routePath && (route.path === menu.routePath || route.path.startsWith(`${menu.routePath}/`))) {
+    return true;
+  }
+
   const selected = props.selectedKey;
 
   if (!selected) {

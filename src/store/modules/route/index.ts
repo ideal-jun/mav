@@ -2,7 +2,9 @@ import { computed, nextTick, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useBoolean } from '@sa/hooks';
 import { router } from '@/router';
-import { menuRoutes, routes } from '@/router/routes';
+import { buildRoutes } from '@/router/routes/dynamic';
+import { layoutStaticRoutes } from '@/router/routes';
+import { getRouters } from '@/service/api/ruoyi/menu';
 import { SetupStoreId } from '@/enum';
 import { useAuthStore } from '../auth';
 import { useTabStore } from '../tab';
@@ -23,6 +25,9 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
 
   /** Home route key */
   const routeHome = ref(import.meta.env.VITE_ROUTE_HOME);
+
+  /** The names of the routes added from the ruoyi backend menu. */
+  const dynamicRouteNames = ref<string[]>([]);
 
   /** Set route home */
   function setRouteHome(routeKey: string) {
@@ -67,7 +72,7 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
   /** Global breadcrumbs */
   const breadcrumbs = computed(() => getBreadcrumbsByRoute(router.currentRoute.value, menus.value));
 
-  /** Initialize menus and cache from the hand-written route table. */
+  /** Load the routes of the ruoyi backend and initialize the menus. */
   async function initAuthRoute() {
     if (isInitAuthRoute.value) return;
 
@@ -77,15 +82,37 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
 
     if (!authStore.userInfo.userId) return;
 
-    sortRoutesByOrder(menuRoutes);
-    menus.value = getGlobalMenusByAuthRoutes(menuRoutes);
-    cacheRoutes.value = getCacheRouteNames(routes);
+    const { data: backendRoutes, error } = await getRouters();
+
+    const dynamicRoutes = error || !backendRoutes ? [] : buildRoutes(backendRoutes);
+
+    const addedNames: string[] = [];
+
+    dynamicRoutes.forEach(route => {
+      router.addRoute('root', route);
+      addedNames.push(route.name as string);
+    });
+
+    dynamicRouteNames.value = addedNames;
+
+    const allRoutes = [...layoutStaticRoutes, ...dynamicRoutes];
+
+    sortRoutesByOrder(allRoutes);
+    menus.value = getGlobalMenusByAuthRoutes(allRoutes);
+    cacheRoutes.value = getCacheRouteNames(allRoutes);
     setIsInitAuthRoute(true);
     tabStore.initHomeTab();
   }
 
   /** Reset store */
-  async function resetStore() {
+  function resetStore() {
+    dynamicRouteNames.value.forEach(name => {
+      if (name && router.hasRoute(name)) {
+        router.removeRoute(name);
+      }
+    });
+
+    dynamicRouteNames.value = [];
     menus.value = [];
     cacheRoutes.value = [];
     excludeCacheRoutes.value = [];

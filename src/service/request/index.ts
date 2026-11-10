@@ -1,132 +1,216 @@
-import type { AxiosResponse } from 'axios';
+import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { BACKEND_ERROR_CODE, createFlatRequest, createRequest } from '@sa/axios';
 import { useAuthStore } from '@/store/modules/auth';
-import { localStg } from '@/utils/storage';
+import { getToken } from '@/store/modules/auth/shared';
 import { getServiceBaseURL } from '@/utils/service';
-import { $t } from '@/locales';
-import { getAuthorization, handleExpiredRequest, showErrorMsg } from './shared';
+import { encrypt } from '@/utils/jsencrypt';
+import { encryptBase64, encryptWithAes, generateAesKey } from '@/utils/crypto';
+import { showErrorMsg } from './shared';
 import type { RequestInstanceState } from './type';
 
 const isHttpProxy = import.meta.env.DEV && import.meta.env.VITE_HTTP_PROXY === 'Y';
 const { baseURL, otherBaseURL } = getServiceBaseURL(import.meta.env, isHttpProxy);
 
-export const request = createFlatRequest(
+/** The ruoyi unified response body `R<T>`. */
+interface RuoYiResponse<T = any> {
+  code: number;
+  msg: string;
+  data: T;
+}
+
+function parseCodes(codes?: string) {
+  return (codes || '')
+    .split(',')
+    .map(code => code.trim())
+    .filter(Boolean);
+}
+
+const successCodes = new Set([import.meta.env.VITE_SERVICE_SUCCESS_CODE, '200', '0000']);
+const logoutCodes = new Set(parseCodes(import.meta.env.VITE_SERVICE_LOGOUT_CODES));
+const modalLogoutCodes = new Set(parseCodes(import.meta.env.VITE_SERVICE_MODAL_LOGOUT_CODES));
+
+function getResponseBody(response: AxiosResponse<any>): RuoYiResponse | null {
+  const body = response.data as any;
+
+  if (body && typeof body === 'object' && 'code' in body) {
+    return body as RuoYiResponse;
+  }
+
+  return null;
+}
+
+/** Extract the payload of a ruoyi response; binary data is returned as-is. */
+function transformResponse(response: AxiosResponse<any>) {
+  const body = response.data;
+
+  if (body && typeof body === 'object' && 'code' in body && 'data' in body) {
+    return (body as RuoYiResponse).data;
+  }
+
+  return body;
+}
+
+function isBackendSuccess(response: AxiosResponse<any>) {
+  const responseType = response.config?.responseType;
+
+  if (responseType && responseType !== 'json') {
+    return true;
+  }
+
+  const body = getResponseBody(response);
+
+  if (!body) {
+    return true;
+  }
+
+  return successCodes.has(String(body.code));
+}
+
+function handleLogout() {
+  const authStore = useAuthStore();
+
+  authStore.resetStore();
+}
+
+function showModalLogout(message: string) {
+  window.$dialog?.error({
+    title: '系统提示',
+    content: message,
+    positiveText: '重新登录',
+    maskClosable: false,
+    closeOnEsc: false,
+    onPositiveClick() {
+      handleLogout();
+    },
+    onClose() {
+      handleLogout();
+    }
+  });
+}
+
+async function onRequest(config: InternalAxiosRequestConfig) {
+  const headers = config.headers as any;
+  const token = getToken();
+  const isToken = headers.isToken !== false;
+
+  if (token && isToken) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  headers.clientid = import.meta.env.VITE_APP_CLIENT_ID;
+
+  const isEncrypt = headers.isEncrypt === true || headers.isEncrypt === 'true';
+
+  if (
+    import.meta.env.VITE_APP_ENCRYPT === 'Y' &&
+    isEncrypt &&
+    (config.method === 'post' || config.method === 'put') &&
+    !(config.data instanceof FormData)
+  ) {
+    const aesKey = generateAesKey();
+
+    headers['encrypt-key'] = encrypt(encryptBase64(aesKey));
+    config.data =
+      typeof config.data === 'string'
+        ? encryptWithAes(config.data, aesKey)
+        : encryptWithAes(JSON.stringify(config.data ?? {}), aesKey);
+  }
+
+  if (config.data instanceof FormData) {
+    delete headers['Content-Type'];
+  }
+
+  // remove the custom flags so they are not sent to the backend
+  delete headers.isToken;
+  delete headers.isEncrypt;
+  delete headers.repeatSubmit;
+
+  return config;
+}
+
+async function onBackendFail(response: AxiosResponse<any>) {
+  const body = getResponseBody(response);
+
+  if (!body) {
+    return null;
+  }
+
+  const responseCode = String(body.code);
+  const message = body.msg || '请求失败';
+
+  if (logoutCodes.has(responseCode)) {
+    handleLogout();
+
+    return null;
+  }
+
+  if (modalLogoutCodes.has(responseCode) && !request.state.errMsgStack?.includes(message)) {
+    showModalLogout(message);
+
+    return null;
+  }
+
+  // show the message in onError
+  return null;
+}
+
+function onError(error: any) {
+  const response = error.response as AxiosResponse<any> | undefined;
+  const body = response ? getResponseBody(response) : null;
+  const responseCode = body ? String(body.code) : '';
+  const httpStatus = response?.status;
+
+  if (httpStatus === 401 || logoutCodes.has(responseCode)) {
+    handleLogout();
+
+    return;
+  }
+
+  if (modalLogoutCodes.has(responseCode)) {
+    showModalLogout(body?.msg || '登录状态已过期，请重新登录');
+
+    return;
+  }
+
+  let message: string = error.message || '网络异常';
+
+  if (body) {
+    message = body.msg || message;
+  }
+
+  if (message === 'Network Error') {
+    message = '后端接口连接异常';
+  } else if (message.includes('timeout')) {
+    message = '系统接口请求超时';
+  } else if (message.includes('Request failed with status code')) {
+    message = `系统接口${message.slice(-3)}异常`;
+  }
+
+  showErrorMsg(request.state, message);
+}
+
+export const request = createFlatRequest<any, any, RequestInstanceState>(
   {
     baseURL,
     headers: {
-      apifoxToken: 'XL299LiMEDZ0H5h3A29PxwQXdMJqWyY2'
+      'Content-Type': 'application/json;charset=utf-8'
     }
   },
   {
     defaultState: {
-      errMsgStack: [],
-      refreshTokenPromise: null
+      errMsgStack: []
     } as RequestInstanceState,
-    transform(response: AxiosResponse<App.Service.Response<any>>) {
-      return response.data.data;
-    },
-    async onRequest(config) {
-      const Authorization = getAuthorization();
-      Object.assign(config.headers, { Authorization });
-
-      return config;
-    },
-    isBackendSuccess(response) {
-      // when the backend response code is "0000"(default), it means the request is success
-      // to change this logic by yourself, you can modify the `VITE_SERVICE_SUCCESS_CODE` in `.env` file
-      return String(response.data.code) === import.meta.env.VITE_SERVICE_SUCCESS_CODE;
-    },
-    async onBackendFail(response, instance) {
-      const authStore = useAuthStore();
-      const responseCode = String(response.data.code);
-
-      function handleLogout() {
-        authStore.resetStore();
-      }
-
-      function logoutAndCleanup() {
-        handleLogout();
-        window.removeEventListener('beforeunload', handleLogout);
-
-        request.state.errMsgStack = request.state.errMsgStack.filter(msg => msg !== response.data.msg);
-      }
-
-      // when the backend response code is in `logoutCodes`, it means the user will be logged out and redirected to login page
-      const logoutCodes = import.meta.env.VITE_SERVICE_LOGOUT_CODES?.split(',') || [];
-      if (logoutCodes.includes(responseCode)) {
-        handleLogout();
-        return null;
-      }
-
-      // when the backend response code is in `modalLogoutCodes`, it means the user will be logged out by displaying a modal
-      const modalLogoutCodes = import.meta.env.VITE_SERVICE_MODAL_LOGOUT_CODES?.split(',') || [];
-      if (modalLogoutCodes.includes(responseCode) && !request.state.errMsgStack?.includes(response.data.msg)) {
-        request.state.errMsgStack = [...(request.state.errMsgStack || []), response.data.msg];
-
-        // prevent the user from refreshing the page
-        window.addEventListener('beforeunload', handleLogout);
-
-        window.$dialog?.error({
-          title: $t('common.error'),
-          content: response.data.msg,
-          positiveText: $t('common.confirm'),
-          maskClosable: false,
-          closeOnEsc: false,
-          onPositiveClick() {
-            logoutAndCleanup();
-          },
-          onClose() {
-            logoutAndCleanup();
-          }
-        });
-
-        return null;
-      }
-
-      // when the backend response code is in `expiredTokenCodes`, it means the token is expired, and refresh token
-      // the api `refreshToken` can not return error code in `expiredTokenCodes`, otherwise it will be a dead loop, should return `logoutCodes` or `modalLogoutCodes`
-      const expiredTokenCodes = import.meta.env.VITE_SERVICE_EXPIRED_TOKEN_CODES?.split(',') || [];
-      if (expiredTokenCodes.includes(responseCode)) {
-        const success = await handleExpiredRequest(request.state);
-        if (success) {
-          const Authorization = getAuthorization();
-          Object.assign(response.config.headers, { Authorization });
-
-          return instance.request(response.config) as Promise<AxiosResponse>;
-        }
-      }
-
-      return null;
-    },
-    onError(error) {
-      // when the request is fail, you can show error message
-
-      let message = error.message;
-      let backendErrorCode = '';
-
-      // get backend error message and code
-      if (error.code === BACKEND_ERROR_CODE) {
-        message = error.response?.data?.msg || message;
-        backendErrorCode = String(error.response?.data?.code || '');
-      }
-
-      // the error message is displayed in the modal
-      const modalLogoutCodes = import.meta.env.VITE_SERVICE_MODAL_LOGOUT_CODES?.split(',') || [];
-      if (modalLogoutCodes.includes(backendErrorCode)) {
-        return;
-      }
-
-      // when the token is expired, refresh token and retry request, so no need to show error message
-      const expiredTokenCodes = import.meta.env.VITE_SERVICE_EXPIRED_TOKEN_CODES?.split(',') || [];
-      if (expiredTokenCodes.includes(backendErrorCode)) {
-        return;
-      }
-
-      showErrorMsg(request.state, message);
-    }
+    transform: transformResponse,
+    isBackendSuccess,
+    onRequest,
+    onBackendFail,
+    onError
   }
 );
 
+export default request;
+
+/** Demo request instance used by the legacy `/function/request` page. */
 export const demoRequest = createRequest(
   {
     baseURL: otherBaseURL.demo
@@ -139,27 +223,22 @@ export const demoRequest = createRequest(
       const { headers } = config;
 
       // set token
-      const token = localStg.get('token');
+      const token = getToken();
       const Authorization = token ? `Bearer ${token}` : null;
       Object.assign(headers, { Authorization });
 
       return config;
     },
     isBackendSuccess(response) {
-      // when the backend response code is "200", it means the request is success
-      // you can change this logic by yourself
       return response.data.status === '200';
     },
-    async onBackendFail(_response) {
-      // when the backend response code is not "200", it means the request is fail
-      // for example: the token is expired, refresh token and retry request
+    async onBackendFail() {
+      // noop: the demo api does not need token refresh
     },
     onError(error) {
-      // when the request is fail, you can show error message
-
+      // show backend error message
       let message = error.message;
 
-      // show backend error message
       if (error.code === BACKEND_ERROR_CODE) {
         message = error.response?.data?.message || message;
       }

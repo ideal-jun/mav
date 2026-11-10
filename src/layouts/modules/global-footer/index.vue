@@ -12,7 +12,7 @@ defineOptions({
       target="_blank"
       rel="noopener noreferrer"
     >
-      Copyright MIT © 2021 Soybean
+      Copyright © 2026 Mav
     </a>
   </div>
 </template>

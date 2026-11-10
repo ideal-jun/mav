@@ -110,6 +110,47 @@ export const constantRoutes: RouteRecordRaw[] = [
   }
 ];
 
+/**
+ * Static routes rendered inside the base layout.
+ *
+ * The ruoyi business routes are generated at runtime from `/system/menu/getRouters`,
+ * these routes are the ones that do not come from the backend menu table.
+ */
+export const layoutStaticRoutes: RouteRecordRaw[] = [
+  {
+    name: 'home',
+    path: '/home',
+    component: () => import('@/views/home/index.vue'),
+    meta: {
+      title: '首页',
+      icon: 'mdi-monitor-dashboard',
+      order: -1
+    }
+  },
+  {
+    name: 'Profile',
+    path: '/user/profile',
+    component: () => import('@/views/system/user/profile/index.vue'),
+    meta: {
+      title: '个人中心',
+      icon: 'mdi-account-circle-outline',
+      hideInMenu: true
+    }
+  },
+  {
+    name: 'iframe-page',
+    path: '/iframe-page/:url',
+    component: () => import('@/views/_builtin/iframe-page/[url].vue'),
+    props: true,
+    meta: {
+      title: 'iframe-page',
+      constant: true,
+      hideInMenu: true,
+      keepAlive: true
+    }
+  }
+];
+
 /** Authenticated menu routes, rendered inside the base layout. */
 export const menuRoutes: RouteRecordRaw[] = [
   {
@@ -660,7 +701,7 @@ export const baseLayoutRoute: RouteRecordRaw = {
   meta: {
     title: 'root'
   },
-  children: menuRoutes
+  children: layoutStaticRoutes
 };
 
 /** All application routes. */

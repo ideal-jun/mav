@@ -85,6 +85,14 @@ declare namespace Env {
     readonly VITE_AUTOMATICALLY_DETECT_UPDATE?: CommonType.YesOrNo;
     /** show proxy url log in terminal */
     readonly VITE_PROXY_LOG?: CommonType.YesOrNo;
+    /** RuoYi OAuth client id (sys_client.client_id) */
+    readonly VITE_APP_CLIENT_ID: string;
+    /** Whether to encrypt the request body (AES + RSA), 'Y' | 'N' */
+    readonly VITE_APP_ENCRYPT?: CommonType.YesOrNo;
+    /** RSA public key used to encrypt the AES key of an encrypted request */
+    readonly VITE_APP_RSA_PUBLIC_KEY?: string;
+    /** RSA private key used to decrypt an encrypted response */
+    readonly VITE_APP_RSA_PRIVATE_KEY?: string;
     /** The launch editor */
     readonly VITE_DEVTOOLS_LAUNCH_EDITOR?: import('vite-plugin-vue-devtools').VitePluginVueDevToolsOptions['launchEditor'];
   }
