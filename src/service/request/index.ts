@@ -3,6 +3,7 @@ import { BACKEND_ERROR_CODE, createFlatRequest, createRequest } from '@sa/axios'
 import { useAuthStore } from '@/store/modules/auth';
 import { getToken } from '@/store/modules/auth/shared';
 import { getServiceBaseURL } from '@/utils/service';
+import { tansParams } from '@/utils/ruoyi';
 import { encrypt } from '@/utils/jsencrypt';
 import { encryptBase64, encryptWithAes, generateAesKey } from '@/utils/crypto';
 import { showErrorMsg } from './shared';
@@ -114,6 +115,19 @@ async function onRequest(config: InternalAxiosRequestConfig) {
       typeof config.data === 'string'
         ? encryptWithAes(config.data, aesKey)
         : encryptWithAes(JSON.stringify(config.data ?? {}), aesKey);
+  }
+
+  // axios leaves the `[]` of bracket keys (e.g. `params[beginTime]`) unencoded which is rejected
+  // by the gateway, so serialize the query string ourselves like the official plus-ui does.
+  if (config.method?.toLowerCase() === 'get' && config.params) {
+    const queryString = tansParams(config.params).replace(/&$/, '');
+
+    if (queryString) {
+      const baseUrl = config.url || '';
+      config.url = `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}${queryString}`;
+    }
+
+    config.params = undefined;
   }
 
   if (config.data instanceof FormData) {

@@ -1,7 +1,18 @@
+import dayjs from 'dayjs';
+
 /**
  * Small helpers ported from plus-ui 6.1.0 (`src/utils/ruoyi.ts`) that the ruoyi business
  * pages rely on (date formatting, date ranges, dict labels, tree building, ...).
  */
+
+/** Format the value of a filter date input (`VDateInput`) as `YYYY-MM-DD`. */
+export function formatFilterDate(value: Date | string | null | undefined, pattern = 'YYYY-MM-DD') {
+  if (!value) {
+    return '';
+  }
+
+  return dayjs(value).format(pattern);
+}
 
 /** Format a date/time value with the given pattern (default `{y}-{m}-{d} {h}:{i}:{s}`). */
 export function parseTime(time: any, pattern?: string) {

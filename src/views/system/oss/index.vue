@@ -8,7 +8,7 @@ import type { TableColumn } from '@/hooks/common/table';
 import { delOss, listOss, uploadOss } from '@/service/api/ruoyi/system/oss';
 import type { OssQuery, OssVO } from '@/service/api/ruoyi/system/oss/types';
 import { downloadOss } from '@/utils/download';
-import { addDateRange, parseTime } from '@/utils/ruoyi';
+import { addDateRange, formatFilterDate, parseTime } from '@/utils/ruoyi';
 
 defineOptions({
   name: 'SystemOss'
@@ -36,14 +36,14 @@ const query = ref<OssQuery>({
 });
 
 /** 上传时间范围 */
-const beginTime = ref('');
-const endTime = ref('');
+const beginTime = ref<Date | null>(null);
+const endTime = ref<Date | null>(null);
 
 function dateRangeParams() {
-  return [
-    beginTime.value ? `${beginTime.value} 00:00:00` : undefined,
-    endTime.value ? `${endTime.value} 23:59:59` : undefined
-  ];
+  const begin = formatFilterDate(beginTime.value);
+  const end = formatFilterDate(endTime.value);
+
+  return [begin ? `${begin} 00:00:00` : undefined, end ? `${end} 23:59:59` : undefined];
 }
 
 /** 附带上传时间范围的 OSS 列表查询（后端时间字段为 createTime） */
@@ -118,8 +118,8 @@ async function handleReset() {
   query.value.fileName = '';
   query.value.originalName = '';
   query.value.service = '';
-  beginTime.value = '';
-  endTime.value = '';
+  beginTime.value = null;
+  endTime.value = null;
   checkedRowKeys.value = [];
 
   await handleSearch();
@@ -240,19 +240,17 @@ async function confirmDelete() {
               clearable
               hide-details="auto"
             />
-            <VTextField
+            <VDateInput
               v-model="beginTime"
               label="上传时间（开始）"
-              type="date"
               density="compact"
               variant="outlined"
               clearable
               hide-details="auto"
             />
-            <VTextField
+            <VDateInput
               v-model="endTime"
               label="上传时间（结束）"
-              type="date"
               density="compact"
               variant="outlined"
               clearable

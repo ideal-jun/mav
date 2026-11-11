@@ -9,7 +9,7 @@ import type { TableColumn } from '@/hooks/common/table';
 import { cleanOperlog, delOperlog, listOperLog } from '@/service/api/ruoyi/monitor/operlog';
 import type { OperLogQuery, OperLogVO } from '@/service/api/ruoyi/monitor/types';
 import { download } from '@/utils/download';
-import { addDateRange, parseTime } from '@/utils/ruoyi';
+import { addDateRange, formatFilterDate, parseTime } from '@/utils/ruoyi';
 import OperInfoDialog from './modules/oper-info-dialog.vue';
 
 defineOptions({
@@ -40,14 +40,14 @@ const query = ref<OperLogQuery>({
 });
 
 /** 操作时间范围 */
-const beginTime = ref('');
-const endTime = ref('');
+const beginTime = ref<Date | null>(null);
+const endTime = ref<Date | null>(null);
 
 function dateRangeParams() {
-  return [
-    beginTime.value ? `${beginTime.value} 00:00:00` : undefined,
-    endTime.value ? `${endTime.value} 23:59:59` : undefined
-  ];
+  const begin = formatFilterDate(beginTime.value);
+  const end = formatFilterDate(endTime.value);
+
+  return [begin ? `${begin} 00:00:00` : undefined, end ? `${end} 23:59:59` : undefined];
 }
 
 /** 附带操作时间范围的操作日志列表查询 */
@@ -97,8 +97,8 @@ async function handleReset() {
   query.value.operName = '';
   query.value.businessType = '';
   query.value.status = '';
-  beginTime.value = '';
-  endTime.value = '';
+  beginTime.value = null;
+  endTime.value = null;
   checkedRowKeys.value = [];
 
   await handleSearch();
@@ -178,12 +178,15 @@ function handleExport() {
 
   delete searchParams.params;
 
-  if (beginTime.value) {
-    searchParams['params[beginTime]'] = `${beginTime.value} 00:00:00`;
+  const begin = formatFilterDate(beginTime.value);
+  const end = formatFilterDate(endTime.value);
+
+  if (begin) {
+    searchParams['params[beginTime]'] = `${begin} 00:00:00`;
   }
 
-  if (endTime.value) {
-    searchParams['params[endTime]'] = `${endTime.value} 23:59:59`;
+  if (end) {
+    searchParams['params[endTime]'] = `${end} 23:59:59`;
   }
 
   download('monitor/operlog/export', searchParams, `operlog_${Date.now()}.xlsx`);
@@ -243,19 +246,17 @@ function handleExport() {
               clearable
               hide-details="auto"
             />
-            <VTextField
+            <VDateInput
               v-model="beginTime"
               label="操作时间（开始）"
-              type="date"
               density="compact"
               variant="outlined"
               clearable
               hide-details="auto"
             />
-            <VTextField
+            <VDateInput
               v-model="endTime"
               label="操作时间（结束）"
-              type="date"
               density="compact"
               variant="outlined"
               clearable
