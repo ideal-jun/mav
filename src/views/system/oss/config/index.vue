@@ -253,10 +253,8 @@ async function confirmDelete() {
               hide-details="auto"
             />
             <VSelect
-              persistent-placeholder
               v-model="query.status"
               label="是否默认"
-              placeholder="请选择状态"
               :items="statusItems"
               density="compact"
               variant="outlined"

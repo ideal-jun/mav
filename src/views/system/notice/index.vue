@@ -210,11 +210,9 @@ async function confirmDelete() {
               @keyup.enter="handleSearch"
             />
             <VSelect
-              persistent-placeholder
               v-model="query.noticeType"
               :items="dict.sys_notice_type.map(item => ({ title: item.label, value: item.value }))"
               label="公告类型"
-              placeholder="请选择公告类型"
               density="compact"
               variant="outlined"
               clearable

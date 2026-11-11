@@ -232,10 +232,8 @@ onMounted(() => {
               @keyup.enter="handleQuery"
             />
             <VSelect
-              persistent-placeholder
               v-model="searchForm.status"
               label="状态"
-              placeholder="部门状态"
               :items="statusItems"
               density="compact"
               variant="outlined"

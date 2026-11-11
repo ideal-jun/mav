@@ -209,10 +209,8 @@ function handleExport() {
               hide-details="auto"
             />
             <VSelect
-              persistent-placeholder
               v-model="query.businessType"
               label="操作类型"
-              placeholder="请选择操作类型"
               :items="businessTypeItems"
               density="compact"
               variant="outlined"
@@ -229,10 +227,8 @@ function handleExport() {
               hide-details="auto"
             />
             <VSelect
-              persistent-placeholder
               v-model="query.status"
               label="操作状态"
-              placeholder="请选择操作状态"
               :items="statusItems"
               density="compact"
               variant="outlined"

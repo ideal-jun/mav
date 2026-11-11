@@ -245,22 +245,18 @@ onMounted(() => {
               @keyup.enter="handleSearch"
             />
             <VSelect
-              persistent-placeholder
               v-model="query.belongDeptId"
               :items="deptOptions"
               label="归属部门"
-              placeholder="请选择部门"
               density="compact"
               variant="outlined"
               clearable
               hide-details="auto"
             />
             <VSelect
-              persistent-placeholder
               v-model="query.status"
               :items="dict.sys_normal_disable.map(item => ({ title: item.label, value: item.value }))"
               label="状态"
-              placeholder="请选择状态"
               density="compact"
               variant="outlined"
               clearable

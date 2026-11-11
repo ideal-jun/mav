@@ -274,10 +274,8 @@ function handleExport() {
               hide-details="auto"
             />
             <VSelect
-              persistent-placeholder
               v-model="query.status"
               label="状态"
-              placeholder="请选择状态"
               :items="statusItems"
               density="compact"
               variant="outlined"
