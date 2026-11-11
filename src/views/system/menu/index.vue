@@ -21,7 +21,7 @@ const dict = useDict('sys_normal_disable', 'sys_show_hide');
 
 const query = ref<MenuQuery>({
   menuName: '',
-  status: ''
+  status: undefined
 });
 
 const loading = ref(false);
@@ -181,7 +181,7 @@ async function handleSearch() {
 
 async function handleReset() {
   query.value.menuName = '';
-  query.value.status = '';
+  query.value.status = undefined;
 
   await handleSearch();
 }
@@ -310,6 +310,7 @@ function handleExport() {
               hide-details="auto"
             />
             <VSelect
+              persistent-placeholder
               v-model="query.status"
               :items="statusItems"
               label="状态"

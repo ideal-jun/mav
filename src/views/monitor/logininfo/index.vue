@@ -25,7 +25,7 @@ const query = ref<LoginInfoQuery>({
   pageSize: 10,
   ipaddr: '',
   userName: '',
-  status: '',
+  status: undefined,
   orderByColumn: 'loginTime',
   isAsc: 'descending'
 });
@@ -87,7 +87,7 @@ async function handleSearch() {
 async function handleReset() {
   query.value.ipaddr = '';
   query.value.userName = '';
-  query.value.status = '';
+  query.value.status = undefined;
   beginTime.value = null;
   endTime.value = null;
   checkedRowKeys.value = [];
@@ -230,6 +230,7 @@ function handleExport() {
               hide-details="auto"
             />
             <VSelect
+              persistent-placeholder
               v-model="query.status"
               label="登录状态"
               placeholder="请选择登录状态"

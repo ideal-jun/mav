@@ -13,8 +13,8 @@ export interface NoticeVO extends RuoYi.BaseEntity {
 export interface NoticeQuery extends RuoYi.PageQuery {
   noticeTitle: string;
   createByName: string;
-  status: string;
-  noticeType: string;
+  status?: string;
+  noticeType?: string;
 }
 
 /** 公告表单 */

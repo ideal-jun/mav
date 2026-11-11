@@ -20,7 +20,7 @@ export interface OssConfigVO extends RuoYi.BaseEntity {
 export interface OssConfigQuery extends RuoYi.PageQuery {
   configKey: string;
   bucketName: string;
-  status: string;
+  status?: string;
 }
 
 /** OSS 配置表单 */

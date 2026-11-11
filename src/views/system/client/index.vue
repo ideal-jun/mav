@@ -33,7 +33,7 @@ const query = ref<ClientQuery>({
   pageSize: 10,
   clientKey: '',
   clientSecret: '',
-  status: ''
+  status: undefined
 });
 
 const { data, loading, pagination, columnChecks, columns, checkedRowKeys, getData, handleQuery } = useRuoYiTable<
@@ -86,7 +86,7 @@ async function handleSearch() {
 async function handleReset() {
   query.value.clientKey = '';
   query.value.clientSecret = '';
-  query.value.status = '';
+  query.value.status = undefined;
   checkedRowKeys.value = [];
 
   await handleSearch();
@@ -274,6 +274,7 @@ function handleExport() {
               hide-details="auto"
             />
             <VSelect
+              persistent-placeholder
               v-model="query.status"
               label="状态"
               placeholder="请选择状态"

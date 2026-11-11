@@ -33,7 +33,7 @@ const query = ref<UserQuery>({
   userName: '',
   nickName: '',
   phoneNumber: '',
-  status: '',
+  status: undefined,
   deptId: undefined
 });
 
@@ -147,7 +147,7 @@ async function resetQuery() {
   query.value.userName = '';
   query.value.nickName = '';
   query.value.phoneNumber = '';
-  query.value.status = '';
+  query.value.status = undefined;
   query.value.deptId = undefined;
   beginTime.value = null;
   endTime.value = null;
@@ -370,6 +370,7 @@ onMounted(() => {
                   @keyup.enter="handleQuery"
                 />
                 <VSelect
+                  persistent-placeholder
                   v-model="query.status"
                   label="状态"
                   placeholder="用户状态"
@@ -388,7 +389,6 @@ onMounted(() => {
                   variant="outlined"
                   hide-details
                   clearable
-                  menu
                 />
                 <VDateInput
                   v-model="endTime"

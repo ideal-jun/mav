@@ -25,10 +25,10 @@ export interface PostForm {
 
 /** 岗位查询参数 */
 export interface PostQuery extends RuoYi.PageQuery {
-  deptId: number | string;
-  belongDeptId: number | string;
+  deptId?: number | string;
+  belongDeptId?: number | string;
   postCode: string;
   postName: string;
   postCategory: string;
-  status: string;
+  status?: string;
 }

@@ -30,7 +30,7 @@ const query = ref<RoleQuery>({
   pageSize: 10,
   roleName: '',
   roleKey: '',
-  status: ''
+  status: undefined
 });
 
 const { data, loading, pagination, columns, columnChecks, checkedRowKeys, getData, handleQuery } = useRuoYiTable<
@@ -63,7 +63,7 @@ async function handleSearch() {
 async function handleReset() {
   query.value.roleName = '';
   query.value.roleKey = '';
-  query.value.status = '';
+  query.value.status = undefined;
 
   await handleSearch();
 }
@@ -212,6 +212,7 @@ function handleExport() {
               hide-details="auto"
             />
             <VSelect
+              persistent-placeholder
               v-model="query.status"
               :items="statusItems"
               label="状态"

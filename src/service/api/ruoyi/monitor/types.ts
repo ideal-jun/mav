@@ -11,8 +11,8 @@ export interface OperLogQuery extends RuoYi.PageQuery {
   deviceType: string;
   browser: string;
   os: string;
-  businessType: string;
-  status: string;
+  businessType?: string;
+  status?: string;
   orderByColumn: string;
   isAsc: string;
 }
@@ -95,7 +95,7 @@ export interface LoginInfoVO {
 export interface LoginInfoQuery extends RuoYi.PageQuery {
   ipaddr: string;
   userName: string;
-  status: string;
+  status?: string;
   orderByColumn: string;
   isAsc: string;
 }

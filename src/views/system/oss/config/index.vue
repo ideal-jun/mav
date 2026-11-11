@@ -32,7 +32,7 @@ const query = ref<OssConfigQuery>({
   pageSize: 10,
   configKey: '',
   bucketName: '',
-  status: ''
+  status: undefined
 });
 
 const { data, loading, pagination, columnChecks, columns, checkedRowKeys, getData, handleQuery } = useRuoYiTable<
@@ -83,7 +83,7 @@ async function handleSearch() {
 async function handleReset() {
   query.value.configKey = '';
   query.value.bucketName = '';
-  query.value.status = '';
+  query.value.status = undefined;
   checkedRowKeys.value = [];
 
   await handleSearch();
@@ -253,6 +253,7 @@ async function confirmDelete() {
               hide-details="auto"
             />
             <VSelect
+              persistent-placeholder
               v-model="query.status"
               label="是否默认"
               placeholder="请选择状态"

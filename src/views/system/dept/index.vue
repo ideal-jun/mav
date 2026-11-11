@@ -21,7 +21,7 @@ const dict = useDict('sys_normal_disable');
 const searchForm = ref({
   deptName: '',
   deptCategory: '',
-  status: ''
+  status: undefined
 });
 
 const statusItems = computed(() => toSelectItems(dict.sys_normal_disable));
@@ -145,7 +145,7 @@ async function handleQuery() {
 async function handleReset() {
   searchForm.value.deptName = '';
   searchForm.value.deptCategory = '';
-  searchForm.value.status = '';
+  searchForm.value.status = undefined;
   collapsedIds.value = new Set();
 
   await getList();
@@ -232,6 +232,7 @@ onMounted(() => {
               @keyup.enter="handleQuery"
             />
             <VSelect
+              persistent-placeholder
               v-model="searchForm.status"
               label="状态"
               placeholder="部门状态"

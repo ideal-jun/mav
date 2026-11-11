@@ -35,7 +35,7 @@ export interface RoleVO extends RuoYi.BaseEntity {
 export interface RoleQuery extends RuoYi.PageQuery {
   roleName: string;
   roleKey: string;
-  status: string;
+  status?: string;
 }
 
 /** 角色表单（新增/修改/权限分配） */

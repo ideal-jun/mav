@@ -27,11 +27,11 @@ const query = ref<PostQuery>({
   pageNum: 1,
   pageSize: 10,
   deptId: '',
-  belongDeptId: '',
+  belongDeptId: undefined,
   postCode: '',
   postName: '',
   postCategory: '',
-  status: ''
+  status: undefined
 });
 
 const { data, loading, pagination, columns, columnChecks, checkedRowKeys, getData, handleQuery } = useRuoYiTable<
@@ -91,11 +91,11 @@ async function handleSearch() {
 
 async function handleReset() {
   query.value.deptId = '';
-  query.value.belongDeptId = '';
+  query.value.belongDeptId = undefined;
   query.value.postCode = '';
   query.value.postName = '';
   query.value.postCategory = '';
-  query.value.status = '';
+  query.value.status = undefined;
 
   await handleSearch();
 }
@@ -245,6 +245,7 @@ onMounted(() => {
               @keyup.enter="handleSearch"
             />
             <VSelect
+              persistent-placeholder
               v-model="query.belongDeptId"
               :items="deptOptions"
               label="归属部门"
@@ -255,6 +256,7 @@ onMounted(() => {
               hide-details="auto"
             />
             <VSelect
+              persistent-placeholder
               v-model="query.status"
               :items="dict.sys_normal_disable.map(item => ({ title: item.label, value: item.value }))"
               label="状态"

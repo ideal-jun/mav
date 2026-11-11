@@ -33,8 +33,8 @@ const query = ref<OperLogQuery>({
   deviceType: '',
   browser: '',
   os: '',
-  businessType: '',
-  status: '',
+  businessType: undefined,
+  status: undefined,
   orderByColumn: 'operTime',
   isAsc: 'descending'
 });
@@ -95,8 +95,8 @@ async function handleReset() {
   query.value.operIp = '';
   query.value.title = '';
   query.value.operName = '';
-  query.value.businessType = '';
-  query.value.status = '';
+  query.value.businessType = undefined;
+  query.value.status = undefined;
   beginTime.value = null;
   endTime.value = null;
   checkedRowKeys.value = [];
@@ -209,6 +209,7 @@ function handleExport() {
               hide-details="auto"
             />
             <VSelect
+              persistent-placeholder
               v-model="query.businessType"
               label="操作类型"
               placeholder="请选择操作类型"
@@ -228,6 +229,7 @@ function handleExport() {
               hide-details="auto"
             />
             <VSelect
+              persistent-placeholder
               v-model="query.status"
               label="操作状态"
               placeholder="请选择操作状态"

@@ -28,7 +28,7 @@ const query = ref<NoticeQuery>({
   noticeTitle: '',
   createByName: '',
   status: '',
-  noticeType: ''
+  noticeType: undefined
 });
 
 const { data, loading, pagination, columns, columnChecks, checkedRowKeys, getData, handleQuery } = useRuoYiTable<
@@ -58,8 +58,8 @@ async function handleSearch() {
 async function handleReset() {
   query.value.noticeTitle = '';
   query.value.createByName = '';
-  query.value.noticeType = '';
-  query.value.status = '';
+  query.value.noticeType = undefined;
+  query.value.status = undefined;
 
   await handleSearch();
 }
@@ -210,6 +210,7 @@ async function confirmDelete() {
               @keyup.enter="handleSearch"
             />
             <VSelect
+              persistent-placeholder
               v-model="query.noticeType"
               :items="dict.sys_notice_type.map(item => ({ title: item.label, value: item.value }))"
               label="公告类型"
