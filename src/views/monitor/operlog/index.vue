@@ -248,6 +248,8 @@ function handleExport() {
             />
             <VDateInput
               v-model="beginTime"
+              prepend-inner-icon="mdi-calendar"
+              prepend-icon=""
               label="操作时间（开始）"
               density="compact"
               variant="outlined"
@@ -256,6 +258,8 @@ function handleExport() {
             />
             <VDateInput
               v-model="endTime"
+              prepend-inner-icon="mdi-calendar"
+              prepend-icon=""
               label="操作时间（结束）"
               density="compact"
               variant="outlined"

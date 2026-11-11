@@ -242,6 +242,8 @@ async function confirmDelete() {
             />
             <VDateInput
               v-model="beginTime"
+              prepend-inner-icon="mdi-calendar"
+              prepend-icon=""
               label="上传时间（开始）"
               density="compact"
               variant="outlined"
@@ -250,6 +252,8 @@ async function confirmDelete() {
             />
             <VDateInput
               v-model="endTime"
+              prepend-inner-icon="mdi-calendar"
+              prepend-icon=""
               label="上传时间（结束）"
               density="compact"
               variant="outlined"

@@ -381,19 +381,25 @@ onMounted(() => {
                 />
                 <VDateInput
                   v-model="beginTime"
+                  prepend-inner-icon="mdi-calendar"
+                  prepend-icon=""
                   label="创建时间（开始）"
                   density="compact"
                   variant="outlined"
                   hide-details
                   clearable
+                  menu
                 />
                 <VDateInput
                   v-model="endTime"
+                  prepend-inner-icon="mdi-calendar"
+                  prepend-icon=""
                   label="创建时间（结束）"
                   density="compact"
                   variant="outlined"
                   hide-details
                   clearable
+                  menu
                 />
                 <div class="flex items-center justify-end gap-2 sm:col-span-2 lg:col-span-2">
                   <VBtn variant="text" prepend-icon="mdi-refresh" @click="resetQuery">重置</VBtn>
